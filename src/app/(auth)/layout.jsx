@@ -1,7 +1,13 @@
-import React from "react";
+import Navbar from "../components/Navbar";
+import RecipeNavbar from "../components/Navbar";
 
 const AuthLayoutPage = ({ children }) => {
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Navbar />
+      {children}
+    </div>
+  );
 };
 
 export default AuthLayoutPage;

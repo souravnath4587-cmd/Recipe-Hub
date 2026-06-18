@@ -1,7 +1,12 @@
-import React from "react";
+import Navbar from "../components/Navbar";
 
 const DashBoardLayoutPage = ({ children }) => {
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Navbar />
+      {children}
+    </div>
+  );
 };
 
 export default DashBoardLayoutPage;
