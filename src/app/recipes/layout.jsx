@@ -1,11 +1,13 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const RecipesLayoutPage = ({ children }) => {
   return (
     <div>
       <Navbar />
       {children}
+      <Footer />
     </div>
   );
 };
