@@ -198,15 +198,6 @@ export default function SignUpPage() {
                   </span>
                 </div>
 
-                {/* Google Sign Up */}
-                <Button
-                  variant="bordered"
-                  startContent={<FaGoogle />}
-                  className="w-full"
-                >
-                  Continue with Google
-                </Button>
-
                 {/* Login Link */}
                 <p className="text-center text-sm text-default-500">
                   Already have an account?{" "}
