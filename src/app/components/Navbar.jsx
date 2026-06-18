@@ -11,10 +11,15 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { authClient } from "../lib/auth-client";
+import Image from "next/image";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log(user);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -84,10 +89,27 @@ export default function Navbar() {
             >
               {dark ? <FaSun /> : <FaMoon />}
             </button>
-
-            <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-500">
-              <FaUserCircle className="w-full h-full text-orange-500" />
-            </button>
+            {user ? (
+              <div className="flex flex-row gap-4 items-center">
+                <p>
+                  Welcome{" "}
+                  <span className="uppercase text-orange-500 font-semibold">
+                    {user?.name}
+                  </span>
+                </p>
+                <Image
+                  src={user?.image}
+                  alt="User Image."
+                  width={40}
+                  height={40}
+                  className="rounded-full border-2 border-green-500"
+                ></Image>
+              </div>
+            ) : (
+              <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-500">
+                <FaUserCircle className="w-full h-full text-orange-500" />
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}

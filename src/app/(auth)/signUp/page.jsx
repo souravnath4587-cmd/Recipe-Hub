@@ -13,6 +13,8 @@ import {
   FieldError,
 } from "@heroui/react";
 import { FaGoogle, FaUtensils } from "react-icons/fa";
+import { authClient } from "@/app/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function SignUpPage() {
   const [password, setPassword] = useState("");
@@ -22,7 +24,21 @@ export default function SignUpPage() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    console.log("Register User", data);
+    const { email, photo, password, name } = data;
+    const { data: res, error } = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      image: photo,
+      callbackURL: "/",
+    });
+
+    console.log("Register User", res);
+    if (!res) {
+      toast.error(error.message);
+    } else {
+      toast.success("Registation successfully done..");
+    }
   };
 
   return (

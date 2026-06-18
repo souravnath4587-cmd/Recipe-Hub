@@ -13,12 +13,25 @@ import { FaUtensils } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
+import { authClient } from "@/app/lib/auth-client";
 
 export default function SignInPage() {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    const { email, password } = data;
+
+    const { data: res, error } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/",
+    });
+    if (!res) {
+      toast.error(error.message);
+    } else {
+      toast.success("Login successfully done..");
+    }
 
     console.log("Login User", data);
   };
