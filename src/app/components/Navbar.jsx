@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { authClient } from "../lib/auth-client";
 import Image from "next/image";
+import { Button } from "@heroui/react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,8 +45,6 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "Browse Recipes", href: "/recipes" },
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Login", href: "/signIn" },
-    { name: "Register", href: "/signUp" },
   ];
 
   return (
@@ -79,13 +78,26 @@ export default function Navbar() {
                 <span className="absolute left-0 -bottom-1 h-[2] w-0 bg-orange-500 transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
+            {user ? (
+              <Button
+                variant="danger-soft"
+                onPress={() => authClient.signOut()}
+              >
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Link href="/signIn">Login</Link>
+                <Link href="/signUp">Register</Link>
+              </>
+            )}
           </div>
 
           {/* Right */}
           <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={() => setDark(!dark)}
-              className="w-10 h-10 rounded-full dark:bg-zinc-800 flex items-center justify-center"
+              className="w-10 h-10 rounded-full dark:bg-zinc-800 flex items-center justify-center border-2"
             >
               {dark ? <FaSun /> : <FaMoon />}
             </button>
@@ -149,6 +161,20 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              {user ? (
+                <Button
+                  className="rounded-none w-full"
+                  variant="danger"
+                  onPress={() => authClient.signOut()}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Link href="/signIn">Login</Link>
+                  <Link href="/signUp">Register</Link>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

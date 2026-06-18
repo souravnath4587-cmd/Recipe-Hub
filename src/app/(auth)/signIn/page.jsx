@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { authClient } from "@/app/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function SignInPage() {
   const handleSubmit = async (e) => {
@@ -34,6 +35,16 @@ export default function SignInPage() {
     }
 
     console.log("Login User", data);
+  };
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+    if (!data) {
+      toast.error(error.message);
+    } else {
+      toast.success("Successfully Done...");
+    }
   };
 
   return (
@@ -139,7 +150,11 @@ export default function SignInPage() {
                   </span>
                 </div>
 
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleGoogleSignIn}
+                >
                   <FcGoogle /> Google SignIn
                 </Button>
                 {/* Login Link */}
