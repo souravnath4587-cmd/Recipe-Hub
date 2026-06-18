@@ -17,14 +17,24 @@ export default function Navbar() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      setDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [dark]);
 
-  const links = ["Home", "Browse Recipes", "Login", "Register"];
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Browse Recipes", href: "/recipes" },
@@ -108,9 +118,13 @@ export default function Navbar() {
             </div>
 
             <div className="flex flex-col gap-6">
-              {links.map((item) => (
-                <Link key={item} href="#" className="text-lg font-medium">
-                  {item}
+              {navLinks.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className="text-lg font-medium"
+                >
+                  {item.name}
                 </Link>
               ))}
             </div>
