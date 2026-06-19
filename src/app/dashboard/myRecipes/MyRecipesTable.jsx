@@ -5,20 +5,24 @@ import { Table, Button, Tooltip, Avatar, Chip, Modal } from "@heroui/react";
 import { FiEdit2, FiTrash2, FiClock, FiEye } from "react-icons/fi";
 import { recipeDelete } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function MyRecipesTable({ allRecipes }) {
   const [recipes, setRecipes] = useState(allRecipes);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [modalType, setModalType] = useState("");
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedRecipe, setSelectedRecipe] = useState(null);
+  // const [modalType, setModalType] = useState("");
 
-  const handleActionClick = (recipe, type) => {
-    console.log(recipe, type);
+  const handleActionClick = (id) => {
+    console.log(id);
 
-    setSelectedRecipe(recipe);
-    setModalType(type);
-    setIsModalOpen(true);
+    // if (type === "edit") {
+    //   // Navigate dynamically using the string variant of the id
+    //   router.push(`/myRecipes/update/${recipe._id}`);
+    // } else {
+    //   setSelectedRecipe(recipe);
+    //   setIsModalOpen(true);
+    // }
   };
 
   const handleDeleteConfirm = async (id) => {
@@ -142,15 +146,16 @@ export default function MyRecipesTable({ allRecipes }) {
                         </Button>
                       </Tooltip>
                       <Tooltip content="Edit Details" closeDelay={0}>
-                        <Button
+                        <Link
+                          href={`/dashboard/myRecipes/${recipe._id}`}
                           isIconOnly
                           variant="light"
                           size="sm"
                           className="text-default-400 hover:text-amber-500 min-w-0"
-                          onClick={() => handleActionClick(recipe, "edit")}
+                          // onClick={() => handleActionClick(recipe._id)}
                         >
                           <FiEdit2 size={16} />
-                        </Button>
+                        </Link>
                       </Tooltip>
                       <Tooltip
                         content="Delete Recipe"
@@ -159,7 +164,7 @@ export default function MyRecipesTable({ allRecipes }) {
                       >
                         <Button
                           isIconOnly
-                          variant="light"
+                          variant="danger-soft"
                           size="sm"
                           className="text-default-400 hover:text-danger min-w-0"
                           onClick={() => handleDeleteConfirm(recipe._id)}
@@ -177,7 +182,7 @@ export default function MyRecipesTable({ allRecipes }) {
         <Table.Footer />
       </Table>
 
-      {/* Modal matching theme structure */}
+      {/* Modal matching theme structure
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -245,7 +250,7 @@ export default function MyRecipesTable({ allRecipes }) {
             </div>
           </>
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
