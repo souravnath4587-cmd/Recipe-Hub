@@ -5,6 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  FiAlertTriangle,
+  FiBookOpen,
+  FiDollarSign,
+  FiUser,
+} from "react-icons/fi";
+import {
   HiSquares2X2,
   HiPlusCircle,
   HiBookOpen,
@@ -15,11 +21,12 @@ import {
 
 export default function DashboardSideBar({ user }) {
   const pathname = usePathname();
+  console.log(user);
 
-  const sidebarLinks = [
+  const userLinks = [
     {
       name: "Overview",
-      href: "/dashboard",
+      href: "/dashboard/user/overView",
       icon: HiSquares2X2,
     },
     {
@@ -48,6 +55,39 @@ export default function DashboardSideBar({ user }) {
       icon: HiUser,
     },
   ];
+  const adminLinks = [
+    {
+      name: "Overview",
+      href: "/dashboard/admin/overview",
+      icon: HiSquares2X2,
+    },
+    {
+      name: "Manage Users",
+      href: "/dashboard/admin/manageUsers",
+      icon: FiUser,
+    },
+    {
+      name: "Manage Recipes",
+      href: "/dashboard/admin/manageRecipes",
+      icon: FiBookOpen,
+    },
+    {
+      name: "Reports",
+      href: "/dashboard/admin/reports",
+      icon: FiAlertTriangle,
+    },
+    {
+      name: "Transactions",
+      href: "/dashboard/admin/transactions",
+      icon: FiDollarSign,
+    },
+  ];
+
+  const roleBaseMap = {
+    user: userLinks,
+    admin: adminLinks,
+  };
+  const navItems = roleBaseMap[user?.role || "user"];
   return (
     <aside className="hidden md:flex w-64 bg-zinc-950 border-r border-white/10 flex-col p-5">
       <h1 className="text-2xl font-bold mb-4">Recipe-Hub</h1>
@@ -77,7 +117,7 @@ export default function DashboardSideBar({ user }) {
       </div>
 
       <nav className="space-y-2">
-        {sidebarLinks.map((item, index) => {
+        {navItems.map((item, index) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
@@ -95,51 +135,6 @@ export default function DashboardSideBar({ user }) {
             </Link>
           );
         })}
-        {/* <Link
-          href="/dashboard"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10"
-        >
-          <MdDashboard />
-          Overview
-        </Link> */}
-
-        {/* <Link
-          href="/dashboard/addRecipe"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5"
-        >
-          <MdFactory />
-          Add Recipe
-        </Link>
-
-        <Link
-          href="/dashboard/recipes"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5"
-        >
-          <FaBriefcase />
-          MY RECIPES
-        </Link>
-        <Link
-          href="/dashboard/purchase"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5"
-        >
-          <FaMoneyBills />
-          MY PURCHASED RECIPES
-        </Link>
-
-        <Link
-          href="/dashboard/favourite"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5"
-        >
-          <FaCog />
-          FAVORITES
-        </Link>
-        <Link
-          href="/dashboard/profile"
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5"
-        >
-          <FaCog />
-          Profile
-        </Link> */}
       </nav>
     </aside>
   );

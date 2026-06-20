@@ -79,7 +79,11 @@ export default function Navbar() {
             ))}
             {user ? (
               <>
-                <Link href="/dashboard">DashBoard</Link>
+                <Link
+                  href={`/dashboard${user?.role === "admin" ? "/admin/overview" : "/user/overView"}`}
+                >
+                  DashBoard
+                </Link>
                 <Button
                   variant="danger-soft"
                   onPress={() => authClient.signOut()}
