@@ -24,27 +24,27 @@ export default function DashboardSideBar({ user }) {
     },
     {
       name: "Add Recipe",
-      href: "/dashboard/addRecipe",
+      href: "/dashboard/user/addRecipe",
       icon: HiPlusCircle,
     },
     {
       name: "My Recipes",
-      href: "/dashboard/myRecipes",
+      href: "/dashboard/user/myRecipes",
       icon: HiBookOpen,
     },
     {
       name: "My Purchased Recipes",
-      href: "/dashboard/purchasedRecipes",
+      href: "/dashboard/user/purchasedRecipes",
       icon: HiShoppingBag,
     },
     {
       name: "Favorites",
-      href: "/dashboard/favorite",
+      href: "/dashboard/user/favorite",
       icon: HiHeart,
     },
     {
       name: "Profile",
-      href: "/dashboard/profile",
+      href: "/dashboard/user/profile",
       icon: HiUser,
     },
   ];

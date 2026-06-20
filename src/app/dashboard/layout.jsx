@@ -1,6 +1,6 @@
 "use client";
 import DashboardSideBar from "../components/components/DashboardSidebar";
-// import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar";
 import { authClient } from "../lib/auth-client";
 
 const DashBoardLayoutPage = ({ children }) => {
@@ -8,7 +8,7 @@ const DashBoardLayoutPage = ({ children }) => {
   const user = session?.user;
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="min-h-screen bg-black text-white flex flex-row gap-10">
         {/* Sidebar */}
         <DashboardSideBar user={user} />

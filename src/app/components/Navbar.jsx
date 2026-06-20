@@ -44,7 +44,6 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Browse Recipes", href: "/recipes" },
-    { name: "Dashboard", href: "/dashboard" },
   ];
 
   return (
@@ -79,12 +78,15 @@ export default function Navbar() {
               </Link>
             ))}
             {user ? (
-              <Button
-                variant="danger-soft"
-                onPress={() => authClient.signOut()}
-              >
-                Logout
-              </Button>
+              <>
+                <Link href="/dashboard">DashBoard</Link>
+                <Button
+                  variant="danger-soft"
+                  onPress={() => authClient.signOut()}
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Link href="/signIn">Login</Link>
