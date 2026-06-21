@@ -58,7 +58,7 @@ export default function DashboardSideBar({ user }) {
   const adminLinks = [
     {
       name: "Overview",
-      href: "/dashboard/admin/overview",
+      href: "/dashboard/admin/adminMenu",
       icon: HiSquares2X2,
     },
     {

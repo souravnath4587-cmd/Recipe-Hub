@@ -20,7 +20,6 @@ export default function Navbar() {
   const [dark, setDark] = useState(false);
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  console.log(user);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -80,7 +79,7 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link
-                  href={`/dashboard${user?.role === "admin" ? "/admin/overview" : "/user/overView"}`}
+                  href={`/dashboard${user?.role === "admin" ? "/admin/adminMenu" : "/user/overView"}`}
                 >
                   DashBoard
                 </Link>

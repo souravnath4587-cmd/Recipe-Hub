@@ -1,6 +1,10 @@
 import { serverFetch } from "../core/server";
 import { getUserSession } from "../core/session";
 
+export const getAllRecipeData = async () => {
+  return serverFetch("/api/allRecipes");
+};
+
 export const getRecipeData = async (id) => {
   return serverFetch(`/api/myRecipe/${id}`);
 };

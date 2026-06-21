@@ -1,7 +1,15 @@
 import React from "react";
+import ManageUsersPage from "./ManageUsers";
+import { getUsers } from "@/app/lib/api/users";
 
-const usersPage = () => {
-  return <div>This is all users page...</div>;
+const page = async () => {
+  const allUsers = await getUsers();
+
+  return (
+    <div>
+      <ManageUsersPage allUsers={allUsers} />
+    </div>
+  );
 };
 
-export default usersPage;
+export default page;
