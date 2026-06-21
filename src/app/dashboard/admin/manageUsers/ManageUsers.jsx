@@ -10,6 +10,8 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import Image from "next/image";
+import { userStatusUpdate } from "@/app/lib/action/users";
+import { toast } from "react-toastify";
 
 // Mock User Data Array including image, registration date, and statuses
 // const initialUsers = [
@@ -51,24 +53,43 @@ export default function ManageUsersPage({ allUsers }) {
   const [users, setUsers] = useState(allUsers);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Helper function to format MongoDB ISO dates to 'MMM DD, YYYY'
-  const formatDate = (dateObj) => {
-    if (!dateObj || !dateObj.$date) return "N/A";
-    const date = new Date(dateObj.$date);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    });
+  // Handler toggling block state dynamically
+  const handleBlockUser = async (userId, name) => {
+    const result = await userStatusUpdate(userId, { status: "block" });
+
+    // If the database successfully acknowledged the modification update
+    if (result.acknowledged || result.modifiedCount > 0) {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          // FIX: Match against database key (_id) and return a clean shallow copy object
+          user._id === userId ? { ...user, status: "block" } : user,
+        ),
+      );
+    }
+    if (result.modifiedCount > 0) {
+      toast.success(`${name} is blocked..`);
+    } else {
+      toast.error(error.message);
+    }
   };
 
-  // Handler toggling block state dynamically
-  const handleToggleBlock = (userId) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, isBlocked: !user.isBlocked } : user,
-      ),
-    );
+  const handleUnblockUser = async (userId, name) => {
+    const result = await userStatusUpdate(userId, { status: "active" });
+
+    // If the database successfully acknowledged the modification update
+    if (result.acknowledged || result.modifiedCount > 0) {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          // FIX: Match against database key (_id) and return a clean shallow copy object
+          user._id === userId ? { ...user, status: "active" } : user,
+        ),
+      );
+    }
+    if (result.modifiedCount > 0) {
+      toast.success(`${name} is active..`);
+    } else {
+      toast.error(error.message);
+    }
   };
 
   // Filter pipeline for dynamic rendering
@@ -187,21 +208,23 @@ export default function ManageUsersPage({ allUsers }) {
                         color={user.isBlocked ? "danger" : "success"}
                         className="font-bold text-xs"
                       >
-                        {user.isBlocked ? "Blocked" : "Active"}
+                        {user.status}
                       </Chip>
                     </Table.Cell>
 
                     {/* Operations Controls Buttons Action Panel */}
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-2">
-                        {user.isBlocked ? (
+                        {user.status === "block" ? (
                           <Button
                             size="sm"
                             variant="flat"
                             color="success"
                             className="font-semibold text-xs"
                             startContent={<FiUserCheck size={14} />}
-                            onPress={() => handleToggleBlock(user.id)}
+                            onPress={() =>
+                              handleUnblockUser(user._id, user.name)
+                            }
                           >
                             Unblock User
                           </Button>
@@ -212,7 +235,9 @@ export default function ManageUsersPage({ allUsers }) {
                             color="danger"
                             className="font-semibold text-xs"
                             startContent={<FiUserX size={14} />}
-                            onPress={() => handleToggleBlock(user.id)}
+                            onPress={() =>
+                              handleBlockUser(user._id, user?.name)
+                            }
                           >
                             Block User
                           </Button>

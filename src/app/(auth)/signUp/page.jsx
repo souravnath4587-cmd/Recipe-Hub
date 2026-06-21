@@ -24,13 +24,21 @@ export default function SignUpPage() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const { email, photo, password, name, role = "user" } = data;
+    const {
+      email,
+      photo,
+      password,
+      name,
+      role = "user",
+      status = "active",
+    } = data;
     const { data: res, error } = await authClient.signUp.email({
       name,
       email,
       password,
       image: photo,
       role,
+      status,
       callbackURL: "/",
     });
 

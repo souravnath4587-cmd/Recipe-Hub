@@ -98,6 +98,7 @@ export default function AddRecipeForm({ recipeCreator }) {
         .filter((item) => item.trim() !== ""), // splits items array cleanly by lines
       instructions: formData.instructions,
       createdAt: new Date().toISOString(),
+      status : 'pending',
       recipeCreatorId: recipeCreator.id,
     };
 
