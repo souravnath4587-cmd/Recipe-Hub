@@ -94,8 +94,12 @@ export default function ManageRecipesPage({ allRecipes }) {
                 >
                   RECIPE CONTENT
                 </Table.Column>
+
                 <Table.Column className="bg-default-100 text-default-700 font-bold">
                   CUISINE / REGION
+                </Table.Column>
+                <Table.Column className="bg-default-100 text-default-700 font-bold">
+                  LIKES
                 </Table.Column>
                 <Table.Column className="bg-default-100 text-default-700 font-bold">
                   DATE PUBLISHED
@@ -155,6 +159,15 @@ export default function ManageRecipesPage({ allRecipes }) {
                         className="font-semibold text-xs text-default-600"
                       >
                         {recipe.cuisineType || "Global"}
+                      </Chip>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Chip
+                        size="sm"
+                        variant="flat"
+                        className="font-semibold text-xs text-default-600"
+                      >
+                        {recipe.likesCount || "Global"}
                       </Chip>
                     </Table.Cell>
 

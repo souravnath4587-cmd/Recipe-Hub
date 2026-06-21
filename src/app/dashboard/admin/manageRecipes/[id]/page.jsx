@@ -13,6 +13,7 @@ import {
   FiCalendar,
   FiShield,
   FiCheckCircle,
+  FiThumbsUp,
 } from "react-icons/fi";
 
 const RecipeDetailPage = async ({ params }) => {
@@ -64,6 +65,16 @@ const RecipeDetailPage = async ({ params }) => {
                   className="font-bold shadow-md"
                 >
                   {recipeData.category}
+                </Chip>
+              </div>
+              <div className="absolute top-4 right-4 flex gap-2">
+                <Chip
+                  color="warning"
+                  variant="danger"
+                  className="font-bold shadow-md flex gap-2"
+                >
+                  <FiThumbsUp size={16} />
+                  {recipeData.likesCount}
                 </Chip>
               </div>
             </div>

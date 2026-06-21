@@ -1,7 +1,13 @@
-import React from "react";
+import { getAllRecipeData } from "../lib/api/recipes";
+import AllRecipesPage from "./AllRecipes";
 
-const recipesPage = () => {
-  return <div>this is recipes page.</div>;
+const recipesPage = async () => {
+  const allRecipes = await getAllRecipeData();
+  return (
+    <div>
+      <AllRecipesPage allRecipes={allRecipes} />
+    </div>
+  );
 };
 
 export default recipesPage;

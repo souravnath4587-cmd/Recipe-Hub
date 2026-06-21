@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Table, Button, Tooltip, Avatar, Chip, Modal } from "@heroui/react";
+import { Table, Button, Tooltip, Avatar, Chip } from "@heroui/react";
 import { FiEdit2, FiTrash2, FiClock, FiEye } from "react-icons/fi";
 import { recipeDelete } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
-export default function MyRecipesTable({ allRecipes }) {
+export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   const [recipes, setRecipes] = useState(allRecipes);
   // const [isModalOpen, setIsModalOpen] = useState(false);
   // const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -51,6 +51,12 @@ export default function MyRecipesTable({ allRecipes }) {
           View, update, or remove recipes you have cataloged.
         </p>
       </div>
+      {recipeCreator.status === "block" && (
+        <p className="text-red-600 my-2 font-semibold">
+          All your actions are currently disabled. Please contact the
+          administrator.{" "}
+        </p>
+      )}
 
       {/* We use custom classNames to hook into semantic tokens.
         Light Mode: background becomes white/light gray surfaces
@@ -140,6 +146,7 @@ export default function MyRecipesTable({ allRecipes }) {
                           variant="light"
                           size="sm"
                           className="text-default-400 hover:text-amber-500 min-w-0"
+                          isDisabled={recipeCreator?.status === "block"}
                           onPress={() => handleActionClick(recipe, "edit")}
                         >
                           <FiEye size={16} />
@@ -166,6 +173,7 @@ export default function MyRecipesTable({ allRecipes }) {
                           isIconOnly
                           variant="danger-soft"
                           size="sm"
+                          isDisabled={recipeCreator?.status === "block"}
                           className="text-default-400 hover:text-danger min-w-0"
                           onClick={() => handleDeleteConfirm(recipe._id)}
                         >
