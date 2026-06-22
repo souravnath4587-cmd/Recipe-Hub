@@ -14,3 +14,16 @@ export const recipeDelete = async (id) => {
 export const updateRecipeAction = async (id, updatedRecipeData) => {
   return serverMutation(`/api/myRecipes/${id}`, updatedRecipeData, "PUT");
 };
+
+// Dynamic PUT updating logic route mapping pipeline
+export const updateRecipeLikeAction = async (id, updatedRecipeData) => {
+  return serverMutation(`/api/recipes/${id}/vote`, updatedRecipeData, "PATCH");
+};
+// Dynamic PUT updating logic route mapping pipeline
+export const updateRecipeFavouriteAction = async (id, updatedRecipeData) => {
+  return serverMutation(
+    `/api/recipes/${id}/favourite`,
+    updatedRecipeData,
+    "PATCH",
+  );
+};

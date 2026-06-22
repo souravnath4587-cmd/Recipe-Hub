@@ -2,10 +2,14 @@
 import { getRecipeData } from "@/app/lib/api/recipes";
 import RecipeDetailsClient from "./RecipeDetailsClient";
 import React from "react";
+import { getUserSession } from "@/app/lib/core/session";
 
 export default async function RecipeDetailPage({ params }) {
   const { id } = await params;
   const selectedRecipeData = await getRecipeData(id);
+  console.log(selectedRecipeData);
+
+  const user = await getUserSession();
 
   if (!selectedRecipeData) {
     return (
@@ -18,5 +22,5 @@ export default async function RecipeDetailPage({ params }) {
   }
 
   // Forward the pristine dataset straight into our responsive administrative layout
-  return <RecipeDetailsClient initialRecipe={selectedRecipeData} />;
+  return <RecipeDetailsClient initialRecipe={selectedRecipeData} user={user} />;
 }

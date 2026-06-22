@@ -21,14 +21,21 @@ import {
   FiGlobe,
   FiThumbsDown,
 } from "react-icons/fi";
+import {
+  updateRecipeFavouriteAction,
+  updateRecipeLikeAction,
+} from "@/app/lib/action/recipe";
+import { toast } from "react-toastify";
 
-export default function RecipeDetailsClient({ initialRecipe }) {
+export default function RecipeDetailsClient({ initialRecipe, user }) {
   const [recipe, setRecipe] = useState(initialRecipe);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [isVoting, setIsVoting] = useState(false);
+  console.log(recipe.favouriteCount);
 
   const modalState = useOverlayState();
   const totalIngredients = recipe.ingredients?.length ?? 0;
@@ -38,22 +45,16 @@ export default function RecipeDetailsClient({ initialRecipe }) {
     if (isVoting) return; // Guard clause to prevent spam clicks
     setIsVoting(true); // Disable buttons immediately
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/recipes/${recipeId}/vote`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ direction: "up" }),
-        },
-      );
-      const data = await res.json();
+      const data = await updateRecipeLikeAction(recipeId, { direction: "up" });
+      if (data.likesCount > recipe.likesCount) {
+        toast.success("Your support means a lot to me. Thank you!");
+        // FIXED: Update the active recipe object's counter property directly
+        setRecipe((prev) => ({ ...prev, likesCount: data.likesCount }));
 
-      // FIXED: Update the active recipe object's counter property directly
-      setRecipe((prev) => ({ ...prev, likesCount: data.likesCount }));
-
-      // Toggle button highlights
-      setIsLiked((prev) => !prev);
-      setIsDisliked(false);
+        // Toggle button highlights
+        setIsLiked((prev) => !prev);
+        setIsDisliked(false);
+      }
     } catch (error) {
       console.error("Failed to register like step:", error);
       setIsVoting(false);
@@ -65,35 +66,56 @@ export default function RecipeDetailsClient({ initialRecipe }) {
     if (isVoting) return; // Guard clause
     setIsVoting(true); // Disable buttons immediately
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/recipes/${recipeId}/vote`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ direction: "down" }),
-        },
-      );
-      const data = await res.json();
+      const data = await updateRecipeLikeAction(recipeId, {
+        direction: "down",
+      });
+      if (data.likesCount < recipe.likesCount) {
+        toast.success(
+          "Experiencing an issue? Please share your feedback or report the problem below. ",
+        );
+
+        setRecipe((prev) => ({ ...prev, likesCount: data.likesCount }));
+
+        // Toggle button highlights
+        setIsDisliked((prev) => !prev);
+        setIsLiked(false);
+      }
 
       // FIXED: Update the active recipe object's counter property directly
-      setRecipe((prev) => ({ ...prev, likesCount: data.likesCount }));
-
-      // Toggle button highlights
-      setIsDisliked((prev) => !prev);
-      setIsLiked(false);
     } catch (error) {
       console.error("Failed to register dislike step:", error);
       isVoting(false);
     }
   };
 
-  const handleFavoriteToggle = () => {
-    setIsFavorited((prev) => !prev);
-    alert(
-      isFavorited
-        ? "Removed from saved favorites."
-        : "Added to your dashboard favorites collection!",
-    );
+  const handleFavoriteToggle = async (recipeId, id) => {
+    if (isFavoriteLoading) return; // Prevent double clicks
+    setIsFavoriteLoading(true);
+
+    try {
+      const data = await updateRecipeFavouriteAction(recipeId, { userId: id });
+
+      console.log(data);
+
+      if (data.favoritesCount > 0) {
+        toast.success(
+          `Great choice! This recipe is now in your favorites. "${user?.name}"`,
+        );
+      } else {
+        toast.error("You've stopped following this recipe.");
+      }
+      setIsFavorited(data.isFavorited); // Sets state to true/false based on MongoDB array state
+
+      // Update your recipe object context tracking locally if you display a count:
+      setRecipe((prev) => ({
+        ...prev,
+        favouritesCount: data.favoritesCount,
+      }));
+    } catch (error) {
+      console.error("Failed updating your saved choices library:", error);
+    } finally {
+      setIsFavoriteLoading(false); // Unlock the button trigger action
+    }
   };
 
   const submitReportHandler = (closeFn) => {
@@ -156,6 +178,10 @@ export default function RecipeDetailsClient({ initialRecipe }) {
                   />
                 </Button>
 
+                {/* Securely displays the reactive state value from our API callback */}
+                <span className="text-xs font-extrabold text-center uppercase text-white px-1">
+                  {recipe.likesCount ?? 0} Likes
+                </span>
                 <Button
                   isIconOnly
                   radius="full"
@@ -169,11 +195,6 @@ export default function RecipeDetailsClient({ initialRecipe }) {
                     className={isDisliked ? "fill-current" : ""}
                   />
                 </Button>
-
-                {/* Securely displays the reactive state value from our API callback */}
-                <span className="text-xs font-bold text-white px-1">
-                  {recipe.likesCount ?? 0} Score
-                </span>
               </div>
 
               <div className="flex items-center justify-center bg-gray-700 p-2 rounded-xl gap-2 border w-full text-white">
@@ -182,14 +203,20 @@ export default function RecipeDetailsClient({ initialRecipe }) {
                   radius="full"
                   variant={isFavorited ? "solid" : "flat"}
                   color={isFavorited ? "danger" : "default"}
-                  onPress={handleFavoriteToggle}
+                  onPress={() => handleFavoriteToggle(recipe._id, user?.id)}
+                  isDisabled={isFavoriteLoading} // Disables interaction while awaiting DB confirmation
+                  isLoading={isFavoriteLoading} // Shows nice native loading feedback circle
                 >
-                  <FiHeart
-                    size={16}
-                    className={isFavorited ? "fill-current" : ""}
-                  />
+                  {!isFavoriteLoading && (
+                    <FiHeart
+                      size={16}
+                      className={isFavorited ? "fill-current" : ""}
+                    />
+                  )}
                 </Button>
-                <span className="text-xs font-bold">Favourite</span>
+                <span className="text-xs font-bold">
+                  {recipe.favouritesCount ?? 0} Saves
+                </span>
               </div>
 
               <div className="flex items-center justify-center bg-gray-700 p-2 rounded-xl gap-2 border w-full text-white">

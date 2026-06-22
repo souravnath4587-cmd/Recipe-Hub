@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { userStatusUpdate } from "@/app/lib/action/users";
 import { toast } from "react-toastify";
+import { filter } from "framer-motion/client";
 
 // Mock User Data Array including image, registration date, and statuses
 // const initialUsers = [
@@ -99,6 +100,8 @@ export default function ManageUsersPage({ allUsers }) {
       user.email.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  console.log(searchQuery);
+
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
       {/* Top Controls Banner Area */}
@@ -119,8 +122,8 @@ export default function ManageUsersPage({ allUsers }) {
           className="w-full md:max-w-xs"
           placeholder="Search by name or email..."
           startContent={<FiSearch className="text-default-400" />}
-          value={searchQuery}
-          onValueChange={setSearchQuery}
+          // value={searchQuery}
+          onValueChange={(e) => setSearchQuery(e.value)}
           variant="flat"
         />
       </div>
