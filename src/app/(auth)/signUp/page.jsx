@@ -32,12 +32,14 @@ export default function SignUpPage() {
       role = "user",
       status = "active",
     } = data;
+    const plan = role === "user" && "user_free";
     const { data: res, error } = await authClient.signUp.email({
       name,
       email,
       password,
       image: photo,
       role,
+      plan,
       status,
       callbackURL: "/",
     });

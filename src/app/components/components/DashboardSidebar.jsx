@@ -98,7 +98,11 @@ export default function DashboardSideBar({ user }) {
             color="warning"
             size="sm"
           >
-            Premium
+            {user?.plan === "user_free"
+              ? "FREE"
+              : user?.plan === "user_pro"
+                ? "PRO"
+                : "PREMIUM"}
           </Badge>
           <div className="userImage ">
             <Image

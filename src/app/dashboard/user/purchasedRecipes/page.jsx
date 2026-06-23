@@ -1,7 +1,20 @@
-import React from "react";
+import { getPayments } from "@/app/lib/api/payments";
+import { getUserSession } from "@/app/lib/core/session";
+import PurchasedRecipesPage from "./PaymentData";
 
-const purchasedRecipesPage = () => {
-  return <div>This page have all recipes which i brought.</div>;
+const page = async () => {
+  const user = await getUserSession();
+  const paymentsData = await getPayments();
+  const selectedUserPaymentsData = paymentsData.filter(
+    (pay) => pay.userId === user?.id,
+  );
+  console.log(selectedUserPaymentsData);
+
+  return (
+    <div>
+      <PurchasedRecipesPage paymentsData={selectedUserPaymentsData} />
+    </div>
+  );
 };
 
-export default purchasedRecipesPage;
+export default page;

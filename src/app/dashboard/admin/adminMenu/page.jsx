@@ -8,7 +8,6 @@ const page = async () => {
   const allReports = await getAllReports();
   return (
     <div>
-      this is overview page.
       <AdminOverviewPage
         users={allUsers}
         recipes={allRecipes}

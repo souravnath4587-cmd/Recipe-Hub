@@ -24,12 +24,11 @@ export default async function page() {
     recipe.favourite?.includes(user?.id),
   ).length;
   const totalLikes = allRecipesdata
-    // .filter((recipe) => recipe.favourite?.includes(user?.id))
+    .filter((recipe) => recipe.favourite?.includes(user?.id))
     .reduce((sum, recipe) => sum + recipe.likesCount, 0);
   const firstFavouriteItem = allRecipesdata.filter((recipe) =>
     recipe.favourite?.includes(user?.id),
   )[0];
-  console.log();
 
   const userData = {
     name: user?.name || "Chef",
@@ -45,8 +44,13 @@ export default async function page() {
     },
     activity: {
       latestRecipe: allRecipesdata[0]?.recipeName || "None Added Yet",
-      latestFavorite: firstFavouriteItem.recipeName,
-      status: "Premium",
+      latestFavorite: firstFavouriteItem?.recipeName,
+      status:
+        user?.plan === "user_free"
+          ? "FREE"
+          : user?.plan === "user_pro"
+            ? "PRO"
+            : "PREMIUM",
     },
   };
 
@@ -122,7 +126,12 @@ export default async function page() {
         <Card className="md:col-span-3 bg-linear-to-br from-default-100 to-surface dark:from-[#1c1917] dark:to-[#121214] border border-amber-500/20 rounded-2xl p-6 shadow-md relative overflow-hidden">
           <Card.Header className="flex flex-col items-start gap-1 p-0">
             <Card.Title className="flex items-center gap-2 text-lg font-bold text-amber-500 uppercase tracking-wider">
-              👑 Premium Membership
+              👑{" "}
+              {user?.plan === "user_free"
+                ? "Free Member"
+                : user?.plan === "user_pro"
+                  ? "Pro Member"
+                  : "Premium Member"}
             </Card.Title>
             <Card.Description className="text-xs text-default-400 mt-1 block">
               Current Tier Status
@@ -135,7 +144,11 @@ export default async function page() {
                 Status:
               </span>
               <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md font-bold tracking-wide uppercase text-xs">
-                {userData.membership.status}
+                {user?.plan === "user_free"
+                  ? "Free Member"
+                  : user?.plan === "user_pro"
+                    ? "Pro Member"
+                    : "Premium Member"}
               </span>
             </div>
             <p className="text-default-600 dark:text-zinc-300 text-sm max-w-sm leading-relaxed">

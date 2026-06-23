@@ -14,17 +14,17 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   // const [selectedRecipe, setSelectedRecipe] = useState(null);
   // const [modalType, setModalType] = useState("");
 
-  const handleActionClick = (id) => {
-    console.log(id);
+  // const handleActionClick = (id) => {
+  //   console.log(id);
 
-    // if (type === "edit") {
-    //   // Navigate dynamically using the string variant of the id
-    //   router.push(`/myRecipes/update/${recipe._id}`);
-    // } else {
-    //   setSelectedRecipe(recipe);
-    //   setIsModalOpen(true);
-    // }
-  };
+  //   // if (type === "edit") {
+  //   //   // Navigate dynamically using the string variant of the id
+  //   //   router.push(`/myRecipes/update/${recipe._id}`);
+  //   // } else {
+  //   //   setSelectedRecipe(recipe);
+  //   //   setIsModalOpen(true);
+  //   // }
+  // };
 
   const handleDeleteConfirm = async (id) => {
     const deleteRecipe = await recipeDelete(id);

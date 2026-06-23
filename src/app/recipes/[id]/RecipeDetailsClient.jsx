@@ -27,8 +27,14 @@ import {
   userReportAction,
 } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
+import { serverMutation } from "@/app/lib/core/server";
+import { uploadPaymetsData } from "@/app/lib/action/payments";
 
-export default function RecipeDetailsClient({ initialRecipe, user }) {
+export default function RecipeDetailsClient({
+  initialRecipe,
+  user,
+  purchasedRecipesCount = 0,
+}) {
   const [recipe, setRecipe] = useState(initialRecipe);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
@@ -131,18 +137,6 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
         reason: reportReason,
         details: additionalDetails,
       });
-      // const res = await fetch("http://localhost:5000/api/reports", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     recipeId: recipeId,
-      //     userId: id, // Replace with your actual authenticated user state context
-      //     reason: reportReason,
-      //     details: additionalDetails,
-      //   }),
-      // });
-
-      // const data = await res.json();
 
       if (data.success) {
         toast.success(
@@ -160,10 +154,56 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
     }
   };
 
-  const handlePurchasePayment = async () => {
-    alert(
-      `Initializing secure Stripe network tunnel for: ${recipe.recipeName}`,
-    );
+  const [isLoading, setIsLoading] = useState(false);
+
+  const userPlan = user?.plan || "user_free";
+
+  // Client-side validation metrics matching server rules
+  const isFreePlan = userPlan === "user_free";
+  const isProCapReached = userPlan === "user_pro" && purchasedRecipesCount >= 5;
+  const isPremiumCapReached =
+    userPlan === "user_premium" && purchasedRecipesCount >= 10;
+
+  const shouldDisableButton =
+    isFreePlan || isProCapReached || isPremiumCapReached;
+
+  // Generate helper warning texts depending on why the button is locked
+  let buttonLabel = "Purchase Recipe Access";
+  if (isFreePlan) buttonLabel = "Free Tier Restriced";
+  if (isProCapReached) buttonLabel = "Pro Purchase Cap Reached (5/5)";
+  if (isPremiumCapReached) buttonLabel = "Premium Purchase Cap Reached (20/20)";
+
+  const handlePurchasePayment = async (recipeId) => {
+    try {
+      setIsLoading(true);
+
+      // 1. This is where you would normally invoke your Stripe checkout flow.
+      // Assuming a successful checkout returns a mock transaction string:
+      const mockTransactionId =
+        "ch_" + Math.random().toString(36).substring(2, 11);
+
+      // 2. Transmit payload directly to your Express Server route
+      const payload = {
+        userId: user?.id,
+        userEmail: user?.email,
+        recipeId: recipeId,
+        transactionId: mockTransactionId,
+        userPlan: userPlan,
+      };
+      const response = await uploadPaymetsData(payload);
+
+      if (response.success) {
+        toast.success("Success! Recipe unlocked successfully.");
+        window.location.reload(); // Refresh to reflect changes
+      } else {
+        toast.error(`Purchase Denied: ${response.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An unexpected transaction system error happened.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -267,10 +307,11 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
           </Card>
 
           {/* Premium Stripe Payment Card */}
+
           <Card className="bg-content1 border-2 border-primary/20 rounded-2xl p-6 shadow-sm space-y-4">
             <div className="space-y-1">
               <span className="text-[10px] uppercase font-bold tracking-widest text-primary">
-                Premium Unlock
+                Pro and Premium User can Unlock
               </span>
               <h3 className="text-xl font-black text-foreground">
                 Own This Recipe Blueprint
@@ -280,12 +321,14 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
               </p>
             </div>
             <Button
-              className="w-full bg-black text-white dark:bg-white dark:text-black font-black tracking-tight text-md h-12 shadow-md"
+              className="w-full bg-black text-white dark:bg-white dark:text-black font-black tracking-tight text-md h-12 shadow-md disabled:opacity-50"
               radius="xl"
               startContent={<FiCreditCard size={18} />}
-              onPress={handlePurchasePayment}
+              isDisabled={shouldDisableButton}
+              isLoading={isLoading}
+              onPress={() => handlePurchasePayment(recipe._id)}
             >
-              Purchase Recipe Access
+              {buttonLabel}
             </Button>
           </Card>
         </div>
