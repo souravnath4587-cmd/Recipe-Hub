@@ -103,7 +103,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-5xl md:max-w-6xl mx-auto p-6 min-h-screen text-foreground bg-background">
+    <div className="max-w-5xl md:w-7xl mx-auto p-6 min-h-screen text-foreground bg-background">
       <div className="bg-surface dark:bg-[#121214] border border-divider rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit}>
           <Fieldset className="space-y-8">

@@ -7,7 +7,6 @@ import { getUserSession } from "@/app/lib/core/session";
 export default async function RecipeDetailPage({ params }) {
   const { id } = await params;
   const selectedRecipeData = await getRecipeData(id);
-  console.log(selectedRecipeData);
 
   const user = await getUserSession();
 

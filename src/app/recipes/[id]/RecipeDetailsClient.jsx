@@ -24,6 +24,7 @@ import {
 import {
   updateRecipeFavouriteAction,
   updateRecipeLikeAction,
+  userReportAction,
 } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
 
@@ -33,9 +34,11 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
   const [isDisliked, setIsDisliked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
-  const [reportReason, setReportReason] = useState("");
   const [isVoting, setIsVoting] = useState(false);
-  console.log(recipe.favouriteCount);
+
+  const [reportReason, setReportReason] = useState("Spam");
+  const [additionalDetails, setAdditionalDetails] = useState("");
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
   const modalState = useOverlayState();
   const totalIngredients = recipe.ingredients?.length ?? 0;
@@ -118,14 +121,43 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
     }
   };
 
-  const submitReportHandler = (closeFn) => {
-    if (!reportReason.trim()) return alert("Please specify a reason.");
-    console.log(`Reporting ID ${recipe._id}:`, reportReason);
-    alert(
-      "Report filed successfully. Our moderation team will audit this entry shortly.",
-    );
-    setReportReason("");
-    closeFn();
+  const submitReportHandler = async (recipeId, id) => {
+    setIsSubmittingReport(true);
+
+    try {
+      const data = await userReportAction({
+        recipeId: recipeId,
+        userId: id, // Replace with your actual authenticated user state context
+        reason: reportReason,
+        details: additionalDetails,
+      });
+      // const res = await fetch("http://localhost:5000/api/reports", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     recipeId: recipeId,
+      //     userId: id, // Replace with your actual authenticated user state context
+      //     reason: reportReason,
+      //     details: additionalDetails,
+      //   }),
+      // });
+
+      // const data = await res.json();
+
+      if (data.success) {
+        toast.success(
+          "Thank you. This recipe has been flagged for moderation review.",
+        );
+        setAdditionalDetails("");
+        modalState.close(); // Programmatically close the modal overlay layer
+      } else {
+        toast.error(data.error || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Failed to submit report packet:", error);
+    } finally {
+      setIsSubmittingReport(false);
+    }
   };
 
   const handlePurchasePayment = async () => {
@@ -334,59 +366,79 @@ export default function RecipeDetailsClient({ initialRecipe, user }) {
         </div>
       </div>
 
-      {/* HeroUI v3.2.1 Compound Modal Overlay Implementation */}
+      {/* HeroUI v3.2.1 EXACT MODAL COMPONENT SPECIFICATION DEMO LAYOUT */}
       <Modal state={modalState}>
-        <Modal.Backdrop variant="blur" />
-        <Modal.Container>
-          <Modal.Dialog>
-            {({ close }) => (
-              <>
-                <Modal.CloseTrigger />
-                <Modal.Header>
-                  <Modal.Heading className="text-xl font-black">
-                    Flag Recipe Publication
-                  </Modal.Heading>
-                </Modal.Header>
-                <Modal.Body className="py-4 space-y-4">
-                  <p className="text-sm text-default-500">
-                    Help enforce community standards. Specify details regarding{" "}
-                    <span className="font-bold text-foreground">
-                      {recipe.recipeName}
-                    </span>
-                    :
-                  </p>
+        <Modal.Backdrop variant="blur">
+          <Modal.Container>
+            <Modal.Dialog>
+              <Modal.CloseTrigger />
 
+              <Modal.Header>
+                <FiAlertTriangle className="text-warning mt-1" size={20} />
+                <Modal.Heading className="text-xl font-black">
+                  Flag This Publication
+                </Modal.Heading>
+              </Modal.Header>
+
+              <Modal.Body className="space-y-4 py-2">
+                {/* Reason Selection Dropdown */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-default-500 uppercase tracking-wider">
+                    Select Core Violation Reason
+                  </label>
+                  <select
+                    value={reportReason}
+                    onChange={(e) => setReportReason(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl bg-default-100 border border-divider text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-warning"
+                  >
+                    <option value="Spam">1. Spam</option>
+                    <option value="Offensive Content">
+                      2. Offensive Content
+                    </option>
+                    <option value="Copyright Issue">3. Copyright Issue</option>
+                  </select>
+                </div>
+
+                {/* Additional Written Context */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-default-500 uppercase tracking-wider">
+                    Additional Context (Optional)
+                  </label>
                   <TextField name="reportDetails">
                     <TextArea
-                      placeholder="Explain why this entry should be audited..."
-                      value={reportReason}
-                      onChange={(e) => setReportReason(e.target.value)}
+                      placeholder="Provide specific links or explanations supporting this report action..."
+                      value={additionalDetails}
+                      onChange={(e) => setAdditionalDetails(e.target.value)}
                       rows={4}
                       fullWidth
                     />
                   </TextField>
-                </Modal.Body>
-                <Modal.Footer className="flex gap-2 justify-end">
-                  <Button
-                    color="default"
-                    variant="flat"
-                    className="font-bold"
-                    onPress={close}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    color="danger"
-                    className="font-bold"
-                    onPress={() => submitReportHandler(close)}
-                  >
-                    Submit Safety Flag
-                  </Button>
-                </Modal.Footer>
-              </>
-            )}
-          </Modal.Dialog>
-        </Modal.Container>
+                </div>
+              </Modal.Body>
+
+              <Modal.Footer className="flex gap-2 justify-end border-t border-divider/40 pt-3">
+                <Button
+                  color="default"
+                  variant="flat"
+                  className="font-bold"
+                  onPress={modalState.close}
+                  isDisabled={isSubmittingReport}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="danger"
+                  className="font-bold"
+                  onPress={() => submitReportHandler(recipe._id, user?.id)}
+                  isLoading={isSubmittingReport}
+                  isDisabled={isSubmittingReport}
+                >
+                  Submit Safety Flag
+                </Button>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
       </Modal>
     </div>
   );

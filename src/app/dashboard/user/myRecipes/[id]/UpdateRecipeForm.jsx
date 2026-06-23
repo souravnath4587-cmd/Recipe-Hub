@@ -112,7 +112,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
     if (result.modifiedCount > 0) {
       setIsSubmitting(false);
       toast.success("Recipe document updated successfully!");
-      router.push("/dashboard/myRecipes"); // Redirect cleanly back to overview logs table
+      router.push("/dashboard/user/myRecipes"); // Redirect cleanly back to overview logs table
     } else {
       toast.error(error.message);
     }

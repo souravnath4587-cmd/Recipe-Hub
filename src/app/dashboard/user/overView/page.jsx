@@ -20,13 +20,23 @@ export default async function page() {
   // BRANCH 1: REGULAR USER ROLE RENDERING
   // ==========================================
   const allRecipesdata = await getLoggedInCreatorRecipesData();
+  const favouriteCount = allRecipesdata.filter((recipe) =>
+    recipe.favourite?.includes(user?.id),
+  ).length;
+  const totalLikes = allRecipesdata
+    // .filter((recipe) => recipe.favourite?.includes(user?.id))
+    .reduce((sum, recipe) => sum + recipe.likesCount, 0);
+  const firstFavouriteItem = allRecipesdata.filter((recipe) =>
+    recipe.favourite?.includes(user?.id),
+  )[0];
+  console.log();
 
   const userData = {
     name: user?.name || "Chef",
     stats: {
       totalRecipes: allRecipesdata.length,
-      totalFavorites: 18,
-      totalLikes: 127,
+      totalFavorites: favouriteCount,
+      totalLikes: totalLikes,
     },
     membership: {
       status: "PREMIUM MEMBER",
@@ -35,7 +45,7 @@ export default async function page() {
     },
     activity: {
       latestRecipe: allRecipesdata[0]?.recipeName || "None Added Yet",
-      latestFavorite: "Thai Soup",
+      latestFavorite: firstFavouriteItem.recipeName,
       status: "Premium",
     },
   };

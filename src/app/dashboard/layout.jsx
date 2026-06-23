@@ -9,7 +9,7 @@ const DashBoardLayoutPage = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-black text-white flex flex-row gap-10">
+      <div className="min-h-screen bg-black text-white flex flex-row">
         {/* Sidebar */}
         <DashboardSideBar user={user} />
 

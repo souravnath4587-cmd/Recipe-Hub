@@ -6,6 +6,7 @@ import { FiEdit2, FiTrash2, FiClock, FiEye } from "react-icons/fi";
 import { recipeDelete } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   const [recipes, setRecipes] = useState(allRecipes);
@@ -42,7 +43,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   };
 
   return (
-    <div className="w-5xl md:max-w-6xl mx-auto p-6 min-h-screen text-foreground bg-background">
+    <div className="max-w-5xl md:w-7xl mx-auto p-6 min-h-screen text-foreground bg-background ">
       <div className="flex flex-col gap-1 pb-6">
         <h1 className="text-2xl font-bold tracking-tight">
           My Recipes Collection
@@ -99,11 +100,13 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                 >
                   <Table.Cell className="py-4">
                     <div className="flex items-center gap-3">
-                      <Avatar
+                      <Image
                         src={recipe.recipeImage}
                         alt={recipe.recipeName}
+                        width={40}
+                        height={40}
                         radius="md"
-                        className="w-10 h-10 object-cover border border-divider shrink-0"
+                        className="w-10 h-10 object-cover border border-divider shrink-0 rounded-full"
                       />
                       <span className="font-medium text-sm truncate max-w-[180]">
                         {recipe.recipeName}
@@ -141,25 +144,25 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                   <Table.Cell className="text-center py-4">
                     <div className="flex justify-center items-center gap-1">
                       <Tooltip content="View Details" closeDelay={0}>
-                        <Button
+                        <Link
                           isIconOnly
                           variant="light"
                           size="sm"
                           className="text-default-400 hover:text-amber-500 min-w-0"
                           isDisabled={recipeCreator?.status === "block"}
-                          onPress={() => handleActionClick(recipe, "edit")}
+                          href={`/recipes/${recipe._id}`}
+                          // onPress={() => handleActionClick(recipe, "edit")}
                         >
                           <FiEye size={16} />
-                        </Button>
+                        </Link>
                       </Tooltip>
                       <Tooltip content="Edit Details" closeDelay={0}>
                         <Link
-                          href={`/dashboard/myRecipes/${recipe._id}`}
+                          href={`/dashboard/user/myRecipes/${recipe._id}`}
                           isIconOnly
                           variant="light"
                           size="sm"
                           className="text-default-400 hover:text-amber-500 min-w-0"
-                          // onClick={() => handleActionClick(recipe._id)}
                         >
                           <FiEdit2 size={16} />
                         </Link>

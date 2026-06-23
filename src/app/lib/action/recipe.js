@@ -27,3 +27,6 @@ export const updateRecipeFavouriteAction = async (id, updatedRecipeData) => {
     "PATCH",
   );
 };
+export const userReportAction = async (updatedRecipeData) => {
+  return serverMutation(`/api/reports`, updatedRecipeData, "POST");
+};

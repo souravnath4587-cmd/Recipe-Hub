@@ -5,7 +5,7 @@ const page = async ({ params }) => {
   const { id } = await params;
 
   const selectedRecipe = await getRecipeData(id);
-  console.log(selectedRecipe);
+  console.log(id);
 
   return (
     <div>
