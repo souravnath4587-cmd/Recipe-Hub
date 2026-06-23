@@ -12,21 +12,45 @@ import {
 } from "react-icons/fi";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function ManageRecipesPage({ allRecipes }) {
   // Use database records directly as state default baseline fallback
   const [recipes, setRecipes] = useState(allRecipes || []);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUpdatingFeature, setIsUpdatingFeature] = useState(false);
 
   // Handler: Toggle Feature State targeting Database Key `_id`
-  const handleToggleFeature = (recipeId) => {
-    setRecipes((prevRecipes) =>
-      prevRecipes.map((recipe) =>
-        recipe._id === recipeId
-          ? { ...recipe, isFeatured: !recipe.isFeatured }
-          : recipe,
-      ),
-    );
+  const handleToggleFeature = async (recipeId) => {
+    if (isUpdatingFeature) return;
+    setIsUpdatingFeature(true);
+
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/recipes/${recipeId}/feature`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success(`${data.message}`);
+        // Synchronize backend response state with local state array tree
+        setRecipes((prevRecipes) =>
+          prevRecipes.map((recipe) =>
+            recipe._id === recipeId
+              ? { ...recipe, isFeatured: data.isFeatured }
+              : recipe,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error("Failed to toggle recipe feature state metadata:", error);
+    } finally {
+      setIsUpdatingFeature(false);
+    }
   };
 
   // Handler: Deletion Pipeline targeting Database Key `_id`
@@ -57,7 +81,7 @@ export default function ManageRecipesPage({ allRecipes }) {
   });
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
+    <div className="max-w-5xl md:w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
       {/* Top Controls Header banner layout info */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-divider">
         <div className="flex flex-col gap-1">
@@ -241,7 +265,6 @@ export default function ManageRecipesPage({ allRecipes }) {
                             variant="flat"
                             color="default"
                             href={`/dashboard/admin/manageRecipes/${recipe._id}`}
-                            // onPress={() => handleEditRecipe(recipe._id)}
                           >
                             <FiEdit3 size={14} />
                           </Link>

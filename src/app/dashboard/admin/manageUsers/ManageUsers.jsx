@@ -14,42 +14,6 @@ import { userStatusUpdate } from "@/app/lib/action/users";
 import { toast } from "react-toastify";
 import { filter } from "framer-motion/client";
 
-// Mock User Data Array including image, registration date, and statuses
-// const initialUsers = [
-//   {
-//     id: "1",
-//     name: "Alex Rivera",
-//     email: "alex.rivera@example.com",
-//     avatar: "https://i.pravatar.cc/150?u=alex",
-//     registrationDate: "May 14, 2025",
-//     isBlocked: false,
-//   },
-//   {
-//     id: "2",
-//     name: "Zara Chen",
-//     email: "zara.chen@example.com",
-//     avatar: "https://i.pravatar.cc/150?u=zara",
-//     registrationDate: "Jan 22, 2025",
-//     isBlocked: true,
-//   },
-//   {
-//     id: "3",
-//     name: "Marcus Brody",
-//     email: "marcus.b@example.com",
-//     avatar: "https://i.pravatar.cc/150?u=marcus",
-//     registrationDate: "Nov 02, 2024",
-//     isBlocked: false,
-//   },
-//   {
-//     id: "4",
-//     name: "Elena Rostova",
-//     email: "elena.r@example.com",
-//     avatar: "https://i.pravatar.cc/150?u=elena",
-//     registrationDate: "Mar 19, 2026",
-//     isBlocked: false,
-//   },
-// ];
-
 export default function ManageUsersPage({ allUsers }) {
   const [users, setUsers] = useState(allUsers);
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,7 +67,7 @@ export default function ManageUsersPage({ allUsers }) {
   console.log(searchQuery);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
+    <div className="max-w-5xl md:w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
       {/* Top Controls Banner Area */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-divider">
         <div className="flex flex-col gap-1">

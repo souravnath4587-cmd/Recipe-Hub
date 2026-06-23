@@ -1,7 +1,15 @@
-import React from "react";
+import { getAllReports } from "@/app/lib/api/recipes";
+import ReportsDashboard from "./ReportDashboard";
 
-const page = () => {
-  return <div>this is reports page.</div>;
+const page = async () => {
+  const allReports = await getAllReports();
+  console.log(allReports);
+
+  return (
+    <div>
+      <ReportsDashboard allReports={allReports} />
+    </div>
+  );
 };
 
 export default page;

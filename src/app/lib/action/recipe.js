@@ -10,6 +10,10 @@ export const recipeDelete = async (id) => {
   return serverDelete("/api/myRecipes/", id);
 };
 
+export const reportDelete = async (id) => {
+  return serverDelete("/api/reports/", id);
+};
+
 // Dynamic PUT updating logic route mapping pipeline
 export const updateRecipeAction = async (id, updatedRecipeData) => {
   return serverMutation(`/api/myRecipes/${id}`, updatedRecipeData, "PUT");
