@@ -4,6 +4,7 @@ import RecipeDetailsClient from "./RecipeDetailsClient";
 import React from "react";
 import { getUserSession } from "@/app/lib/core/session";
 import { getPlanById } from "@/app/lib/api/plan";
+import { redirect } from "next/navigation";
 
 export default async function RecipeDetailPage({ params }) {
   const { id } = await params;
@@ -12,6 +13,10 @@ export default async function RecipeDetailPage({ params }) {
   const user = await getUserSession();
   const plan = await getPlanById(user?.plan || "user_free");
   const purchaseRecipeLimit = plan?.purchaseRecipeLimit;
+
+  if (!user) {
+    redirect(`/signIn?redirect=/recipes/${id}`);
+  }
 
   if (!selectedRecipeData) {
     return (

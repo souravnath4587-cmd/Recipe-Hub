@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Fieldset,
   TextField,
@@ -21,21 +21,19 @@ import { authClient } from "@/app/lib/auth-client";
 export default function ProfilePage() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  console.log(user);
-
-  // Mock logged-in user data structure
-
-  const [userProfile, setUserProfile] = useState(user);
-  console.log(userProfile);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState(userProfile?.image);
+  const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const [formData, setFormData] = useState({ name: "" });
 
-  // Editable fields local state form variables
-  const [formData, setFormData] = useState({
-    name: userProfile?.image,
-  });
+  // Sync state cleanly when the async better-auth session data resolves
+  useEffect(() => {
+    if (user) {
+      setFormData({ name: user.name || "" });
+      setImagePreview(user.image || "");
+    }
+  }, [user]);
 
   // Handle local avatar file replacement
   const handleImageChange = (e) => {
@@ -48,7 +46,12 @@ export default function ProfilePage() {
 
   const uploadToImgbb = async (file) => {
     const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API;
-    if (!IMGBB_API_KEY) return null;
+    if (!IMGBB_API_KEY) {
+      console.error(
+        "Missing NEXT_PUBLIC_IMAGE_UPLOAD_API key environment variable",
+      );
+      return null;
+    }
 
     const body = new FormData();
     body.append("image", file);
@@ -62,7 +65,7 @@ export default function ProfilePage() {
         },
       );
       const data = await response.json();
-      return data.data.url;
+      return data?.data?.url || null;
     } catch (error) {
       console.error("Image upload failed:", error);
       return null;
@@ -73,9 +76,9 @@ export default function ProfilePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    let finalImageUrl = userProfile.profileImage;
+    let finalImageUrl = user?.image || "";
 
-    // Upload new image if selected
+    // 1. Upload new image if a new file asset was selected
     if (imageFile) {
       const uploadedUrl = await uploadToImgbb(imageFile);
       if (uploadedUrl) {
@@ -83,23 +86,24 @@ export default function ProfilePage() {
       }
     }
 
-    const updatedProfilePayload = {
-      name: formData.name,
-      profileImage: finalImageUrl,
-    };
+    try {
+      // 2. Call better-auth directly to update database values on your server
+      const { data, error } = await authClient.updateUser({
+        name: formData.name,
+        image: finalImageUrl,
+      });
 
-    console.log("Ready to push profile mutations:", updatedProfilePayload);
-
-    // Simulate Server Ingestion Delay
-    setTimeout(() => {
-      setUserProfile((prev) => ({
-        ...prev,
-        name: updatedProfilePayload.name,
-        profileImage: updatedProfilePayload.profileImage,
-      }));
+      if (error) {
+        alert(`Failed to update profile: ${error.message}`);
+      } else {
+        alert("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error("Profile mutation error:", error);
+      alert("An unexpected error occurred during your profile save.");
+    } finally {
       setIsSubmitting(false);
-      alert("Profile updated successfully!");
-    }, 1200);
+    }
   };
 
   return (
@@ -122,7 +126,8 @@ export default function ProfilePage() {
             <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl">
               <div className="relative group shrink-0">
                 <Avatar
-                  src={imagePreview}
+                  src={imagePreview || undefined}
+                  name={formData.name || "User"}
                   className="w-24 h-24 text-large rounded-2xl border-2 border-divider object-cover"
                 />
                 <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center rounded-2xl cursor-pointer text-white text-[10px] font-semibold gap-1">
@@ -139,10 +144,10 @@ export default function ProfilePage() {
 
               <div className="flex flex-col text-center sm:text-left min-w-0">
                 <h3 className="text-lg font-bold text-foreground truncate">
-                  {userProfile.name}
+                  {user?.name || "Loading..."}
                 </h3>
                 <p className="text-sm text-default-500 truncate mb-2">
-                  {userProfile.email}
+                  {user?.email || ""}
                 </p>
                 <span className="text-[11px] text-default-400">
                   Click the avatar image overlay to select a new profile
@@ -182,7 +187,7 @@ export default function ProfilePage() {
                   <FiMail className="absolute left-3 text-default-400 z-10" />
                   <Input
                     type="email"
-                    value={userProfile.email}
+                    value={user?.email || ""}
                     disabled
                     readOnly
                     className="w-full bg-default-100 dark:bg-zinc-800/40 border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-default-500 outline-none select-none"

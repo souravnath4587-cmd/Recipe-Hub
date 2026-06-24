@@ -10,7 +10,10 @@ import {
   FiBriefcase,
 } from "react-icons/fi";
 
-import { getLoggedInCreatorRecipesData } from "@/app/lib/api/recipes";
+import {
+  getAllRecipeData,
+  getLoggedInCreatorRecipesData,
+} from "@/app/lib/api/recipes";
 import { getUserSession } from "@/app/lib/core/session";
 
 export default async function page() {
@@ -19,7 +22,8 @@ export default async function page() {
   // ==========================================
   // BRANCH 1: REGULAR USER ROLE RENDERING
   // ==========================================
-  const allRecipesdata = await getLoggedInCreatorRecipesData();
+  const allRecipesdata = await getAllRecipeData();
+  const userRecipesData = await getLoggedInCreatorRecipesData();
   const favouriteCount = allRecipesdata.filter((recipe) =>
     recipe.favourite?.includes(user?.id),
   ).length;
@@ -33,7 +37,7 @@ export default async function page() {
   const userData = {
     name: user?.name || "Chef",
     stats: {
-      totalRecipes: allRecipesdata.length,
+      totalRecipes: userRecipesData.length,
       totalFavorites: favouriteCount,
       totalLikes: totalLikes,
     },
