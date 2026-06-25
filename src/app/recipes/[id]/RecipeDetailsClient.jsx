@@ -27,8 +27,8 @@ import {
   userReportAction,
 } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
-import { serverMutation } from "@/app/lib/core/server";
 import { uploadPaymetsData } from "@/app/lib/action/payments";
+import { useRouter } from "next/navigation";
 
 export default function RecipeDetailsClient({
   initialRecipe,
@@ -45,6 +45,8 @@ export default function RecipeDetailsClient({
   const [reportReason, setReportReason] = useState("Spam");
   const [additionalDetails, setAdditionalDetails] = useState("");
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+
+  const router = useRouter();
 
   const modalState = useOverlayState();
   const totalIngredients = recipe.ingredients?.length ?? 0;
@@ -191,10 +193,12 @@ export default function RecipeDetailsClient({
         userPlan: userPlan,
       };
       const response = await uploadPaymetsData(payload);
+      console.log(response);
 
       if (response.success) {
         toast.success("Success! Recipe unlocked successfully.");
-        window.location.reload(); // Refresh to reflect changes
+        // Refresh to reflect changes
+        router.push("/dashboard/user/purchasedRecipes");
       } else {
         toast.error(`Purchase Denied: ${response.message}`);
       }

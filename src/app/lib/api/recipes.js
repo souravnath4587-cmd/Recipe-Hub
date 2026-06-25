@@ -1,11 +1,11 @@
-import { serverFetch } from "../core/server";
+import { protectedFetch, serverFetch } from "../core/server";
 import { getUserSession } from "../core/session";
 
 export const getAllRecipeData = async () => {
   return serverFetch("/api/allRecipes");
 };
 export const getAllReports = async () => {
-  return serverFetch("/api/reports");
+  return protectedFetch("/api/reports");
 };
 
 export const getRecipeData = async (id) => {

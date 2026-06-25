@@ -31,6 +31,15 @@ export const updateRecipeFavouriteAction = async (id, updatedRecipeData) => {
     "PATCH",
   );
 };
+// Dynamic PUT updating logic route mapping pipeline
+export const updateRecipeFeature = async (id, updatedRecipeData) => {
+  return serverMutation(
+    `/api/recipes/${id}/feature`,
+    updatedRecipeData,
+    "PATCH",
+  );
+};
+
 export const userReportAction = async (updatedRecipeData) => {
   return serverMutation(`/api/reports`, updatedRecipeData, "POST");
 };

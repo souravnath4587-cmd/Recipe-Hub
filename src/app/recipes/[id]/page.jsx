@@ -1,14 +1,14 @@
-// app/recipes/[id]/page.js
 import { getRecipeData } from "@/app/lib/api/recipes";
 import RecipeDetailsClient from "./RecipeDetailsClient";
-import React from "react";
 import { getUserSession } from "@/app/lib/core/session";
 import { getPlanById } from "@/app/lib/api/plan";
 import { redirect } from "next/navigation";
+// import { uploadPaymetsData } from "@/app/lib/action/payments";
 
 export default async function RecipeDetailPage({ params }) {
   const { id } = await params;
   const selectedRecipeData = await getRecipeData(id);
+  // const data = await uploadPaymetsData();
 
   const user = await getUserSession();
   const plan = await getPlanById(user?.plan || "user_free");
@@ -34,6 +34,7 @@ export default async function RecipeDetailPage({ params }) {
       initialRecipe={selectedRecipeData}
       user={user}
       purchasedRecipesCount={purchaseRecipeLimit}
+      // uploadPaymetsData={data}
     />
   );
 }

@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { updateRecipeFeature } from "@/app/lib/action/recipe";
 
 export default function ManageRecipesPage({ allRecipes }) {
   // Use database records directly as state default baseline fallback
@@ -26,14 +27,16 @@ export default function ManageRecipesPage({ allRecipes }) {
     setIsUpdatingFeature(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/recipes/${recipeId}/feature`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        },
-      );
-      const data = await res.json();
+      // const res = await fetch(
+      //   `http://localhost:5000/api/recipes/${recipeId}/feature`,
+      //   {
+      //     method: "PATCH",
+      //     headers: { "Content-Type": "application/json" },
+      //   },
+      // );
+      // const data = await res.json();
+
+      const data = await updateRecipeFeature(recipeId);
 
       if (data.success) {
         toast.success(`${data.message}`);

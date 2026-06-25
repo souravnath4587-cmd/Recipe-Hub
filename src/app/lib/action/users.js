@@ -1,3 +1,5 @@
+"use server";
+
 import { serverMutation } from "../core/server";
 
 export const userStatusUpdate = async (id, setData) => {
