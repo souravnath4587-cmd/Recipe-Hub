@@ -63,7 +63,7 @@ export default function Footer() {
 
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/dashboard/user/overView"
                   className="hover:text-orange-500 transition"
                 >
                   Dashboard

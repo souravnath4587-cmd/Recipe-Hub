@@ -12,10 +12,9 @@ import {
   Button,
   FieldError,
 } from "@heroui/react";
-import { FaGoogle, FaUtensils } from "react-icons/fa";
+import {  FaUtensils } from "react-icons/fa";
 import { authClient } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 export default function SignUpPage({ redirectTo = "/" }) {

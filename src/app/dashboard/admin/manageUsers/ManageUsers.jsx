@@ -12,7 +12,6 @@ import {
 import Image from "next/image";
 import { userStatusUpdate } from "@/app/lib/action/users";
 import { toast } from "react-toastify";
-import { filter } from "framer-motion/client";
 
 export default function ManageUsersPage({ allUsers }) {
   const [users, setUsers] = useState(allUsers);

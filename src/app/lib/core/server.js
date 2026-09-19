@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getUserToken } from "./session";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
@@ -19,7 +20,7 @@ export const protectedFetch = async (path) => {
 
   // handle 401, 403
 
-  return res.json();
+  return res.json(); 
 };
 
 export const serverFetch = async (path) => {
@@ -46,20 +47,6 @@ export const serverMutation = async (path, data, method = "POST") => {
   return res.json();
 };
 
-export const serverMutationPayment = async (path, data, method = "POST") => {
-  const res = await fetch(`${baseUrl}${path}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  // handle 401, 404, 403
-
-  return res.json();
-};
-
 export const serverDelete = async (path, id) => {
   try {
     const res = await fetch(`${baseUrl}${path}${id}`, {
@@ -76,7 +63,7 @@ const handleStatusCode = (res) => {
   if (res.status === 401) {
     redirect("/unauthorized");
   } else if (res.status === 403) {
-    redirect("/forbidden");
+    redirect("/unauthorized");
   }
 
   return res.json();
