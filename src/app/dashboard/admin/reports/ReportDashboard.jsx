@@ -7,13 +7,54 @@ import {
   FiCheckCircle,
   FiTrash2,
   FiExternalLink,
+  FiZap,
 } from "react-icons/fi";
 import Link from "next/link";
 import { reportDelete } from "@/app/lib/action/recipe";
+import { triageReport } from "@/app/lib/action/moderation";
 import { toast } from "react-toastify";
 
 export default function ReportsDashboard({ allReports = [] }) {
   const [reports, setReports] = useState(allReports);
+
+  // AI triage results, keyed by report id. Populated only when an admin presses
+  // the button - opening this page must never spend tokens.
+  const [triage, setTriage] = useState({});
+  const [triagingId, setTriagingId] = useState(null);
+
+  const handleTriage = async (report) => {
+    setTriagingId(report._id);
+    try {
+      const result = await triageReport({
+        reason: report.reason,
+        details: report.details,
+      });
+
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      setTriage((prev) => ({ ...prev, [report._id]: result.triage }));
+    } catch (error) {
+      console.error("Triage failed:", error);
+      toast.error("Could not triage this report. Please try again.");
+    } finally {
+      setTriagingId(null);
+    }
+  };
+
+  // high = danger, medium = warning, low = default
+  const getSeverityColor = (severity) => {
+    switch (severity) {
+      case "high":
+        return "danger";
+      case "medium":
+        return "warning";
+      default:
+        return "default";
+    }
+  };
 
   // Optional: Function to handle changing report status or deleting them
   const handleResolveReport = async (reportId) => {
@@ -65,19 +106,18 @@ export default function ReportsDashboard({ allReports = [] }) {
         <Table.ScrollContainer>
           <Table.Content>
             <Table.Header>
-              <Table.Column>Target Recipe ID</Table.Column>
+              <Table.Column isRowHeader>Target Recipe ID</Table.Column>
               <Table.Column>Reporter User</Table.Column>
               <Table.Column>Violation Reason</Table.Column>
               <Table.Column>Context Details</Table.Column>
               <Table.Column>Submission Date</Table.Column>
               <Table.Column>Workflow Status</Table.Column>
+              <Table.Column>AI Triage</Table.Column>
               <Table.Column>Actions</Table.Column>
             </Table.Header>
 
             <Table.Body
-              emptyContent={
-                "No pending report documents found in moderation queue."
-              }
+              renderEmptyState={() => "No pending report documents found in moderation queue."}
             >
               {reports.map((report) => (
                 <Table.Row
@@ -146,6 +186,50 @@ export default function ReportsDashboard({ allReports = [] }) {
                     >
                       {report.status}
                     </Chip>
+                  </Table.Cell>
+
+                  {/* On-demand AI triage - advisory only, changes no data */}
+                  <Table.Cell>
+                    {triage[report._id] ? (
+                      <div className="flex flex-col gap-1 max-w-[220px]">
+                        <div className="flex items-center gap-1">
+                          <Chip
+                            size="sm"
+                            variant="flat"
+                            color={getSeverityColor(triage[report._id].severity)}
+                            className="font-bold tracking-wide text-[11px] uppercase"
+                          >
+                            {triage[report._id].severity}
+                          </Chip>
+                          <span className="text-[11px] text-default-500">
+                            {triage[report._id].recommendedAction}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-default-400 leading-snug">
+                          {triage[report._id].reasoning}
+                        </p>
+                      </div>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        color="secondary"
+                        radius="md"
+                        title="Ask AI to assess this report"
+                        isDisabled={triagingId === report._id}
+                        onPress={() => handleTriage(report)}
+                      >
+                        <span className="flex items-center gap-1 text-[11px]">
+                          <FiZap
+                            size={12}
+                            className={
+                              triagingId === report._id ? "animate-pulse" : undefined
+                            }
+                          />
+                          {triagingId === report._id ? "Checking..." : "Triage"}
+                        </span>
+                      </Button>
+                    )}
                   </Table.Cell>
 
                   {/* Admin Row Action Controls */}

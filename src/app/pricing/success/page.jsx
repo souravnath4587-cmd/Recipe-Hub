@@ -102,7 +102,7 @@
 //                 color="warning"
 //                 variant="solid"
 //                 className="font-black text-default-700 text-xs tracking-tight"
-//                 startContent={<FiBookOpen size={14} />}
+// 
 //               >
 //                 Go to Dashboard
 //               </Button>
@@ -239,9 +239,11 @@ export default async function PricingSuccessPage({ searchParams }) {
                 color="warning"
                 variant="solid"
                 className="font-black text-default-700 text-xs tracking-tight"
-                startContent={<FiBookOpen size={14} />}
               >
-                Go to Dashboard
+                <span className="inline-flex items-center gap-1.5">
+                  <FiBookOpen size={14} />
+                  Go to Dashboard
+                </span>
               </Button>
             </Link>
 
@@ -251,9 +253,11 @@ export default async function PricingSuccessPage({ searchParams }) {
                 color="default"
                 variant="flat"
                 className="font-bold text-xs tracking-tight text-default-700"
-                endContent={<FiArrowRight size={14} />}
               >
-                Publish New Recipe
+                <span className="inline-flex items-center gap-1.5">
+                  Publish New Recipe
+                  <FiArrowRight size={14} />
+                </span>
               </Button>
             </Link>
           </div>

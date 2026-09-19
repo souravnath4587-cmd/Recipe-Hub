@@ -29,7 +29,10 @@ export default async function page() {
   ).length;
   const totalLikes = allRecipesdata
     .filter((recipe) => recipe.favourite?.includes(user?.id))
-    .reduce((sum, recipe) => sum + recipe.likesCount, 0);
+    // likesCount is added by the backend and is missing on older recipe
+    // documents. Without the fallback one undefined turns the whole sum into
+    // NaN, which React then warns about when it renders.
+    .reduce((sum, recipe) => sum + (recipe.likesCount ?? 0), 0);
   const firstFavouriteItem = allRecipesdata.filter((recipe) =>
     recipe.favourite?.includes(user?.id),
   )[0];

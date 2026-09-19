@@ -60,8 +60,6 @@ export default function NotFound() {
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            size="lg"
-            color="warning"
             className="font-semibold bg-blue-500 text-white px-4 py-2 rounded-xl"
           >
             Back to Home
@@ -69,9 +67,7 @@ export default function NotFound() {
 
           <Link
             href="/recipes"
-            size="lg"
-            variant="bordered"
-            className=" bg-orange-500 text-white px-4 py-2 rounded-xl"
+            className="bg-orange-500 text-white px-4 py-2 rounded-xl"
           >
             Browse Recipes
           </Link>

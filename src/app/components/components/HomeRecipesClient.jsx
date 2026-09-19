@@ -45,14 +45,10 @@ export default function HomeRecipesClient({ recipes = [] }) {
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
           <Link
             href="/recipes"
-            color="primary"
-            variant="ghost"
-            className="font-bold group"
-            endContent={
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-            }
+            className="font-bold group inline-flex items-center gap-1 text-primary"
           >
             View All Recipes
+            <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
       </div>
@@ -103,9 +99,11 @@ export default function HomeRecipesClient({ recipes = [] }) {
                     color="warning"
                     variant="solid"
                     className="font-black text-black shadow-md text-[10px] tracking-wider uppercase"
-                    startContent={<FiStar className="fill-current" />}
                   >
-                    Featured
+                    <span className="inline-flex items-center gap-1">
+                      <FiStar className="fill-current" />
+                      Featured
+                    </span>
                   </Chip>
                 )}
               </div>
@@ -167,11 +165,7 @@ export default function HomeRecipesClient({ recipes = [] }) {
               >
                 <Link
                   href={`/recipes/${recipe._id}`}
-                  fullWidth
-                  size="md"
-                  variant="flat"
-                  color="primary"
-                  className="font-bold tracking-tight"
+                  className="w-full block text-center font-bold tracking-tight text-primary"
                 >
                   View Blueprint Details
                 </Link>

@@ -281,7 +281,6 @@ export default function RecipeDetailsClient({
                   color={isFavorited ? "danger" : "default"}
                   onPress={() => handleFavoriteToggle(recipe._id, user?.id)}
                   isDisabled={isFavoriteLoading} // Disables interaction while awaiting DB confirmation
-                  isLoading={isFavoriteLoading} // Shows nice native loading feedback circle
                 >
                   {!isFavoriteLoading && (
                     <FiHeart
@@ -327,12 +326,13 @@ export default function RecipeDetailsClient({
             <Button
               className="w-full bg-black text-white dark:bg-white dark:text-black font-black tracking-tight text-md h-12 shadow-md disabled:opacity-50"
               radius="xl"
-              startContent={<FiCreditCard size={18} />}
               isDisabled={shouldDisableButton}
-              isLoading={isLoading}
               onPress={() => handlePurchasePayment(recipe._id)}
             >
-              {buttonLabel}
+              <span className="inline-flex items-center gap-2">
+                <FiCreditCard size={18} />
+                {buttonLabel}
+              </span>
             </Button>
           </Card>
         </div>
@@ -477,7 +477,6 @@ export default function RecipeDetailsClient({
                   color="danger"
                   className="font-bold"
                   onPress={() => submitReportHandler(recipe._id, user?.id)}
-                  isLoading={isSubmittingReport}
                   isDisabled={isSubmittingReport}
                 >
                   Submit Safety Flag

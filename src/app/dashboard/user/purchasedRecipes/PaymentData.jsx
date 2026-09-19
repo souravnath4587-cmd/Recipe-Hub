@@ -35,7 +35,7 @@ export default function PurchasedRecipesPage({ paymentsData }) {
           <Table.ScrollContainer>
             <Table.Content>
               <Table.Header>
-                <Table.Column className="font-bold text-xs">
+                <Table.Column isRowHeader className="font-bold text-xs">
                   Recipe Ref Reference ID
                 </Table.Column>
                 <Table.Column className="font-bold text-xs">
@@ -91,20 +91,17 @@ export default function PurchasedRecipesPage({ paymentsData }) {
                         variant="flat"
                         color="success"
                         className="font-bold capitalize text-[10px]"
-                        startContent={
-                          <FiCheckCircle size={12} className="mr-0.5" />
-                        }
                       >
-                        {payment.paymentStatus}
+                        <span className="inline-flex items-center gap-1">
+                          <FiCheckCircle size={12} />
+                          {payment.paymentStatus}
+                        </span>
                       </Chip>
                     </Table.Cell>
                     <Table.Cell>
                       <Link
-                        size="sm"
                         href={`/recipes/${payment.recipeId}`}
-                        variant="flat"
-                        color="success"
-                        className="font-bold capitalize text-[10px]"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-success/10 text-success hover:bg-success/20 transition-colors"
                       >
                         <FiEye size={20} />
                       </Link>

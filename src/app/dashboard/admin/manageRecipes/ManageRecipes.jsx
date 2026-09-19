@@ -98,15 +98,16 @@ export default function ManageRecipesPage({ allRecipes }) {
         </div>
 
         {/* Catalog Query Input field filtering values */}
-        <Input
-          isClearable
-          className="w-full md:max-w-xs"
-          placeholder="Search by title, category, cuisine..."
-          startContent={<FiSearch className="text-default-400" />}
-          value={searchQuery}
-          onValueChange={setSearchQuery}
-          variant="flat"
-        />
+        <div className="relative flex items-center w-full md:max-w-xs">
+          <FiSearch className="absolute left-3 z-10 text-default-400" />
+          <Input
+            className="w-full pl-9"
+            placeholder="Search by title, category, cuisine..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="flat"
+          />
+        </div>
       </div>
 
       {/* Main Table Interface Layout Grid Box */}
@@ -140,9 +141,7 @@ export default function ManageRecipesPage({ allRecipes }) {
               </Table.Header>
 
               <Table.Body
-                emptyContent={
-                  "No database matches returned for specified search terms context."
-                }
+                renderEmptyState={() => "No database matches returned for specified search terms context."}
               >
                 {filteredRecipes.map((recipe) => (
                   <Table.Row
@@ -220,11 +219,11 @@ export default function ManageRecipesPage({ allRecipes }) {
                           variant="soft"
                           color="warning"
                           className="font-bold text-xs"
-                          startContent={
-                            <FiCheckCircle className="ml-1" size={12} />
-                          }
                         >
-                          Featured on Feed
+                          <span className="inline-flex items-center gap-1">
+                            <FiCheckCircle size={12} />
+                            Featured on Feed
+                          </span>
                         </Chip>
                       ) : (
                         <span className="text-xs text-default-400 italic pl-2">
@@ -263,11 +262,8 @@ export default function ManageRecipesPage({ allRecipes }) {
                         {/* Edit metadata block handler controls item actions */}
                         <Tooltip content="Edit recipe configuration properties">
                           <Link
-                            isIconOnly
-                            size="sm"
-                            variant="flat"
-                            color="default"
                             href={`/dashboard/admin/manageRecipes/${recipe._id}`}
+                            className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-default-100 text-default-600 hover:bg-default-200 transition-colors"
                           >
                             <FiEdit3 size={14} />
                           </Link>

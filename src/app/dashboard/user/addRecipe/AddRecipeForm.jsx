@@ -19,6 +19,7 @@ import {
   FiSmile,
   FiUploadCloud,
   FiCheck,
+  FiZap,
 } from "react-icons/fi";
 import { createRecipe } from "@/app/lib/action/recipe";
 import { SiAdblock } from "react-icons/si";
@@ -31,6 +32,10 @@ export default function AddRecipeForm({ recipeCreator }) {
   const [imageFile, setImageFile] = useState(null);
   const router = useRouter();
 
+  // AI draft panel state (separate from the recipe fields it fills in)
+  const [aiIdea, setAiIdea] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
   // Core Recipe Form State values tracking your specified fields
   const [formData, setFormData] = useState({
     recipeName: "",
@@ -41,6 +46,56 @@ export default function AddRecipeForm({ recipeCreator }) {
     ingredients: "",
     instructions: "",
   });
+
+  // Asks /api/ai/recipe for a draft and prefills the form below.
+  // Nothing is saved here - the user still reviews and submits.
+  const handleGenerate = async () => {
+    const idea = aiIdea.trim();
+    if (!idea) {
+      toast.error("Describe the dish you want first.");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const res = await fetch("/api/ai/recipe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idea }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Gemini capacity errors are transient - the button stays enabled so the
+        // user can simply press it again.
+        toast.error(data?.error || "Could not generate a recipe. Try again.");
+        return;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        recipeName: data.recipeName ?? prev.recipeName,
+        category: data.category ?? prev.category,
+        cuisineType: data.cuisineType ?? prev.cuisineType,
+        difficultyLevel: data.difficultyLevel ?? prev.difficultyLevel,
+        // The API returns preparationTime; this form's state calls it prepTime.
+        prepTime: data.preparationTime ?? prev.prepTime,
+        // The API returns string[]; this textarea is newline-delimited and is
+        // split back into an array on submit.
+        ingredients: Array.isArray(data.ingredients)
+          ? data.ingredients.join("\n")
+          : prev.ingredients,
+        instructions: data.instructions ?? prev.instructions,
+      }));
+
+      toast.success("Draft ready. Review and edit before saving.");
+    } catch (error) {
+      console.error("AI generate failed:", error);
+      toast.error("Could not reach the AI service. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // ImgBB Upload Pipeline Helper Function
   const uploadToImgbb = async (file) => {
@@ -155,6 +210,47 @@ export default function AddRecipeForm({ recipeCreator }) {
               </>
             ) : (
               <>
+                {/* AI draft panel - prefills the fields below, saves nothing */}
+                <div className="rounded-xl border border-amber-500/30 bg-[#1c1c1f] p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <FiZap className="text-amber-500" />
+                    <span className="text-sm font-semibold text-white">
+                      Generate with AI
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400">
+                    Describe a dish and AI will draft the fields below. Everything
+                    stays editable before you save.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <TextField
+                      className="flex-1 flex flex-col gap-1.5"
+                      aria-label="Describe the dish you want AI to draft"
+                    >
+                      <Input
+                        type="text"
+                        placeholder="e.g. spicy thai green curry with chicken"
+                        value={aiIdea}
+                        maxLength={300}
+                        onChange={(e) => setAiIdea(e.target.value)}
+                        className="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600"
+                      />
+                    </TextField>
+                    {/* type=button: without it this would submit the form */}
+                    <Button
+                      type="button"
+                      onPress={handleGenerate}
+                      isDisabled={isGenerating || !aiIdea.trim()}
+                      className="bg-amber-500 text-black font-semibold rounded-lg px-5 disabled:opacity-50"
+                    >
+                      <span className="flex items-center gap-2">
+                        <FiZap className={isGenerating ? "animate-pulse" : undefined} />
+                        {isGenerating ? "Generating..." : "Generate"}
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+
                 <Fieldset.Group className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 w-full">
                   {/* Recipe Name */}
                   <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
@@ -374,7 +470,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                 <Fieldset.Actions className="flex justify-end pt-4 border-t border-zinc-800 w-full">
                   <Button
                     type="submit"
-                    isLoading={isSubmitting}
+                    isDisabled={isSubmitting}
                     className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm transition shadow-lg shadow-amber-500/10 flex items-center gap-2"
                   >
                     {!isSubmitting && <FiCheck size={16} />}

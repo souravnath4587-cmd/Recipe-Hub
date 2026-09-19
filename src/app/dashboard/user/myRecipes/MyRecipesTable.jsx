@@ -7,6 +7,7 @@ import { recipeDelete } from "@/app/lib/action/recipe";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import Image from "next/image";
+import { isValidImageSrc } from "@/app/lib/imageSrc";
 
 export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   const [recipes, setRecipes] = useState(allRecipes);
@@ -63,16 +64,11 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
         Light Mode: background becomes white/light gray surfaces
         Dark Mode: transitions into dark card finishes automatically
       */}
-      <Table
-        classNames={{
-          base: "shadow-sm rounded-2xl overflow-hidden border border-divider",
-          tbody: "bg-surface dark:bg-zinc-900/40",
-        }}
-      >
+      <Table className="shadow-sm rounded-2xl overflow-hidden border border-divider">
         <Table.ScrollContainer>
           <Table.Content aria-label="User registered recipes control log panel">
             <Table.Header>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column isRowHeader className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
                 Recipe
               </Table.Column>
               <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
@@ -92,7 +88,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
               </Table.Column>
             </Table.Header>
 
-            <Table.Body>
+            <Table.Body className="bg-surface dark:bg-zinc-900/40">
               {recipes.map((recipe, index) => (
                 <Table.Row
                   key={index}
@@ -100,14 +96,19 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                 >
                   <Table.Cell className="py-4">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={recipe.recipeImage}
-                        alt={recipe.recipeName}
-                        width={40}
-                        height={40}
-                        radius="md"
-                        className="w-10 h-10 object-cover border border-divider shrink-0 rounded-full"
-                      />
+                      {isValidImageSrc(recipe.recipeImage) ? (
+                        <Image
+                          src={recipe.recipeImage}
+                          alt={recipe.recipeName}
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 object-cover border border-divider shrink-0 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 shrink-0 rounded-full border border-divider bg-default-100 flex items-center justify-center text-xs font-bold text-default-500 uppercase">
+                          {recipe.recipeName?.[0] || "?"}
+                        </div>
+                      )}
                       <span className="font-medium text-sm truncate max-w-[180]">
                         {recipe.recipeName}
                       </span>
@@ -145,13 +146,13 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                     <div className="flex justify-center items-center gap-1">
                       <Tooltip content="View Details" closeDelay={0}>
                         <Link
-                          isIconOnly
-                          variant="light"
-                          size="sm"
-                          className="text-default-400 hover:text-amber-500 min-w-0"
-                          isDisabled={recipeCreator?.status === "block"}
                           href={`/recipes/${recipe._id}`}
-                          // onPress={() => handleActionClick(recipe, "edit")}
+                          aria-disabled={recipeCreator?.status === "block"}
+                          className={`inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-amber-500 transition-colors ${
+                            recipeCreator?.status === "block"
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }`}
                         >
                           <FiEye size={16} />
                         </Link>
@@ -159,10 +160,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                       <Tooltip content="Edit Details" closeDelay={0}>
                         <Link
                           href={`/dashboard/user/myRecipes/${recipe._id}`}
-                          isIconOnly
-                          variant="light"
-                          size="sm"
-                          className="text-default-400 hover:text-amber-500 min-w-0"
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-amber-500 transition-colors"
                         >
                           <FiEdit2 size={16} />
                         </Link>

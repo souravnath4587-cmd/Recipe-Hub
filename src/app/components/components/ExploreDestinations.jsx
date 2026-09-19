@@ -178,14 +178,14 @@ export default function ExploreDestinations() {
                 <Button
                   fullWidth
                   className="bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-black text-xs tracking-tight shadow-lg opacity-95 group-hover:opacity-100 h-11 transition-all"
-                  endContent={
+                >
+                  <span className="inline-flex items-center gap-1.5">
+                    Explore Recipes
                     <FiArrowRight
                       className="group-hover:translate-x-1.5 transition-transform duration-200 stroke-[3]"
                       size={14}
                     />
-                  }
-                >
-                  Explore Recipes
+                  </span>
                 </Button>
               </div>
             </Card>

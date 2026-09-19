@@ -123,11 +123,13 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
       {/* Return Back Navigation */}
       <Button
         variant="light"
-        startContent={<FiArrowLeft />}
         className="mb-4 text-default-500 hover:text-foreground"
         onPress={() => router.push("/dashboard/myRecipes")}
       >
-        Back to Recipes
+        <span className="inline-flex items-center gap-1.5">
+          <FiArrowLeft />
+          Back to Recipes
+        </span>
       </Button>
 
       <div className="bg-surface dark:bg-[#121214] border border-divider rounded-2xl p-8 shadow-xl">
@@ -315,7 +317,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
             <Fieldset.Actions className="flex justify-end pt-4 border-t border-divider w-full">
               <Button
                 type="submit"
-                isLoading={isSubmitting}
+                isDisabled={isSubmitting}
                 className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm"
               >
                 {!isSubmitting && <FiCheck size={16} />} Save Changes

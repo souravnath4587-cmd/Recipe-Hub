@@ -170,14 +170,14 @@ export default function WhyJoin() {
           <Button
             size="lg"
             className="bg-linear-to-r from-red-500 via-orange-500 to-amber-500 text-white font-black text-xs tracking-tight shadow-xl shadow-orange-500/10 px-8 h-12 rounded-xl shrink-0 group relative z-10"
-            endContent={
+          >
+            <span className="inline-flex items-center gap-1.5">
+              Join Recipe-Hub Today
               <FiArrowRight
                 className="group-hover:translate-x-1 transition-transform stroke-3"
                 size={14}
               />
-            }
-          >
-            Join Recipe-Hub Today
+            </span>
           </Button>
         </div>
       </motion.div>

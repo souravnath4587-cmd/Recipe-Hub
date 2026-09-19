@@ -146,8 +146,8 @@ export default function PricingPlansPage() {
                   <Chip
                     size="sm"
                     className="bg-linear-to-r from-orange-500 to-red-600 text-white font-black tracking-wider uppercase text-[10px]"
-                    startContent={<FiZap className="fill-current" />}
                   >
+                    <FiZap className="fill-current inline mr-1" />
                     Most Popular
                   </Chip>
                 </div>

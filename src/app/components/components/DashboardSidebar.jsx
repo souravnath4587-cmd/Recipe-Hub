@@ -2,6 +2,7 @@
 
 import { Badge } from "@heroui/react";
 import Image from "next/image";
+import { isValidImageSrc } from "@/app/lib/imageSrc";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -105,13 +106,19 @@ export default function DashboardSideBar({ user }) {
                 : "PREMIUM"}
           </Badge>
           <div className="userImage ">
-            <Image
-              src={user?.image || "/avatar.png"}
-              alt="User"
-              width={60}
-              height={60}
-              className="rounded-full ml-2"
-            ></Image>
+            {isValidImageSrc(user?.image) ? (
+              <Image
+                src={user.image}
+                alt="User"
+                width={60}
+                height={60}
+                className="rounded-full ml-2"
+              />
+            ) : (
+              <div className="w-[60px] h-[60px] ml-2 rounded-full bg-default-100 flex items-center justify-center text-lg font-bold text-default-500 uppercase">
+                {user?.name?.[0] || "?"}
+              </div>
+            )}
           </div>
           <div>
             <h2 className="font-bold text-xl">{user?.name}</h2>

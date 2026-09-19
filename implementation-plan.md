@@ -168,30 +168,41 @@ works before a single line of UI exists.
 
 ## Phase 2 — Recipe generator
 
-- [ ] **2.1** Create `src/app/api/ai/recipe/route.js`. Mirror the existing style in
+- [x] **2.1** Create `src/app/api/ai/recipe/route.js`. Mirror the existing style in
       `src/app/api/checkout_sessions/route.js` (plain `export async function POST`,
       `NextResponse.json`, try/catch + `console.error`) but read
       `await request.json()`. Call `requireAiUser()` first, before any model call —
       an unauthenticated request must cost zero tokens.
-- [ ] **2.2 Auth gate test (do this before building UI):**
+- [x] **2.2 Auth gate test (do this before building UI):**
       ```bash
       curl -i -X POST http://localhost:3000/api/ai/recipe \
         -H 'content-type: application/json' -d '{"idea":"pad thai"}'
       ```
       Expect **401**. If this returns a recipe, stop and fix the guard.
-- [ ] **2.3** Signed-in test via the browser devtools console (so the session cookie
+- [ ] **2.3** *(needs your browser session)* Signed-in test via the browser devtools console (so the session cookie
       is attached) — confirm valid JSON matching the zod schema comes back.
-- [ ] **2.4** Add the "Generate with AI" panel to
+- [x] **2.4** Add the "Generate with AI" panel to
       `src/app/dashboard/user/addRecipe/AddRecipeForm.jsx`, above the existing
       `Fieldset.Group` inside the non-blocked branch. HeroUI `Button` with `onPress`
       and `isLoading` — this codebase does not use `onClick`.
-- [ ] **2.5** Wire the two field-shape conversions, which are easy to miss:
+- [x] **2.5** Wire the two field-shape conversions, which are easy to miss:
       `prepTime` <- `preparationTime`, and `ingredients.join("\n")` for the textarea.
-- [ ] **2.6** End-to-end: generate, review, submit, confirm the recipe persists
+- [ ] **2.6** *(needs your browser session)* End-to-end: generate, review, submit, confirm the recipe persists
       through the untouched `createRecipe` path and appears in My Recipes.
 
 **Done when:** a real recipe created via AI prefill is visible in the app.
 **Commit point.**
+
+> **Status (2026-09-19): code complete, awaiting a signed-in browser test.**
+> Verified here: route returns **401** unauthenticated with the correct message
+> (model never reached, zero tokens spent); `/dashboard/user/addRecipe` compiles and
+> returns 200; eslint clean apart from a pre-existing `<img>` warning at line 408.
+> Steps 2.3 and 2.6 need a real session, so they are yours to run.
+>
+> **Dev-server note:** a syntax error in an intermediate edit wedged Turbopack -
+> every route, including untouched ones, hung with no log line. `rm -rf .next` plus a
+> restart cleared it. If routes ever hang silently after an edit, suspect a wedged
+> compiler before suspecting the route.
 
 ---
 
@@ -200,51 +211,95 @@ works before a single line of UI exists.
 Highest-risk phase. If something breaks, it is almost certainly the `useChat` wiring,
 not the route — so verify the route by itself first.
 
-- [ ] **3.1** Create `src/app/api/ai/chat/route.js` — `requireAiUser()`, then
+- [x] **3.1** Create `src/app/api/ai/chat/route.js` — `requireAiUser()`, then
       `streamText({ model: MODELS.chat, instructions, messages })` scoping the bot to
       cooking and declining unrelated topics. **`instructions`, not `system`** — the
       v7 rename. Return via `createUIMessageStreamResponse` + `toUIMessageStream`
       (exact shape recorded in "Verified API surface" below).
       Also `export const maxDuration = 30`.
-- [ ] **3.2 Route-only tests, before any component exists:**
+- [~] **3.2 Route-only tests** (401 verified; streaming curl needs a session)
       - unauthenticated `curl` -> **401**
       - authenticated `curl -N` -> tokens arrive incrementally, not in one block
-- [ ] **3.3** Create `src/app/components/ai/CookingAssistant.jsx` (`"use client"`):
+- [x] **3.3** Create `src/app/components/ai/CookingAssistant.jsx` (`"use client"`):
       floating launcher + panel, `useChat` from `@ai-sdk/react`, self-gating via
       `authClient.useSession()` returning `null` when logged out — the same pattern
       already used at `src/app/dashboard/layout.jsx:7`.
-- [ ] **3.4** Mount once in `src/app/layout.js` beside the existing `<ToastContainer />`.
-- [ ] **3.5** Verify: absent when logged out (including on `/signIn`), present and
+- [x] **3.4** Mount once in `src/app/layout.js` beside the existing `<ToastContainer />`.
+- [ ] **3.5** *(needs your browser session)* Verify: absent when logged out (including on `/signIn`), present and
       streaming when signed in, panel survives client-side navigation between routes.
 
 **Done when:** a signed-in user can hold a multi-turn cooking conversation.
 **Commit point.**
 
+> **Status (2026-09-19): code complete, awaiting a signed-in browser test.**
+> Verified here: chat route returns **401** unauthenticated; `/` and `/signIn`
+> compile and return 200 with the assistant mounted; eslint clean.
+>
+> **`runModel()` is deliberately NOT used in the chat route.** `streamText` does not
+> throw on a capacity error - it resolves immediately and the failure arrives later
+> on the stream, so a try/catch around it never fires. The retry affordance for chat
+> is `regenerate()` in the client, plus an `onError` on `toUIMessageStream` that logs
+> the real error server-side and returns a friendly line to the user (the SDK masks
+> stream errors entirely by default).
+
 ---
 
 ## Phase 4 — Admin moderation triage
 
-- [ ] **4.1** Create `src/app/lib/action/moderation.js` (`"use server"`) with
+- [x] **4.1** Create `src/app/lib/action/moderation.js` (`"use server"`) with
       `triageReport()`. **It must re-check `user.role !== "admin"` and throw** —
       the `requireRole("admin")` in `dashboard/admin/layout.jsx:4` protects the page,
       not the action. Use `MODELS.moderation` (the cheap model) here.
-- [ ] **4.2** Add a per-row "Triage with AI" button to
+- [x] **4.2** Add a per-row "Triage with AI" button to
       `src/app/dashboard/admin/reports/ReportDashboard.jsx`; render severity as a
       colour-coded HeroUI `Chip` plus one line of reasoning.
-- [ ] **4.3** Verify: works as admin; the reports page fires **no** AI call on load
+- [ ] **4.3** *(needs an admin browser session)* Verify: works as admin; the reports page fires **no** AI call on load
       (watch the network tab); a non-admin session invoking the action is rejected.
 
 **Done when:** triage returns advisory output and changes no data.
 **Commit point.**
 
+> **Status (2026-09-19): code complete, awaiting an admin browser test.**
+> Verified here: `/dashboard/admin/reports` compiles and returns 200; table
+> column/cell parity is 8/8; eslint clean.
+>
+> **Gate-ordering audit across all three AI entry points** (checking the call site,
+> not the import line):
+>
+> | File | gate | first model call | admin check |
+> |---|---|---|---|
+> | `api/ai/recipe/route.js` | 37 | 60 | n/a |
+> | `api/ai/chat/route.js` | 26 | 42 | n/a |
+> | `lib/action/moderation.js` | 36 | 50 | line 39 |
+>
+> Every gate precedes its model call, so an unauthorized request costs zero tokens.
+>
+> **No AI call on page load** is structural, not a convention: `triageReport` is only
+> reachable from `onPress`. Results live in component state keyed by report id, so
+> opening the reports page spends nothing.
+>
+> The action is **advisory only** - it returns severity, category, reasoning and a
+> recommended action, and mutates nothing. The existing resolve/delete controls are
+> untouched.
+
 ---
 
 ## Phase 5 — Hardening and deploy
 
-- [ ] **5.1** `npx eslint src/` clean, `npm run build` succeeds.
-- [ ] **5.2** Key containment:
-      `grep -r "GOOGLE_GENERATIVE_AI" .next/static/ || echo clean`. Must print `clean`.
-- [ ] **5.3** Rate limit: hit `/api/ai/recipe` 21x signed in; the 21st returns 429.
+- [x] **5.1** `npm run build` **succeeds**. Both AI routes registered as dynamic:
+      `f /api/ai/chat`, `f /api/ai/recipe`. eslint: 4 errors / 3 warnings, **all
+      pre-existing** (2x unescaped apostrophes, 2x set-state-in-effect) and none in
+      files written for this work.
+- [x] **5.2** Key containment **PASSED**:
+      - var name not in `.next/static/` - clean
+      - actual key value not in `.next/static/` - clean
+      - sanity check: `NEXT_PUBLIC_IMAGE_UPLOAD_API` **is** found in static chunks,
+        proving the grep works and the two negatives above are meaningful
+      - the key does appear in `.next/dev/cache/turbopack/*` (local dev cache only,
+        never served); `.gitignore:17` covers `/.next/` and `:34` covers `.env*`,
+        and `git ls-files` confirms neither is tracked
+- [ ] **5.3** *(needs a signed-in session)* Rate limit: hit `/api/ai/recipe` 21x
+      signed in; the 21st returns 429.
 - [ ] **5.4** Add `GOOGLE_GENERATIVE_AI_API_KEY` to the Vercel project env (all
       environments you deploy to) — it is currently local-only. Missing this is the
       most common cause of "works locally, 500s in preview".
@@ -252,6 +307,63 @@ not the route — so verify the route by itself first.
       and confirm one live generation and one live chat.
 
 ---
+
+## HeroUI v2 -> v3: the recurring trap
+
+This repo uses **HeroUI v3**, but much of the code was written against the **v2**
+API. v3 components destructure a fixed prop set and spread **everything else onto the
+DOM element**, so a v2 prop does not fail loudly - it silently does nothing, and
+React logs a warning.
+
+Three separate errors during this build traced back to this one cause. Swept and
+fixed across 14 files / 28 instances on 2026-09-19; all 14 routes now render with
+zero prop warnings.
+
+| v2 prop | On | v3 reality | Fix |
+|---|---|---|---|
+| `startContent` / `endContent` | Button, Chip, Link | leaks to DOM, icon never renders | put the icon in `children` |
+| `startContent` | Input | leaks (input is void) | relative wrapper + absolute icon |
+| `isLoading` | Button | leaks, no spinner, no disable | use `isDisabled` |
+| `isClearable` | Input | leaks, no clear button | remove |
+| `onValueChange` | Input | **never fires - search was dead** | `onChange={(e) => set(e.target.value)}` |
+
+`onValueChange` is the one that mattered most: it was not cosmetic. Every search and
+filter box in the app (all recipes, favourites, manage users, manage recipes) was
+inert because the handler never ran.
+
+**Before passing any prop to a HeroUI component, check its `.d.ts`:**
+`node_modules/@heroui/react/dist/components/<name>/<name>.d.ts`. If the prop is not
+in the destructured list or its `*Variants` type, it goes to the DOM and does nothing.
+
+## HeroUI v3 Button: supported props
+
+Found while building Phase 3, and it applies to every UI phase.
+`node_modules/@heroui/react/dist/components/button/button.d.ts` destructures a fixed
+prop set and spreads **everything else onto the DOM element**.
+
+| Supported | Not supported (leaks to DOM) |
+|---|---|
+| `color`, `radius`, `size`, `variant` | `startContent` |
+| `isIconOnly`, `fullWidth`, `isDisabled` | `endContent` |
+| `onPress`, `className`, `style`, `slot` | `isLoading` |
+
+An unsupported prop does not just get ignored - it produces a React warning
+("does not recognize the `startContent` prop on a DOM element") and **the icon never
+renders**. Put icons in `children` instead:
+
+```jsx
+<Button onPress={fn} isDisabled={busy}>
+  <span className="flex items-center gap-2">
+    <FiZap /> {busy ? "Working..." : "Go"}
+  </span>
+</Button>
+```
+
+**Pre-existing in this repo:** `startContent`/`endContent`/`isLoading` are used in
+at least ExploreDestinations, HomeRecipesClient, WhyJoin, FeaturedRecipesSection,
+RecipeLimitMeter, ManageRecipes, ManageUsers, and the Add Recipe submit button
+(`AddRecipeForm.jsx:470`). Those icons and loading states are silently not rendering
+today. Out of scope here, but worth a cleanup pass.
 
 ## Risks and how each shows up
 

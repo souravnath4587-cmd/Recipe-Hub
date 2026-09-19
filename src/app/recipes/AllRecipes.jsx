@@ -43,16 +43,17 @@ export default function AllRecipesPage({ allRecipes = [] }) {
         </div>
 
         {/* Eye-catching Search Input */}
-        <Input
-          isClearable
-          className="w-full md:max-w-xs"
-          placeholder="Search recipes, tags, origins..."
-          startContent={<FiSearch className="text-default-400" size={18} />}
-          value={searchQuery}
-          onValueChange={setSearchQuery}
-          variant="flat"
-          radius="lg"
-        />
+        <div className="relative flex items-center w-full md:max-w-xs">
+          <FiSearch className="absolute left-3 z-10 text-default-400" size={18} />
+          <Input
+            className="w-full pl-10"
+            placeholder="Search recipes, tags, origins..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="flat"
+            radius="lg"
+          />
+        </div>
       </div>
 
       {/* Main Grid Layout - Matches your reference card aspect ratios closely */}
@@ -116,11 +117,11 @@ export default function AllRecipesPage({ allRecipes = [] }) {
                     <Chip
                       size="sm"
                       className="bg-[#d2f34c] text-black font-bold text-xs shadow-sm border border-black/5"
-                      startContent={
-                        <FiStar className="fill-current text-black" size={12} />
-                      }
                     >
-                      {dynamicRating}
+                      <span className="inline-flex items-center gap-1">
+                        <FiStar className="fill-current text-black" size={12} />
+                        {dynamicRating}
+                      </span>
                     </Chip>
                   </div>
                 </div>
@@ -163,12 +164,14 @@ export default function AllRecipesPage({ allRecipes = [] }) {
                   <Button
                     className="w-full bg-black text-white dark:bg-white dark:text-black font-bold text-sm h-11 shadow-sm hover:opacity-90 transition-opacity"
                     radius="xl"
-                    endContent={<FiArrowRight size={16} />}
                     onPress={() =>
                       (window.location.href = `/recipes/${recipe._id}`)
                     }
                   >
-                    View Recipe
+                    <span className="inline-flex items-center gap-1.5">
+                      View Recipe
+                      <FiArrowRight size={16} />
+                    </span>
                   </Button>
                 </Card.Footer>
               </Card>

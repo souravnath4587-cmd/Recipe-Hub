@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { userStatusUpdate } from "@/app/lib/action/users";
 import { toast } from "react-toastify";
+import { isValidImageSrc } from "@/app/lib/imageSrc";
 
 export default function ManageUsersPage({ allUsers }) {
   const [users, setUsers] = useState(allUsers);
@@ -80,15 +81,16 @@ export default function ManageUsersPage({ allUsers }) {
         </div>
 
         {/* Input Component matching Light/Dark layout standard */}
-        <Input
-          isClearable
-          className="w-full md:max-w-xs"
-          placeholder="Search by name or email..."
-          startContent={<FiSearch className="text-default-400" />}
-          // value={searchQuery}
-          onValueChange={(e) => setSearchQuery(e.value)}
-          variant="flat"
-        />
+        <div className="relative flex items-center w-full md:max-w-xs">
+          <FiSearch className="absolute left-3 z-10 text-default-400" />
+          <Input
+            className="w-full pl-9"
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="flat"
+          />
+        </div>
       </div>
 
       {/* Main Container Wrapper */}
@@ -119,26 +121,29 @@ export default function ManageUsersPage({ allUsers }) {
               </Table.Header>
 
               <Table.Body
-                emptyContent={
-                  "No user matching that sequence sequence discovered."
-                }
+                renderEmptyState={() => "No user matching that sequence sequence discovered."}
               >
                 {filteredUsers.map((user) => (
                   <Table.Row
-                    key={user.id}
+                    key={user._id}
                     className="border-b border-divider/50 last:border-none hover:bg-default-50/50 transition-colors"
                   >
                     {/* User Identity Column Grouping */}
                     <Table.Cell>
                       <div className="flex items-center gap-3 py-1">
-                        <Image
-                          src={user?.image}
-                          //   color={user.isBlocked ? "danger" : "default"}
-                          className="rounded-full"
-                          alt={user?.name}
-                          width={60}
-                          height={60}
-                        ></Image>
+                        {isValidImageSrc(user?.image) ? (
+                          <Image
+                            src={user.image}
+                            className="rounded-full"
+                            alt={user?.name || "User"}
+                            width={60}
+                            height={60}
+                          />
+                        ) : (
+                          <div className="w-[60px] h-[60px] shrink-0 rounded-full bg-default-100 flex items-center justify-center text-lg font-bold text-default-500 uppercase">
+                            {user?.name?.[0] || "?"}
+                          </div>
+                        )}
                         {/* <Avatar
                           isBordered
                           color={user.isBlocked ? "danger" : "default"}
@@ -187,12 +192,14 @@ export default function ManageUsersPage({ allUsers }) {
                             variant="flat"
                             color="success"
                             className="font-semibold text-xs"
-                            startContent={<FiUserCheck size={14} />}
                             onPress={() =>
                               handleUnblockUser(user._id, user.name)
                             }
                           >
-                            Unblock User
+                            <span className="inline-flex items-center gap-1.5">
+                              <FiUserCheck size={14} />
+                              Unblock User
+                            </span>
                           </Button>
                         ) : (
                           <Button
@@ -200,12 +207,14 @@ export default function ManageUsersPage({ allUsers }) {
                             variant="flat"
                             color="danger"
                             className="font-semibold text-xs"
-                            startContent={<FiUserX size={14} />}
                             onPress={() =>
                               handleBlockUser(user._id, user?.name)
                             }
                           >
-                            Block User
+                            <span className="inline-flex items-center gap-1.5">
+                              <FiUserX size={14} />
+                              Block User
+                            </span>
                           </Button>
                         )}
                       </div>

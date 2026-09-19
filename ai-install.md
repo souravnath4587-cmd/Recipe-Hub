@@ -17,22 +17,16 @@ additionally requires the admin role):
 2. **Cooking assistant chatbot** (site-wide, streaming)
 3. **AI moderation triage** for admin reports
 
-Provider access is **Google AI Studio (Gemini) direct**, via `@ai-sdk/google` and
-`GOOGLE_GENERATIVE_AI_API_KEY` in `.env`.
-
-> **Changed 2026-09-19.** This was originally planned on the Vercel AI Gateway. The
-> gateway refused to serve requests without a credit card on file
-> (`customer_verification_required`), so the project moved to a direct Google key.
-> Trade-off accepted: no cross-provider fallbacks and no unified spend tracking.
-> Swapping back later is a change to `src/app/lib/ai/models.js` plus the env var.
+Provider access is via **Vercel AI Gateway** with `AI_GATEWAY_API_KEY` in `.env`.
+The project is already Vercel-linked (`.vercel/project.json`, project `recipe-hub`).
 
 ## Critical constraint — verify the SDK API before writing code
 
 The `ai` package is **not installed**. Its API has changed substantially from what
 is in LLM training data (`useChat` especially). So:
 
-1. `npm i ai @ai-sdk/react @ai-sdk/google zod`
-   - `zod` is currently only a *transitive* dep (v4.4.3 via better-auth). Promote it
+1. `npm i ai @ai-sdk/react zod`
+   - `zod` is currently only a _transitive_ dep (v4.4.3 via better-auth). Promote it
      to a direct dependency rather than relying on hoisting.
 2. **Then read `node_modules/ai/docs/`** and `node_modules/ai/src/` to confirm the
    real signatures for `generateObject`, `streamText`, the stream response helper,
@@ -45,24 +39,13 @@ is in LLM training data (`useChat` especially). So:
 The code sketches below show **intent and wiring**, not verified API calls.
 Treat any signature mismatch found in the bundled docs as authoritative over this file.
 
-## Models (smoke-tested live against this key on 2026-09-19)
+## Models (verified live against the gateway on 2026-09-19)
 
-| Use | Model | Status |
-|---|---|---|
-| Recipe generation | `gemini-3.8-flash` | PASS — `generateObject` returned a valid schema-conforming recipe |
-| Chat assistant | `gemini-3.8-flash` | PASS — `generateText` |
-| Report moderation | `gemini-3.5-flash-lite` | PASS — cheap model for simple classification |
-| Fallback | `gemini-3.6-flash` | PASS — used when the primary returns a capacity error |
-
-Do **not** use `gemini-2.5-flash`: the API rejects it for new users
-("no longer available to new users").
-
-**Capacity errors are real and expected.** During smoke testing, `gemini-3.8-flash`
-and `gemini-flash-latest` both intermittently returned *"This model is currently
-experiencing high demand"* after the SDK's own 3 retries, then succeeded moments
-later. Every AI call in this build needs a user-visible retry path, and the model
-module should expose a fallback id. This is the single most likely source of
-"it worked yesterday" bug reports.
+| Use               | Model                                                                    |
+| ----------------- | ------------------------------------------------------------------------ |
+| Recipe generation | `anthropic/claude-sonnet-5`                                              |
+| Chat assistant    | `anthropic/claude-sonnet-5`                                              |
+| Report moderation | `anthropic/claude-haiku-4.5` (cheap, high volume, simple classification) |
 
 Centralize these in one file so swapping is a one-line change.
 
@@ -72,12 +55,11 @@ Add to `.env` (server-only; **no** `NEXT_PUBLIC_` prefix — that would ship the
 to the browser):
 
 ```
-GOOGLE_GENERATIVE_AI_API_KEY=...
+AI_GATEWAY_API_KEY=...
 ```
 
-This is the exact variable name `@ai-sdk/google` reads; no explicit wiring needed.
-Get the key from Google AI Studio. Also add it to the Vercel project before
-deploying. `.gitignore:34` (`.env*`) already covers it.
+Get the key from the Vercel dashboard under AI Gateway -> API Keys. Also add it to
+the Vercel project for deploys. `.gitignore` already covers `.env`.
 
 ## Step 1 — Shared AI module
 
@@ -85,13 +67,11 @@ deploying. `.gitignore:34` (`.env*`) already covers it.
 
 ```js
 import "server-only";
-import { google } from "@ai-sdk/google";
 
 export const MODELS = {
-  recipe: google("gemini-3.8-flash"),
-  chat: google("gemini-3.8-flash"),
-  moderation: google("gemini-3.5-flash-lite"),
-  fallback: google("gemini-3.6-flash"), // for capacity errors
+  recipe: "anthropic/claude-sonnet-5",
+  chat: "anthropic/claude-sonnet-5",
+  moderation: "anthropic/claude-haiku-4.5",
 };
 ```
 
@@ -108,14 +88,17 @@ const WINDOW_MS = 60 * 60 * 1000;
 
 export async function requireAiUser() {
   const user = await getUserSession();
-  if (!user) return { error: "Please sign in to use AI features.", status: 401 };
+  if (!user)
+    return { error: "Please sign in to use AI features.", status: 401 };
   if (user.status === "block")
     return { error: "Your account is blocked.", status: 403 };
 
   const now = Date.now();
   const rec = hits.get(user.id);
-  if (!rec || now > rec.resetAt) hits.set(user.id, { count: 1, resetAt: now + WINDOW_MS });
-  else if (rec.count >= LIMIT) return { error: "Rate limit reached. Try again later.", status: 429 };
+  if (!rec || now > rec.resetAt)
+    hits.set(user.id, { count: 1, resetAt: now + WINDOW_MS });
+  else if (rec.count >= LIMIT)
+    return { error: "Rate limit reached. Try again later.", status: 429 };
   else rec.count++;
 
   return { user };
@@ -150,9 +133,9 @@ const RecipeSchema = z.object({
   category: z.string(),
   cuisineType: z.string(),
   difficultyLevel: z.enum(["Easy", "Medium", "Hard"]),
-  preparationTime: z.string(),      // e.g. "45 Mins"
+  preparationTime: z.string(), // e.g. "45 Mins"
   ingredients: z.array(z.string()),
-  instructions: z.string(),         // one blob, not an array — matches current shape
+  instructions: z.string(), // one blob, not an array — matches current shape
 });
 ```
 
@@ -167,7 +150,7 @@ On success, merge into the existing `formData` state:
 setFormData((p) => ({
   ...p,
   ...data,
-  prepTime: data.preparationTime,           // form key is prepTime, payload key is preparationTime
+  prepTime: data.preparationTime, // form key is prepTime, payload key is preparationTime
   ingredients: data.ingredients.join("\n"), // textarea is newline-delimited
 }));
 ```
@@ -245,8 +228,8 @@ through to the existing delete/action flow.
 
 **Edited**
 
-- `package.json` (+ `ai`, `@ai-sdk/react`, `@ai-sdk/google`, `zod`)
-- `.env` (+ `GOOGLE_GENERATIVE_AI_API_KEY`)
+- `package.json` (+ `ai`, `@ai-sdk/react`, `zod`)
+- `.env` (+ `AI_GATEWAY_API_KEY`)
 - `src/app/layout.js` (mount assistant)
 - `src/app/dashboard/user/addRecipe/AddRecipeForm.jsx` (generate panel)
 - `src/app/dashboard/admin/reports/ReportDashboard.jsx` (triage button)
@@ -274,9 +257,10 @@ external API in this phase.
    ```
 
    Expect **401**, not a streamed reply. Repeat for `/api/ai/recipe`.
+
 6. **Rate limit:** fire the recipe route 21x while signed in; the 21st should return 429.
 7. Confirm the key never reaches the browser:
-   `grep -r "GOOGLE_GENERATIVE_AI" .next/static/ || echo clean`
+   `grep -r "AI_GATEWAY" .next/static/ || echo clean`
 
 ## Out of scope for this phase
 

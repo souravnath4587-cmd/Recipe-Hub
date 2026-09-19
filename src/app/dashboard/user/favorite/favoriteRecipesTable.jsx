@@ -54,15 +54,16 @@ export default function FavoriteRecipesTable({ initialFavorites = [], user }) {
           </p>
         </div>
 
-        <Input
-          isClearable
-          className="w-full sm:max-w-[320px]"
-          placeholder="Filter by title or origin tag..."
-          startContent={<FiSearch className="text-default-400" />}
-          value={filterValue}
-          onValueChange={setFilterValue}
-          variant="flat"
-        />
+        <div className="relative flex items-center w-full sm:max-w-[320px]">
+          <FiSearch className="absolute left-3 z-10 text-default-400" />
+          <Input
+            className="w-full pl-9"
+            placeholder="Filter by title or origin tag..."
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+            variant="flat"
+          />
+        </div>
       </div>
 
       {/* HeroUI v3.2.1 Core Compound Table Component implementation architecture */}
@@ -70,7 +71,7 @@ export default function FavoriteRecipesTable({ initialFavorites = [], user }) {
         <Table.ScrollContainer>
           <Table.Content>
             <Table.Header>
-              <Table.Column>Recipe Asset Pipeline</Table.Column>
+              <Table.Column isRowHeader>Recipe Asset Pipeline</Table.Column>
               <Table.Column>Classification Group</Table.Column>
               <Table.Column>Execution Latency</Table.Column>
               <Table.Column>Complexity Tier</Table.Column>
@@ -78,9 +79,7 @@ export default function FavoriteRecipesTable({ initialFavorites = [], user }) {
             </Table.Header>
 
             <Table.Body
-              emptyContent={
-                "No matching saved recipe logs found in workspace records."
-              }
+              renderEmptyState={() => "No matching saved recipe logs found in workspace records."}
             >
               {filteredItems.map((recipe) => (
                 <Table.Row
@@ -141,11 +140,7 @@ export default function FavoriteRecipesTable({ initialFavorites = [], user }) {
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/recipes/${recipe._id}`}
-                        isIconOnly
-                        size="sm"
-                        variant="flat"
-                        color="primary"
-                        radius="md"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                       >
                         <FiEye size={14} />
                       </Link>

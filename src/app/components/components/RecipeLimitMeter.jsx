@@ -99,9 +99,11 @@ export default function RecipeLimitMeter({
                 color="warning"
                 variant="solid"
                 className="font-black text-black text-xs w-full md:w-auto px-6 shadow-lg bg-linear-to-r from-amber-400 to-orange-500"
-                startContent={<FiTrendingUp className="stroke-3" size={14} />}
               >
-                Expand My Quota
+                <span className="inline-flex items-center gap-1.5">
+                  <FiTrendingUp className="stroke-3" size={14} />
+                  Expand My Quota
+                </span>
               </Button>
             </Link>
           </div>

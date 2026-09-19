@@ -12,14 +12,21 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { authClient } from "../lib/auth-client";
+import { useHydrated } from "../lib/useHydrated";
 import Image from "next/image";
 import { Button } from "@heroui/react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const hydrated = useHydrated();
   const { data: session } = authClient.useSession();
-  const user = session?.user;
+
+  // The server cannot see the client-side session, so it always renders the
+  // logged-out nav. Reading `session` during the first client render too would
+  // make the two disagree and trigger a hydration mismatch. Gate on `mounted`
+  // so server and first client render match, then swap in the real state.
+  const user = hydrated ? session?.user : null;
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");

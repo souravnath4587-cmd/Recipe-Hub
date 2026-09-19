@@ -17,10 +17,14 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { authClient } from "@/app/lib/auth-client";
+import { useHydrated } from "@/app/lib/useHydrated";
 
 export default function ProfilePage() {
+  const hydrated = useHydrated();
   const { data: session } = authClient.useSession();
-  const user = session?.user;
+  // Hydration guard: the server renders the placeholder state, so the first
+  // client render must too (this page prints user.name / user.email directly).
+  const user = hydrated ? session?.user : null;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
@@ -200,7 +204,7 @@ export default function ProfilePage() {
             <Fieldset.Actions className="flex justify-end pt-4 border-t border-divider w-full">
               <Button
                 type="submit"
-                isLoading={isSubmitting}
+                isDisabled={isSubmitting}
                 className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm transition-transform shadow-lg shadow-amber-500/10 flex items-center gap-2"
               >
                 {isSubmitting ? (

@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { Poppins, Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import CookingAssistant from "./components/ai/CookingAssistant";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,6 +30,9 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         {children}
         <ToastContainer />
+        {/* Self-gating: renders null unless a user is signed in, so one mount
+            here covers the whole app without appearing on the auth pages. */}
+        <CookingAssistant />
       </body>
     </html>
   );

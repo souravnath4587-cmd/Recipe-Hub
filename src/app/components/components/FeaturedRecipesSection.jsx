@@ -52,9 +52,11 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
               color="warning"
               variant="flat"
               className="font-bold text-xs tracking-tight shadow-sm"
-              endContent={<FiArrowRight />}
             >
-              Explore Full Spotlight
+              <span className="inline-flex items-center gap-1">
+                Explore Full Spotlight
+                <FiArrowRight />
+              </span>
             </Button>
           </div>
         </div>
@@ -95,9 +97,11 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
                       size="sm"
                       variant="solid"
                       className="bg-black/60 text-white dark:bg-white/70 dark:text-black backdrop-blur-md font-bold"
-                      startContent={<FiGlobe />}
                     >
-                      {recipe.cuisineType}
+                      <span className="inline-flex items-center gap-1">
+                        <FiGlobe />
+                        {recipe.cuisineType}
+                      </span>
                     </Chip>
                   </div>
                 </div>
@@ -159,10 +163,7 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
                   <motion.div whileTap={{ scale: 0.95 }}>
                     <Link
                       href={`/recipes/${recipe._id}`}
-                      size="sm"
-                      color="warning"
-                      variant="solid"
-                      className="font-black text-xs shadow-sm"
+                      className="inline-flex items-center justify-center rounded-lg bg-warning px-3 py-1.5 font-black text-xs text-warning-foreground shadow-sm hover:opacity-90 transition-opacity"
                     >
                       Open Blueprint
                     </Link>
