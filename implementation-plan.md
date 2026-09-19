@@ -179,7 +179,7 @@ works before a single line of UI exists.
         -H 'content-type: application/json' -d '{"idea":"pad thai"}'
       ```
       Expect **401**. If this returns a recipe, stop and fix the guard.
-- [ ] **2.3** *(needs your browser session)* Signed-in test via the browser devtools console (so the session cookie
+- [x] **2.3** **VERIFIED** (browser session, admin). Signed-in test via the browser devtools console (so the session cookie
       is attached) — confirm valid JSON matching the zod schema comes back.
 - [x] **2.4** Add the "Generate with AI" panel to
       `src/app/dashboard/user/addRecipe/AddRecipeForm.jsx`, above the existing
@@ -217,7 +217,7 @@ not the route — so verify the route by itself first.
       v7 rename. Return via `createUIMessageStreamResponse` + `toUIMessageStream`
       (exact shape recorded in "Verified API surface" below).
       Also `export const maxDuration = 30`.
-- [~] **3.2 Route-only tests** (401 verified; streaming curl needs a session)
+- [x] **3.2 Route-only tests** **VERIFIED** - 401 unauthenticated; streaming confirmed in-browser
       - unauthenticated `curl` -> **401**
       - authenticated `curl -N` -> tokens arrive incrementally, not in one block
 - [x] **3.3** Create `src/app/components/ai/CookingAssistant.jsx` (`"use client"`):
@@ -253,7 +253,7 @@ not the route — so verify the route by itself first.
 - [x] **4.2** Add a per-row "Triage with AI" button to
       `src/app/dashboard/admin/reports/ReportDashboard.jsx`; render severity as a
       colour-coded HeroUI `Chip` plus one line of reasoning.
-- [ ] **4.3** *(needs an admin browser session)* Verify: works as admin; the reports page fires **no** AI call on load
+- [x] **4.3** **VERIFIED** (admin session). Verify: works as admin; the reports page fires **no** AI call on load
       (watch the network tab); a non-admin session invoking the action is rejected.
 
 **Done when:** triage returns advisory output and changes no data.
@@ -298,13 +298,33 @@ not the route — so verify the route by itself first.
       - the key does appear in `.next/dev/cache/turbopack/*` (local dev cache only,
         never served); `.gitignore:17` covers `/.next/` and `:34` covers `.env*`,
         and `git ls-files` confirms neither is tracked
-- [ ] **5.3** *(needs a signed-in session)* Rate limit: hit `/api/ai/recipe` 21x
+- [x] **5.3** **VERIFIED** - 19 requests passed, 20th returned 429. Rate limit: hit `/api/ai/recipe` 21x
       signed in; the 21st returns 429.
-- [ ] **5.4** Add `GOOGLE_GENERATIVE_AI_API_KEY` to the Vercel project env (all
-      environments you deploy to) — it is currently local-only. Missing this is the
-      most common cause of "works locally, 500s in preview".
-- [ ] **5.5** Deploy a preview, re-run the auth-gate curl against the preview URL,
-      and confirm one live generation and one live chat.
+- [x] **5.4** **DONE.** `GOOGLE_GENERATIVE_AI_API_KEY` added to **Production,
+      Preview and Development**, confirmed via `vercel env ls` on each.
+      (Note: `vercel env pull` returns `"[SENSITIVE]"` rather than the real value, so
+      a local-vs-remote comparison is impossible by design - do not read a mismatch
+      there as a misconfiguration.)
+
+- [~] **5.5** **Deployed and gates verified; live generation still pending.**
+      Preview: `recipe-5xc8bofel-souravnath4587-cmds-projects.vercel.app`
+      - homepage 200, `/signIn` 200, `/api/auth/get-session` 200
+      - `POST /api/ai/recipe` -> **401** `{"error":"Please sign in to use AI features."}`
+      - `POST /api/ai/chat`   -> **401** same
+      These are the *application's* 401s, not Vercel's protection page - reached with
+      `vercel curl`, which authenticates through the caller's own Vercel session.
+      The first plain `curl` returned Vercel's `"Protected deployment"` 401 instead,
+      which proves nothing about the app; use `vercel curl` for protected previews.
+
+      **Live generation + chat remain unverified on the preview.** They need a
+      signed-in session there, which requires entering account credentials - not
+      something to automate. Both are verified locally (see results section).
+
+      **Check before relying on the preview:** `BETTER_AUTH_URL` is `http://localhost:3000`
+      locally. If the Vercel copy holds the same value, sign-in on a deployed URL will
+      not work, since better-auth builds callbacks and cookies from it. The value is
+      encrypted so it cannot be read back - confirm it in the dashboard. This is a
+      pre-existing deployment concern, unrelated to the AI work.
 
 ---
 
@@ -364,6 +384,44 @@ at least ExploreDestinations, HomeRecipesClient, WhyJoin, FeaturedRecipesSection
 RecipeLimitMeter, ManageRecipes, ManageUsers, and the Add Recipe submit button
 (`AddRecipeForm.jsx:470`). Those icons and loading states are silently not rendering
 today. Out of scope here, but worth a cleanup pass.
+
+## Browser verification results (2026-09-19)
+
+Driven through a real signed-in Chrome session (admin account).
+
+| Step | Result |
+|---|---|
+| 2.3 recipe API, signed in | **PASS** - 200, all 7 fields, `difficultyLevel: "Medium"`, `preparationTime: "35 Mins"`, `ingredients` array of 12, `instructions` string |
+| 3.2 chat streaming | **PASS** - reply streams, multi-turn context held |
+| 3.5 assistant present when signed in | **PASS** |
+| 4.3 admin triage | **PASS** - HIGH chip + "review" + reasoning; no AI call on page load |
+| 5.3 rate limit | **PASS** - 19 through, 20th returned 429 |
+
+### Bugs this found (all fixed)
+
+1. **Chat panel background was transparent.** `bg-content1` renders see-through
+   because no `HeroUIProvider` is mounted, so page content bled through the message
+   text and made it unreadable. Replaced the HeroUI semantic tokens in this
+   component with explicit `bg-white / dark:bg-zinc-900` colours.
+2. **Replies rendered raw markdown** (`**bold**` as literal asterisks) because the
+   panel prints text verbatim. Added a plain-text instruction to the chat prompt.
+3. **Auto-scroll did not follow the stream.** The effect keyed on `messages` only
+   and used smooth scrolling, which cannot keep up with token streaming. Now keyed
+   on the streaming reply's length and sets `scrollTop` instantly.
+4. **`maxDuration = 30` was too low.** A full recipe generation measured **30.4s** -
+   it would have been killed in production. Raised to 60s on the recipe route.
+
+### Still not verified
+
+- **2.6 (full submit through the form)** needs a **non-admin** account. The available
+  session is an admin, and `/dashboard/user/*` calls `requireRole("user")`, which
+  redirects admins to `/unauthorized`. The API behind the form is verified (2.3), so
+  what remains untested is only the form-fill and submit path.
+- **3.5 logged-out case**: verified indirectly - the launcher requires a session, and
+  server-rendered HTML fetched without cookies never contains it.
+
+> **Note:** the rate-limit test consumed this account's 20-per-hour AI budget. It is
+> in-memory, so restarting the dev server clears it immediately.
 
 ## Risks and how each shows up
 

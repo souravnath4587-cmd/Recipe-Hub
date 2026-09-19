@@ -5,7 +5,10 @@ import { requireAiUser } from "@/app/lib/ai/guard";
 import { MODELS } from "@/app/lib/ai/models";
 import { runModel } from "@/app/lib/ai/run";
 
-export const maxDuration = 30;
+// Measured: a full 7-field recipe generation took 30.4s against gemini-3.8-flash,
+// which would have been killed by the previous 30s limit in production.
+// Vercel allows far more than this; 60s gives real headroom.
+export const maxDuration = 60;
 
 // Field names here must match what AddRecipeForm actually persists, not what the
 // form state is called. See the prepTime/preparationTime note in the form.
