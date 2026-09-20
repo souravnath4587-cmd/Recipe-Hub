@@ -202,7 +202,7 @@ const RecipeDetailPage = async ({ params }) => {
                 <span className="text-xs text-default-400 font-medium flex items-center gap-2">
                   <FiMail size={14} /> Email Address
                 </span>
-                <span className="text-xs font-semibold text-foreground max-w-[180] truncate">
+                <span className="text-xs font-semibold text-foreground max-w-[180px] truncate">
                   {selectedUser?.email || "N/A"}
                 </span>
               </div>

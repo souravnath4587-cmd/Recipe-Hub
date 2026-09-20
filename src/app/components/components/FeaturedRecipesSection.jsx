@@ -66,7 +66,7 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
           {featuredRecipes.map((recipe, index) => (
             <motion.div
               key={recipe._id}
-              className="min-w-[300] sm:min-w-[340] max-w-[340] snap-start"
+              className="min-w-[300px] sm:min-w-[340px] max-w-[340px] snap-start"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{

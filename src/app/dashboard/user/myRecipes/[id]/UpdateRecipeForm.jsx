@@ -119,7 +119,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
   };
 
   return (
-    <div className="max-w-5xl md:w-7xl mx-auto p-6 min-h-screen text-foreground bg-background">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 min-h-screen text-foreground bg-background">
       {/* Return Back Navigation */}
       <Button
         variant="light"

@@ -162,7 +162,7 @@ export default function PricingPlansPage() {
                   <Card.Title className="text-xl font-black text-foreground tracking-tight">
                     {plan.name}
                   </Card.Title>
-                  <Card.Description className="text-xs text-default-400 min-h-[32] pt-1 leading-relaxed">
+                  <Card.Description className="text-xs text-default-400 min-h-[32px] pt-1 leading-relaxed">
                     {plan.description}
                   </Card.Description>
                 </div>

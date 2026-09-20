@@ -22,7 +22,6 @@ import {
 
 export default function DashboardSideBar({ user }) {
   const pathname = usePathname();
-  console.log(user);
 
   const userLinks = [
     {
@@ -89,64 +88,119 @@ export default function DashboardSideBar({ user }) {
     admin: adminLinks,
   };
   const navItems = roleBaseMap[user?.role || "user"];
+
+  const planLabel =
+    user?.plan === "user_free"
+      ? "FREE"
+      : user?.plan === "user_pro"
+        ? "PRO"
+        : "PREMIUM";
+
+  const avatar = (size) =>
+    isValidImageSrc(user?.image) ? (
+      <Image
+        src={user.image}
+        alt="User"
+        width={size}
+        height={size}
+        className="rounded-full"
+      />
+    ) : (
+      <div
+        style={{ width: size, height: size }}
+        className="rounded-full bg-default-100 flex items-center justify-center text-lg font-bold text-default-500 uppercase"
+      >
+        {user?.name?.[0] || "?"}
+      </div>
+    );
+
   return (
-    <aside className="hidden md:flex w-64 bg-zinc-950 border-r border-white/10 flex-col p-5">
-      <h1 className="text-2xl font-bold mb-4">Recipe-Hub</h1>
-      <div className="mb-4">
-        <div className=" flex flex-col gap-2 items-left relative">
-          <Badge
-            className="absolute t-0 left-10 w-[60] text-white"
-            color="warning"
-            size="sm"
-          >
-            {user?.plan === "user_free"
-              ? "FREE"
-              : user?.plan === "user_pro"
-                ? "PRO"
-                : "PREMIUM"}
-          </Badge>
-          <div className="userImage ">
-            {isValidImageSrc(user?.image) ? (
-              <Image
-                src={user.image}
-                alt="User"
-                width={60}
-                height={60}
-                className="rounded-full ml-2"
-              />
-            ) : (
-              <div className="w-[60px] h-[60px] ml-2 rounded-full bg-default-100 flex items-center justify-center text-lg font-bold text-default-500 uppercase">
-                {user?.name?.[0] || "?"}
-              </div>
-            )}
+    <>
+      {/* Mobile: the sidebar is hidden below md, so these screens need their own
+          nav. A horizontally scrollable pill bar keeps every destination one tap
+          away without a drawer to open. */}
+      <div className="md:hidden border-b border-white/10 bg-zinc-950">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <div className="relative shrink-0">
+            {avatar(40)}
+            <Badge
+              className="absolute -bottom-1 -right-1 text-white"
+              color="warning"
+              size="sm"
+            >
+              {planLabel}
+            </Badge>
           </div>
-          <div>
-            <h2 className="font-bold text-xl">{user?.name}</h2>
-            <p className=" text-sm">{user?.email}</p>
+          <div className="min-w-0">
+            <h2 className="font-bold text-sm truncate">{user?.name}</h2>
+            <p className="text-xs text-gray-400 truncate">{user?.email}</p>
           </div>
         </div>
+
+        <nav className="flex gap-2 overflow-x-auto px-4 pb-3 scrollbar-hide">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition-all ${
+                  isActive
+                    ? "bg-gray-800 text-white"
+                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                }`}
+              >
+                <Icon size={16} />
+                {item.name}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
-      <nav className="space-y-2">
-        {navItems.map((item, index) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={index}
-              href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all ${
-                isActive
-                  ? "bg-gray-800 text-white"
-                  : "text-gray-400 hover:bg-gray-900 hover:text-white"
-              }`}
+      {/* Desktop: shrink-0 so the nav keeps its width instead of being squeezed
+          by a wide table in the main column. */}
+      <aside className="hidden md:flex w-64 shrink-0 bg-zinc-950 border-r border-white/10 flex-col p-5">
+        <h1 className="text-2xl font-bold mb-4">Recipe-Hub</h1>
+        <div className="mb-4">
+          <div className="flex flex-col gap-2 relative">
+            <Badge
+              className="absolute top-0 left-10 text-white"
+              color="warning"
+              size="sm"
             >
-              <Icon size={20} />
-              {item.name}
-            </Link>
-          );
-        })}
-      </nav>
-    </aside>
+              {planLabel}
+            </Badge>
+            <div className="ml-2">{avatar(60)}</div>
+            <div className="min-w-0">
+              <h2 className="font-bold text-xl truncate">{user?.name}</h2>
+              <p className="text-sm truncate">{user?.email}</p>
+            </div>
+          </div>
+        </div>
+
+        <nav className="space-y-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all ${
+                  isActive
+                    ? "bg-gray-800 text-white"
+                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                }`}
+              >
+                <Icon size={20} />
+                {item.name}
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
   );
 }

@@ -18,7 +18,7 @@ export default function PurchasedRecipesPage({ paymentsData }) {
   };
 
   return (
-    <div className="max-w-5xl md:w-7xl mx-auto px-4 py-10 space-y-6">
+    <div className="w-full max-w-7xl mx-auto px-4 py-8 sm:py-10 space-y-6">
       {/* Informative Dashboard Heading */}
       <div className="space-y-1">
         <h1 className="text-2xl font-black tracking-tight text-foreground">

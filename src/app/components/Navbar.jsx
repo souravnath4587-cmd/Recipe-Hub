@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { authClient } from "../lib/auth-client";
 import { useHydrated } from "../lib/useHydrated";
+import { isValidImageSrc } from "../lib/imageSrc";
 import Image from "next/image";
 import { Button } from "@heroui/react";
 
@@ -81,7 +82,7 @@ export default function Navbar() {
               >
                 {item.name}
 
-                <span className="absolute left-0 -bottom-1 h-[2] w-0 bg-orange-500 transition-all duration-300 group-hover:w-full" />
+                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-orange-500 transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
             {user ? (
@@ -115,20 +116,28 @@ export default function Navbar() {
               {dark ? <FaSun /> : <FaMoon />}
             </button>
             {user ? (
-              <div className="flex flex-row gap-4 items-center">
-                <p>
+              <div className="flex flex-row gap-4 items-center min-w-0">
+                <p className="hidden xl:block truncate">
                   Welcome{" "}
                   <span className="uppercase text-orange-500 font-semibold">
                     {user?.name}
                   </span>
                 </p>
-                <Image
-                  src={user?.image}
-                  alt="User Image."
-                  width={40}
-                  height={40}
-                  className="rounded-full border-2 border-green-500"
-                ></Image>
+                {/* Email/password accounts have no image, and stored values are
+                    not validated - next/image throws on both. */}
+                {isValidImageSrc(user?.image) ? (
+                  <Image
+                    src={user.image}
+                    alt="User Image."
+                    width={40}
+                    height={40}
+                    className="rounded-full border-2 border-green-500 shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 shrink-0 rounded-full border-2 border-green-500 flex items-center justify-center font-bold uppercase text-orange-500">
+                    {user?.name?.[0] || "?"}
+                  </div>
+                )}
               </div>
             ) : (
               <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-500">
@@ -137,60 +146,134 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden text-2xl"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FaTimes /> : <FaBars />}
-          </button>
+          {/* Mobile controls: the theme toggle lives beside the burger so it is
+              reachable without opening the drawer. */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              onClick={() => setDark(!dark)}
+              aria-label="Toggle theme"
+              className="w-9 h-9 rounded-full dark:bg-zinc-800 flex items-center justify-center border-2"
+            >
+              {dark ? <FaSun /> : <FaMoon />}
+            </button>
+            <button
+              className="text-2xl"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          className="fixed top-0 right-0 h-screen w-72 bg-orange-500 dark:bg-zinc-900 shadow-2xl lg:hidden"
-        >
-          <div className="p-6">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="font-bold text-xl">Menu</h2>
+        <>
+          {/* Backdrop: tapping outside is the gesture people expect for closing
+              a drawer, and it also dims the page behind it. */}
+          <div
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
 
-              <FaTimes
-                onClick={() => setMenuOpen(false)}
-                className="cursor-pointer"
-              />
-            </div>
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            className="fixed top-0 right-0 z-50 h-screen w-72 max-w-[85vw] overflow-y-auto bg-orange-500 dark:bg-zinc-900 shadow-2xl lg:hidden"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="font-bold text-xl">Menu</h2>
 
-            <div className="flex flex-col gap-6">
-              {navLinks.map((item, index) => (
-                <Link
-                  key={index}
-                  href={item.href}
-                  className="text-lg font-medium"
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="cursor-pointer"
                 >
-                  {item.name}
-                </Link>
-              ))}
-              {user ? (
-                <Button
-                  className="rounded-none w-full"
-                  variant="danger"
-                  onPress={() => authClient.signOut()}
-                >
-                  Logout
-                </Button>
-              ) : (
-                <>
-                  <Link href="/signIn">Login</Link>
-                  <Link href="/signUp">Register</Link>
-                </>
+                  <FaTimes />
+                </button>
+              </div>
+
+              {user && (
+                <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/20">
+                  {isValidImageSrc(user?.image) ? (
+                    <Image
+                      src={user.image}
+                      alt="User Image."
+                      width={40}
+                      height={40}
+                      className="rounded-full border-2 border-green-500 shrink-0"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 shrink-0 rounded-full border-2 border-green-500 flex items-center justify-center font-bold uppercase">
+                      {user?.name?.[0] || "?"}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{user?.name}</p>
+                    <p className="text-xs opacity-80 truncate">{user?.email}</p>
+                  </div>
+                </div>
               )}
+
+              {/* Every link closes the drawer - navigating with it still open
+                  leaves it covering the page it just moved to. */}
+              <div className="flex flex-col gap-6">
+                {navLinks.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-lg font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                {user ? (
+                  <>
+                    <Link
+                      href={`/dashboard${user?.role === "admin" ? "/admin/adminMenu" : "/user/overView"}`}
+                      onClick={() => setMenuOpen(false)}
+                      className="text-lg font-medium"
+                    >
+                      DashBoard
+                    </Link>
+                    <Button
+                      className="rounded-none w-full"
+                      variant="danger"
+                      onPress={() => {
+                        setMenuOpen(false);
+                        authClient.signOut();
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/signIn"
+                      onClick={() => setMenuOpen(false)}
+                      className="text-lg font-medium"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/signUp"
+                      onClick={() => setMenuOpen(false)}
+                      className="text-lg font-medium"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </nav>
   );

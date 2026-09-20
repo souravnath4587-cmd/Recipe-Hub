@@ -84,7 +84,7 @@ export default function ManageRecipesPage({ allRecipes }) {
   });
 
   return (
-    <div className="max-w-5xl md:w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-6 text-foreground min-h-screen bg-background">
       {/* Top Controls Header banner layout info */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-divider">
         <div className="flex flex-col gap-1">

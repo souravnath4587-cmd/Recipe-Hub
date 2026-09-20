@@ -18,12 +18,30 @@ function MessageText({ message }) {
 export default function CookingAssistant() {
   const { data: session } = authClient.useSession();
   const hydrated = useHydrated();
+
+  // Signed-in users only, matching the access decision for AI features.
+  // Logged-out visitors never see the launcher at all.
+  //
+  // `hydrated` guards hydration: the server renders nothing (it cannot see the
+  // client-side session), so the first client render must render nothing too.
+  if (!hydrated || !session?.user) return null;
+
+  // This component lives in the root layout and sign-out/sign-in happen without
+  // a page reload, so without the key one user's conversation (and the history
+  // sent to the model as context) would carry over to the next user in the same
+  // tab. Keying by user id remounts the panel with a fresh chat per user.
+  return <AssistantPanel key={session.user.id} userId={session.user.id} />;
+}
+
+function AssistantPanel({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
 
   // v7 useChat does NOT manage the input - that is the `input` state above.
+  // `id` scopes the Chat instance to this user; a new id creates a new Chat.
   const { messages, sendMessage, status, error, regenerate } = useChat({
+    id: `cooking-assistant-${userId}`,
     transport: new DefaultChatTransport({ api: "/api/ai/chat" }),
   });
 
@@ -44,13 +62,6 @@ export default function CookingAssistant() {
     // and leaves the newest text below the fold.
     el.scrollTop = el.scrollHeight;
   }, [messages.length, lastLength, status]);
-
-  // Signed-in users only, matching the access decision for AI features.
-  // Logged-out visitors never see the launcher at all.
-  //
-  // `mounted` guards hydration: the server renders nothing (it cannot see the
-  // client-side session), so the first client render must render nothing too.
-  if (!hydrated || !session?.user) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,7 +86,9 @@ export default function CookingAssistant() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex h-[32rem] w-[22rem] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+    // max-h keeps the panel inside short viewports (landscape phones, small
+    // laptops) where a fixed 32rem would run off the top of the screen.
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-128 max-h-[calc(100dvh-2rem)] w-88 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
       <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
         <div className="flex items-center gap-2">
           <FiMessageCircle className="text-orange-500" />

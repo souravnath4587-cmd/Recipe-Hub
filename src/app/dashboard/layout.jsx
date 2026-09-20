@@ -13,12 +13,16 @@ const DashBoardLayoutPage = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-black text-white flex flex-row">
+      {/* Column on mobile (nav bar sits above the content), row from md up. */}
+      <div className="min-h-screen bg-black text-white flex flex-col md:flex-row">
         {/* Sidebar */}
         <DashboardSideBar user={user} />
 
-        {/* Main Content */}
-        <main>{children}</main>
+        {/* Main Content
+            min-w-0 is what stops a wide child - the data tables - from forcing
+            this flex item past the viewport and scrolling the whole page
+            sideways. Without it a flex item's min-width defaults to auto. */}
+        <main className="flex-1 min-w-0 w-full">{children}</main>
       </div>
     </>
   );

@@ -62,7 +62,7 @@ export default async function page() {
   };
 
   return (
-    <div className="max-w-5xl md:w-7xl mx-auto p-6 space-y-6 text-foreground min-h-screen bg-background">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-6 text-foreground min-h-screen bg-background">
       {/* Welcome Header */}
       <div className="flex flex-col gap-1 pb-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
@@ -184,7 +184,7 @@ export default async function page() {
               <span className="text-default-500 font-medium">
                 Latest Recipe
               </span>
-              <span className="text-default-800 dark:text-zinc-200 font-semibold text-right max-w-[150] truncate">
+              <span className="text-default-800 dark:text-zinc-200 font-semibold text-right max-w-[150px] truncate">
                 {userData.activity.latestRecipe}
               </span>
             </div>
@@ -193,7 +193,7 @@ export default async function page() {
               <span className="text-default-500 font-medium">
                 Latest Favorite
               </span>
-              <span className="text-default-800 dark:text-zinc-200 font-semibold text-right max-w-[150] truncate">
+              <span className="text-default-800 dark:text-zinc-200 font-semibold text-right max-w-[150px] truncate">
                 {userData.activity.latestFavorite}
               </span>
             </div>

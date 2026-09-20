@@ -44,7 +44,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
   };
 
   return (
-    <div className="max-w-5xl md:w-7xl mx-auto p-6 min-h-screen text-foreground bg-background ">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 min-h-screen text-foreground bg-background ">
       <div className="flex flex-col gap-1 pb-6">
         <h1 className="text-2xl font-bold tracking-tight">
           My Recipes Collection
@@ -109,7 +109,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                           {recipe.recipeName?.[0] || "?"}
                         </div>
                       )}
-                      <span className="font-medium text-sm truncate max-w-[180]">
+                      <span className="font-medium text-sm truncate max-w-[180px]">
                         {recipe.recipeName}
                       </span>
                     </div>
