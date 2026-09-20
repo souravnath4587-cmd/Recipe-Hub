@@ -60,14 +60,14 @@ strings are gateway syntax and will not resolve here.
 
 ### Models (each smoke-tested against this key on 2026-09-19)
 
-| Model | Role | Verified |
-|---|---|---|
-| `gemini-3.8-flash` | recipe generation + chat | text + `generateObject` |
-| `gemini-3.5-flash-lite` | moderation triage | text |
-| `gemini-3.6-flash` | fallback on capacity errors | text + `generateObject` |
+| Model                   | Role                        | Verified                |
+| ----------------------- | --------------------------- | ----------------------- |
+| `gemini-3.8-flash`      | recipe generation + chat    | text + `generateObject` |
+| `gemini-3.5-flash-lite` | moderation triage           | text                    |
+| `gemini-3.6-flash`      | fallback on capacity errors | text + `generateObject` |
 
-**`gemini-2.5-flash` is retired** — the API returns *"no longer available to new
-users"* and points at `gemini-3.6-flash`. Do not copy it in from an older tutorial.
+**`gemini-2.5-flash` is retired** — the API returns _"no longer available to new
+users"_ and points at `gemini-3.6-flash`. Do not copy it in from an older tutorial.
 
 ### The gotcha that will cost you an afternoon
 
@@ -106,33 +106,35 @@ works before a single line of UI exists.
 > `gemini-3.5-flash-lite` PASS, `gemini-3.6-flash` PASS (fallback).
 > `gemini-2.5-flash` is **rejected for new users** — do not use it.
 >
-> **Carry into every phase:** Gemini intermittently returns *"This model is
-> currently experiencing high demand"* even after the SDK's own 3 retries, then
+> **Carry into every phase:** Gemini intermittently returns _"This model is
+> currently experiencing high demand"_ even after the SDK's own 3 retries, then
 > succeeds moments later. Every AI call needs a visible retry affordance and a
 > fallback model. Do not treat a single failure as a bug in your code.
 
 - [x] **0.1 Install dependencies**
+
   ```bash
   npm i ai @ai-sdk/react @ai-sdk/google zod
   ```
+
   `zod` is currently transitive only (v4.4.3 via better-auth); this promotes it to a
   direct dependency so a future better-auth bump cannot silently remove it.
 
 - [x] **0.2 Read the real API surface.** Grep `node_modules/ai/docs/` and
-  `node_modules/ai/src/` for the current signatures of `generateObject`, `streamText`,
-  the UI-message stream response helper, and `useChat`. Write the four real signatures
-  into the "Verified API surface" section at the bottom of this file. Do not skip this
-  because the calls "look familiar" — `useChat` in particular has moved.
-  **Done:** results recorded below.
+      `node_modules/ai/src/` for the current signatures of `generateObject`, `streamText`,
+      the UI-message stream response helper, and `useChat`. Write the four real signatures
+      into the "Verified API surface" section at the bottom of this file. Do not skip this
+      because the calls "look familiar" — `useChat` in particular has moved.
+      **Done:** results recorded below.
 
 - [x] **0.3 Provision the key.** `GOOGLE_GENERATIVE_AI_API_KEY` is set in `.env`
-  (the exact name `@ai-sdk/google` reads). `.gitignore:34` (`.env*`) covers it.
-  **Not yet added to Vercel** — that is step 5.4 and is required before deploying.
+      (the exact name `@ai-sdk/google` reads). `.gitignore:34` (`.env*`) covers it.
+      **Not yet added to Vercel** — that is step 5.4 and is required before deploying.
 
 - [x] **0.4 Transport smoke test.** PASSED. `generateText` and `generateObject`
-  both returned valid output against a real key, isolating key/model/network from
-  application bugs before any UI existed. This step is what caught the gateway
-  billing block and the retired `gemini-2.5-flash`.
+      both returned valid output against a real key, isolating key/model/network from
+      application bugs before any UI existed. This step is what caught the gateway
+      billing block and the retired `gemini-2.5-flash`.
 
 **Gate:** PASSED — Phase 1 may begin.
 
@@ -174,10 +176,10 @@ works before a single line of UI exists.
       `await request.json()`. Call `requireAiUser()` first, before any model call —
       an unauthenticated request must cost zero tokens.
 - [x] **2.2 Auth gate test (do this before building UI):**
-      ```bash
-      curl -i -X POST http://localhost:3000/api/ai/recipe \
-        -H 'content-type: application/json' -d '{"idea":"pad thai"}'
-      ```
+      `bash
+  curl -i -X POST http://localhost:3000/api/ai/recipe \
+    -H 'content-type: application/json' -d '{"idea":"pad thai"}'
+  `
       Expect **401**. If this returns a recipe, stop and fix the guard.
 - [x] **2.3** **VERIFIED** (browser session, admin). Signed-in test via the browser devtools console (so the session cookie
       is attached) — confirm valid JSON matching the zod schema comes back.
@@ -187,7 +189,7 @@ works before a single line of UI exists.
       and `isLoading` — this codebase does not use `onClick`.
 - [x] **2.5** Wire the two field-shape conversions, which are easy to miss:
       `prepTime` <- `preparationTime`, and `ingredients.join("\n")` for the textarea.
-- [ ] **2.6** *(needs your browser session)* End-to-end: generate, review, submit, confirm the recipe persists
+- [ ] **2.6** _(needs your browser session)_ End-to-end: generate, review, submit, confirm the recipe persists
       through the untouched `createRecipe` path and appears in My Recipes.
 
 **Done when:** a real recipe created via AI prefill is visible in the app.
@@ -217,15 +219,13 @@ not the route — so verify the route by itself first.
       v7 rename. Return via `createUIMessageStreamResponse` + `toUIMessageStream`
       (exact shape recorded in "Verified API surface" below).
       Also `export const maxDuration = 30`.
-- [x] **3.2 Route-only tests** **VERIFIED** - 401 unauthenticated; streaming confirmed in-browser
-      - unauthenticated `curl` -> **401**
-      - authenticated `curl -N` -> tokens arrive incrementally, not in one block
+- [x] **3.2 Route-only tests** **VERIFIED** - 401 unauthenticated; streaming confirmed in-browser - unauthenticated `curl` -> **401** - authenticated `curl -N` -> tokens arrive incrementally, not in one block
 - [x] **3.3** Create `src/app/components/ai/CookingAssistant.jsx` (`"use client"`):
       floating launcher + panel, `useChat` from `@ai-sdk/react`, self-gating via
       `authClient.useSession()` returning `null` when logged out — the same pattern
       already used at `src/app/dashboard/layout.jsx:7`.
 - [x] **3.4** Mount once in `src/app/layout.js` beside the existing `<ToastContainer />`.
-- [ ] **3.5** *(needs your browser session)* Verify: absent when logged out (including on `/signIn`), present and
+- [ ] **3.5** _(needs your browser session)_ Verify: absent when logged out (including on `/signIn`), present and
       streaming when signed in, panel survives client-side navigation between routes.
 
 **Done when:** a signed-in user can hold a multi-turn cooking conversation.
@@ -266,11 +266,11 @@ not the route — so verify the route by itself first.
 > **Gate-ordering audit across all three AI entry points** (checking the call site,
 > not the import line):
 >
-> | File | gate | first model call | admin check |
-> |---|---|---|---|
-> | `api/ai/recipe/route.js` | 37 | 60 | n/a |
-> | `api/ai/chat/route.js` | 26 | 42 | n/a |
-> | `lib/action/moderation.js` | 36 | 50 | line 39 |
+> | File                       | gate | first model call | admin check |
+> | -------------------------- | ---- | ---------------- | ----------- |
+> | `api/ai/recipe/route.js`   | 37   | 60               | n/a         |
+> | `api/ai/chat/route.js`     | 26   | 42               | n/a         |
+> | `lib/action/moderation.js` | 36   | 50               | line 39     |
 >
 > Every gate precedes its model call, so an unauthorized request costs zero tokens.
 >
@@ -290,41 +290,17 @@ not the route — so verify the route by itself first.
       `f /api/ai/chat`, `f /api/ai/recipe`. eslint: 4 errors / 3 warnings, **all
       pre-existing** (2x unescaped apostrophes, 2x set-state-in-effect) and none in
       files written for this work.
-- [x] **5.2** Key containment **PASSED**:
-      - var name not in `.next/static/` - clean
-      - actual key value not in `.next/static/` - clean
-      - sanity check: `NEXT_PUBLIC_IMAGE_UPLOAD_API` **is** found in static chunks,
-        proving the grep works and the two negatives above are meaningful
-      - the key does appear in `.next/dev/cache/turbopack/*` (local dev cache only,
-        never served); `.gitignore:17` covers `/.next/` and `:34` covers `.env*`,
-        and `git ls-files` confirms neither is tracked
+- [x] **5.2** Key containment **PASSED**: - var name not in `.next/static/` - clean - actual key value not in `.next/static/` - clean - sanity check: `NEXT_PUBLIC_IMAGE_UPLOAD_API` **is** found in static chunks,
+      proving the grep works and the two negatives above are meaningful - the key does appear in `.next/dev/cache/turbopack/*` (local dev cache only,
+      never served); `.gitignore:17` covers `/.next/` and `:34` covers `.env*`,
+      and `git ls-files` confirms neither is tracked
 - [x] **5.3** **VERIFIED** - 19 requests passed, 20th returned 429. Rate limit: hit `/api/ai/recipe` 21x
       signed in; the 21st returns 429.
-- [x] **5.4** **DONE.** `GOOGLE_GENERATIVE_AI_API_KEY` added to **Production,
-      Preview and Development**, confirmed via `vercel env ls` on each.
-      (Note: `vercel env pull` returns `"[SENSITIVE]"` rather than the real value, so
-      a local-vs-remote comparison is impossible by design - do not read a mismatch
-      there as a misconfiguration.)
-
-- [~] **5.5** **Deployed and gates verified; live generation still pending.**
-      Preview: `recipe-5xc8bofel-souravnath4587-cmds-projects.vercel.app`
-      - homepage 200, `/signIn` 200, `/api/auth/get-session` 200
-      - `POST /api/ai/recipe` -> **401** `{"error":"Please sign in to use AI features."}`
-      - `POST /api/ai/chat`   -> **401** same
-      These are the *application's* 401s, not Vercel's protection page - reached with
-      `vercel curl`, which authenticates through the caller's own Vercel session.
-      The first plain `curl` returned Vercel's `"Protected deployment"` 401 instead,
-      which proves nothing about the app; use `vercel curl` for protected previews.
-
-      **Live generation + chat remain unverified on the preview.** They need a
-      signed-in session there, which requires entering account credentials - not
-      something to automate. Both are verified locally (see results section).
-
-      **Check before relying on the preview:** `BETTER_AUTH_URL` is `http://localhost:3000`
-      locally. If the Vercel copy holds the same value, sign-in on a deployed URL will
-      not work, since better-auth builds callbacks and cookies from it. The value is
-      encrypted so it cannot be read back - confirm it in the dashboard. This is a
-      pre-existing deployment concern, unrelated to the AI work.
+- [ ] **5.4** Add `GOOGLE_GENERATIVE_AI_API_KEY` to the Vercel project env (all
+      environments you deploy to) — it is currently local-only. Missing this is the
+      most common cause of "works locally, 500s in preview".
+- [ ] **5.5** Deploy a preview, re-run the auth-gate curl against the preview URL,
+      and confirm one live generation and one live chat.
 
 ---
 
@@ -339,13 +315,13 @@ Three separate errors during this build traced back to this one cause. Swept and
 fixed across 14 files / 28 instances on 2026-09-19; all 14 routes now render with
 zero prop warnings.
 
-| v2 prop | On | v3 reality | Fix |
-|---|---|---|---|
-| `startContent` / `endContent` | Button, Chip, Link | leaks to DOM, icon never renders | put the icon in `children` |
-| `startContent` | Input | leaks (input is void) | relative wrapper + absolute icon |
-| `isLoading` | Button | leaks, no spinner, no disable | use `isDisabled` |
-| `isClearable` | Input | leaks, no clear button | remove |
-| `onValueChange` | Input | **never fires - search was dead** | `onChange={(e) => set(e.target.value)}` |
+| v2 prop                       | On                 | v3 reality                        | Fix                                      |
+| ----------------------------- | ------------------ | --------------------------------- | ---------------------------------------- |
+| `startContent` / `endContent` | Button, Chip, Link | leaks to DOM, icon never renders  | put the icon in `children`               |
+| `startContent`                | Input              | leaks (input is void)             | relative wrapper + absolute icon         |
+| `isLoading`                   | Button             | leaks, no spinner, no disable     | use `isDisabled`                         |
+| `isClearable`                 | Input              | leaks, no clear button            | remove                                   |
+| `onValueChange`               | Input              | **never fires - search was dead** | `on Change={(e) => set(e.target.value)}` |
 
 `onValueChange` is the one that mattered most: it was not cosmetic. Every search and
 filter box in the app (all recipes, favourites, manage users, manage recipes) was
@@ -361,11 +337,11 @@ Found while building Phase 3, and it applies to every UI phase.
 `node_modules/@heroui/react/dist/components/button/button.d.ts` destructures a fixed
 prop set and spreads **everything else onto the DOM element**.
 
-| Supported | Not supported (leaks to DOM) |
-|---|---|
-| `color`, `radius`, `size`, `variant` | `startContent` |
-| `isIconOnly`, `fullWidth`, `isDisabled` | `endContent` |
-| `onPress`, `className`, `style`, `slot` | `isLoading` |
+| Supported                               | Not supported (leaks to DOM) |
+| --------------------------------------- | ---------------------------- |
+| `color`, `radius`, `size`, `variant`    | `startContent`               |
+| `isIconOnly`, `fullWidth`, `isDisabled` | `endContent`                 |
+| `onPress`, `className`, `style`, `slot` | `isLoading`                  |
 
 An unsupported prop does not just get ignored - it produces a React warning
 ("does not recognize the `startContent` prop on a DOM element") and **the icon never
@@ -389,13 +365,13 @@ today. Out of scope here, but worth a cleanup pass.
 
 Driven through a real signed-in Chrome session (admin account).
 
-| Step | Result |
-|---|---|
-| 2.3 recipe API, signed in | **PASS** - 200, all 7 fields, `difficultyLevel: "Medium"`, `preparationTime: "35 Mins"`, `ingredients` array of 12, `instructions` string |
-| 3.2 chat streaming | **PASS** - reply streams, multi-turn context held |
-| 3.5 assistant present when signed in | **PASS** |
-| 4.3 admin triage | **PASS** - HIGH chip + "review" + reasoning; no AI call on page load |
-| 5.3 rate limit | **PASS** - 19 through, 20th returned 429 |
+| Step                                 | Result                                                                                                                                    |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 2.3 recipe API, signed in            | **PASS** - 200, all 7 fields, `difficultyLevel: "Medium"`, `preparationTime: "35 Mins"`, `ingredients` array of 12, `instructions` string |
+| 3.2 chat streaming                   | **PASS** - reply streams, multi-turn context held                                                                                         |
+| 3.5 assistant present when signed in | **PASS**                                                                                                                                  |
+| 4.3 admin triage                     | **PASS** - HIGH chip + "review" + reasoning; no AI call on page load                                                                      |
+| 5.3 rate limit                       | **PASS** - 19 through, 20th returned 429                                                                                                  |
 
 ### Bugs this found (all fixed)
 
@@ -425,16 +401,16 @@ Driven through a real signed-in Chrome session (admin account).
 
 ## Risks and how each shows up
 
-| Risk | Symptom | Response |
-|---|---|---|
-| `useChat` API differs from the sketch | Type/runtime error in the component, or messages never render | Re-read `node_modules/ai/docs/`; the docs are authoritative. Phase 3.2 proves the route is fine, so the bug is client-side. |
-| Stream helper renamed | Chat route throws on return | Same — grep the docs for the current export name. |
-| `generateObject` rejects the zod v4 schema | 500 from `/api/ai/recipe` | Unlikely — the full 7-field recipe schema was smoke-tested PASS on `gemini-3.8-flash`. Suspect a capacity error first; check the real message before touching the schema. |
-| Model id copied from an old tutorial | "no longer available to new users" | `gemini-2.5-flash` and older are retired. Use only the three ids in the provider table. |
-| Plain `"provider/model"` string used as the model | Model fails to resolve | That is gateway syntax. Direct Google needs `google("gemini-3.8-flash")`. |
-| Rate limiter resets constantly in dev | 429 never triggers | Expected — it is in-memory and per-instance. Do not "fix" it; it is a documented v1 limitation. |
-| Gemini capacity error | "This model is currently experiencing high demand" after 3 SDK retries | Confirmed real during smoke testing. Retry, or fall back to `gemini-3.6-flash`. Not a code bug. |
-| HeroUI v3 compound components differ | Chat panel renders unstyled or broken | Copy the `Modal.Backdrop > Modal.Container > Modal.Dialog` structure from `RecipeDetailsClient.jsx:417-489` rather than inventing markup. |
+| Risk                                              | Symptom                                                                | Response                                                                                                                                                                  |
+| ------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useChat` API differs from the sketch             | Type/runtime error in the component, or messages never render          | Re-read `node_modules/ai/docs/`; the docs are authoritative. Phase 3.2 proves the route is fine, so the bug is client-side.                                               |
+| Stream helper renamed                             | Chat route throws on return                                            | Same — grep the docs for the current export name.                                                                                                                         |
+| `generateObject` rejects the zod v4 schema        | 500 from `/api/ai/recipe`                                              | Unlikely — the full 7-field recipe schema was smoke-tested PASS on `gemini-3.8-flash`. Suspect a capacity error first; check the real message before touching the schema. |
+| Model id copied from an old tutorial              | "no longer available to new users"                                     | `gemini-2.5-flash` and older are retired. Use only the three ids in the provider table.                                                                                   |
+| Plain `"provider/model"` string used as the model | Model fails to resolve                                                 | That is gateway syntax. Direct Google needs `google("gemini-3.8-flash")`.                                                                                                 |
+| Rate limiter resets constantly in dev             | 429 never triggers                                                     | Expected — it is in-memory and per-instance. Do not "fix" it; it is a documented v1 limitation.                                                                           |
+| Gemini capacity error                             | "This model is currently experiencing high demand" after 3 SDK retries | Confirmed real during smoke testing. Retry, or fall back to `gemini-3.6-flash`. Not a code bug.                                                                           |
+| HeroUI v3 compound components differ              | Chat panel renders unstyled or broken                                  | Copy the `Modal.Backdrop > Modal.Container > Modal.Dialog` structure from `RecipeDetailsClient.jsx:417-489` rather than inventing markup.                                 |
 
 ## Explicitly not in this build
 
@@ -470,8 +446,8 @@ import { google } from "@ai-sdk/google";
 
 const { object } = await generateObject({
   model: google("gemini-3.8-flash"),
-  schema: RecipeSchema,   // zod schema
-  instructions: "...",    // NOT `system`
+  schema: RecipeSchema, // zod schema
+  instructions: "...", // NOT `system`
   prompt: userIdea,
 });
 ```
