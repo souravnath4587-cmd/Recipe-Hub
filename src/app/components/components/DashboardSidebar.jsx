@@ -119,7 +119,7 @@ export default function DashboardSideBar({ user }) {
       {/* Mobile: the sidebar is hidden below md, so these screens need their own
           nav. A horizontally scrollable pill bar keeps every destination one tap
           away without a drawer to open. */}
-      <div className="md:hidden border-b border-white/10 bg-zinc-950">
+      <div className="md:hidden border-b border-border bg-card">
         <div className="flex items-center gap-3 px-4 py-3">
           <div className="relative shrink-0">
             {avatar(40)}
@@ -133,7 +133,7 @@ export default function DashboardSideBar({ user }) {
           </div>
           <div className="min-w-0">
             <h2 className="font-bold text-sm truncate">{user?.name}</h2>
-            <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+            <p className="text-xs text-default-500 truncate">{user?.email}</p>
           </div>
         </div>
 
@@ -147,8 +147,8 @@ export default function DashboardSideBar({ user }) {
                 href={item.href}
                 className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition-all ${
                   isActive
-                    ? "bg-gray-800 text-white"
-                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-default-500 hover:bg-surface-hover hover:text-foreground"
                 }`}
               >
                 <Icon size={16} />
@@ -161,7 +161,7 @@ export default function DashboardSideBar({ user }) {
 
       {/* Desktop: shrink-0 so the nav keeps its width instead of being squeezed
           by a wide table in the main column. */}
-      <aside className="hidden md:flex w-64 shrink-0 bg-zinc-950 border-r border-white/10 flex-col p-5">
+      <aside className="hidden md:flex w-64 shrink-0 bg-card border-r border-border flex-col p-5">
         <h1 className="text-2xl font-bold mb-4">Recipe-Hub</h1>
         <div className="mb-4">
           <div className="flex flex-col gap-2 relative">
@@ -190,8 +190,8 @@ export default function DashboardSideBar({ user }) {
                 href={item.href}
                 className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all ${
                   isActive
-                    ? "bg-gray-800 text-white"
-                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-default-500 hover:bg-surface-hover hover:text-foreground"
                 }`}
               >
                 <Icon size={20} />

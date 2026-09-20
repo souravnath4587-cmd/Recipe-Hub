@@ -47,16 +47,16 @@
 //     return (
 //       <div className="w-full min-h-[80vh] flex items-center justify-center bg-background px-4 py-12">
 //         <Card className="w-full max-w-xl bg-content1 border border-divider rounded-3xl p-8 shadow-xl text-center flex flex-col items-center space-y-6 relative overflow-hidden">
-//           <div className="absolute -top-24 -left-24 w-48 h-48 bg-warning-500/10 rounded-full blur-3xl pointer-events-none" />
-//           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+//           <div className="absolute -top-24 -left-24 w-48 h-48 bg-warning/10 rounded-full blur-3xl pointer-events-none" />
+//           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
 
 //           <div className="relative flex items-center justify-center">
-//             <div className="p-5 bg-warning-50 dark:bg-warning-900/20 text-warning-500 rounded-2xl border border-warning-200/30">
+//             <div className="p-5 bg-warning-soft text-warning rounded-2xl border border-warning/30">
 //               <GiChefToque size={48} />
 //             </div>
 //             <div className="absolute -bottom-1 -right-1 bg-background p-0.5 rounded-full">
 //               <FiCheckCircle
-//                 className="text-success-500 fill-background"
+//                 className="text-success fill-background"
 //                 size={20}
 //               />
 //             </div>
@@ -73,7 +73,7 @@
 //             </Chip>
 //             <h1 className="text-3xl font-black tracking-tight text-foreground">
 //               Welcome to the{" "}
-//               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">
+//               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-brand">
 //                 Elite Kitchen
 //               </span>
 //             </h1>
@@ -86,7 +86,7 @@
 
 //           {customerEmail && (
 //             <div className="w-full bg-default-50 border border-divider/40 p-3.5 rounded-2xl flex items-center justify-center gap-2 text-xs text-default-600 font-medium">
-//               <FiMail className="text-orange-500 flex-shrink-0" size={14} />
+//               <FiMail className="text-brand flex-shrink-0" size={14} />
 //               <span className="truncate">
 //                 Invoice receipt transmitted to:{" "}
 //                 <strong className="text-foreground">{customerEmail}</strong>
@@ -125,7 +125,7 @@
 //             Encountering setup problems? Contact support pipelines at{" "}
 //             <a
 //               href="mailto:support@recipehub.com"
-//               className="text-orange-500 hover:underline font-bold"
+//               className="text-brand hover:underline font-bold"
 //             >
 //               support@recipehub.com
 //             </a>
@@ -185,16 +185,16 @@ export default async function PricingSuccessPage({ searchParams }) {
     return (
       <div className="w-full min-h-[80vh] flex items-center justify-center bg-background px-4 py-12">
         <Card className="w-full max-w-xl bg-content1 border border-divider rounded-3xl p-8 shadow-xl text-center flex flex-col items-center space-y-6 relative overflow-hidden">
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-warning-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-warning/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative flex items-center justify-center">
-            <div className="p-5 bg-warning-50 dark:bg-warning-900/20 text-warning-500 rounded-2xl border border-warning-200/30">
+            <div className="p-5 bg-warning-soft text-warning rounded-2xl border border-warning/30">
               <GiChefToque size={48} />
             </div>
             <div className="absolute -bottom-1 -right-1 bg-background p-0.5 rounded-full">
               <FiCheckCircle
-                className="text-success-500 fill-background"
+                className="text-success fill-background"
                 size={20}
               />
             </div>
@@ -211,7 +211,7 @@ export default async function PricingSuccessPage({ searchParams }) {
             </Chip>
             <h1 className="text-3xl font-black tracking-tight text-foreground">
               Welcome to the{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-brand">
                 Elite Kitchen
               </span>
             </h1>
@@ -224,7 +224,7 @@ export default async function PricingSuccessPage({ searchParams }) {
 
           {customerEmail && (
             <div className="w-full bg-default-50 border border-divider/40 p-3.5 rounded-2xl flex items-center justify-center gap-2 text-xs text-default-600 font-medium">
-              <FiMail className="text-orange-500 flex-shrink-0" size={14} />
+              <FiMail className="text-brand flex-shrink-0" size={14} />
               <span className="truncate">
                 Invoice receipt transmitted to:{" "}
                 <strong className="text-foreground">{customerEmail}</strong>
@@ -266,7 +266,7 @@ export default async function PricingSuccessPage({ searchParams }) {
             Encountering setup problems? Contact support pipelines at{" "}
             <a
               href="mailto:support@recipehub.com"
-              className="text-orange-500 hover:underline font-bold"
+              className="text-brand hover:underline font-bold"
             >
               support@recipehub.com
             </a>

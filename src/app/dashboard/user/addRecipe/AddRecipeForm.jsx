@@ -186,23 +186,23 @@ export default function AddRecipeForm({ recipeCreator }) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 min-h-screen text-zinc-100 bg-[#09090b]">
-      <div className="bg-[#121214] border border-zinc-800 rounded-2xl p-8 shadow-xl">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 min-h-screen text-foreground bg-background">
+      <div className="bg-card border border-border rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit}>
           <Fieldset className="space-y-6">
             {/* Header Legend block configuration */}
-            <Fieldset.Legend className="flex flex-col gap-1 pb-2 border-b border-zinc-800 w-full">
-              <span className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                <FiPlus className="text-amber-500" /> ADD NEW RECIPE
+            <Fieldset.Legend className="flex flex-col gap-1 pb-2 border-b border-border w-full">
+              <span className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                <FiPlus className="text-brand" /> ADD NEW RECIPE
               </span>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-default-500">
                 Fill in the parameters below to catalog this entry inside your
                 recipes collection.
               </p>
             </Fieldset.Legend>
             {recipeCreator?.status === "block" ? (
               <>
-                <p className="text-red-600 flex gap-4 items-center">
+                <p className="text-danger flex gap-4 items-center">
                   <SiAdblock size={40} />
                   Your account is currently blocked. Please contact support for
                   assistance.
@@ -211,14 +211,14 @@ export default function AddRecipeForm({ recipeCreator }) {
             ) : (
               <>
                 {/* AI draft panel - prefills the fields below, saves nothing */}
-                <div className="rounded-xl border border-amber-500/30 bg-[#1c1c1f] p-4 space-y-3">
+                <div className="rounded-xl border border-brand/30 bg-background p-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <FiZap className="text-amber-500" />
-                    <span className="text-sm font-semibold text-white">
+                    <FiZap className="text-brand" />
+                    <span className="text-sm font-semibold text-foreground">
                       Generate with AI
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-default-500">
                     Describe a dish and AI will draft the fields below. Everything
                     stays editable before you save.
                   </p>
@@ -233,7 +233,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                         value={aiIdea}
                         maxLength={300}
                         onChange={(e) => setAiIdea(e.target.value)}
-                        className="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600"
+                        className="w-full bg-input border border-input-line rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-default-400"
                       />
                     </TextField>
                     {/* type=button: without it this would submit the form */}
@@ -241,7 +241,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                       type="button"
                       onPress={handleGenerate}
                       isDisabled={isGenerating || !aiIdea.trim()}
-                      className="bg-amber-500 text-black font-semibold rounded-lg px-5 disabled:opacity-50"
+                      className="bg-accent hover:bg-accent-hover text-accent-foreground font-semibold rounded-lg px-5 disabled:opacity-50"
                     >
                       <span className="flex items-center gap-2">
                         <FiZap className={isGenerating ? "animate-pulse" : undefined} />
@@ -254,11 +254,11 @@ export default function AddRecipeForm({ recipeCreator }) {
                 <Fieldset.Group className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 w-full">
                   {/* Recipe Name */}
                   <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Recipe Name
                     </Label>
                     <div className="relative flex items-center">
-                      <FiBook className="absolute left-3 text-zinc-500 z-10" />
+                      <FiBook className="absolute left-3 text-default-500 z-10" />
                       <Input
                         type="text"
                         placeholder="e.g. Traditional Spicy Chicken Biryani"
@@ -270,10 +270,10 @@ export default function AddRecipeForm({ recipeCreator }) {
                           })
                         }
                         required
-                        className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-zinc-600 outline-none transition"
+                        className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-default-400 outline-none transition"
                       />
                     </div>
-                    <Description className="text-[11px] text-zinc-500">
+                    <Description className="text-[11px] text-default-500">
                       Provide a clear, identifying catalog name.
                     </Description>
                     <FieldError className="hidden" />
@@ -281,11 +281,11 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Category */}
                   <TextField className="flex flex-col gap-1.5">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Category
                     </Label>
                     <div className="relative flex items-center">
-                      <FiLayers className="absolute left-3 text-zinc-500 z-10" />
+                      <FiLayers className="absolute left-3 text-default-500 z-10" />
                       <Input
                         type="text"
                         placeholder="e.g. Main Course, Dessert"
@@ -294,7 +294,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                           setFormData({ ...formData, category: e.target.value })
                         }
                         required
-                        className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-zinc-600 outline-none transition"
+                        className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-default-400 outline-none transition"
                       />
                     </div>
                     <Description className="hidden" />
@@ -303,11 +303,11 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Cuisine Type */}
                   <TextField className="flex flex-col gap-1.5">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Cuisine Type
                     </Label>
                     <div className="relative flex items-center">
-                      <FiGlobe className="absolute left-3 text-zinc-500 z-10" />
+                      <FiGlobe className="absolute left-3 text-default-500 z-10" />
                       <Input
                         type="text"
                         placeholder="e.g. South Asian, Italian"
@@ -319,7 +319,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                           })
                         }
                         required
-                        className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-zinc-600 outline-none transition"
+                        className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-default-400 outline-none transition"
                       />
                     </div>
                     <Description className="hidden" />
@@ -328,11 +328,11 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Preparation Time */}
                   <TextField className="flex flex-col gap-1.5">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Preparation Time
                     </Label>
                     <div className="relative flex items-center">
-                      <FiClock className="absolute left-3 text-zinc-500 z-10" />
+                      <FiClock className="absolute left-3 text-default-500 z-10" />
                       <Input
                         type="text"
                         placeholder="e.g. 45 Mins, 1.5 Hours"
@@ -341,7 +341,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                           setFormData({ ...formData, prepTime: e.target.value })
                         }
                         required
-                        className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-zinc-600 outline-none transition"
+                        className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-default-400 outline-none transition"
                       />
                     </div>
                     <Description className="hidden" />
@@ -350,11 +350,11 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Difficulty Level */}
                   <TextField className="flex flex-col gap-1.5">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Difficulty Level
                     </Label>
                     <div className="relative flex items-center">
-                      <FiSmile className="absolute left-3 text-zinc-500 z-10" />
+                      <FiSmile className="absolute left-3 text-default-500 z-10" />
                       <select
                         value={formData.difficultyLevel}
                         onChange={(e) =>
@@ -363,15 +363,15 @@ export default function AddRecipeForm({ recipeCreator }) {
                             difficultyLevel: e.target.value,
                           })
                         }
-                        className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none transition appearance-none cursor-pointer"
+                        className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-default-400 outline-none transition appearance-none cursor-pointer"
                       >
-                        <option value="Easy" className="text-zinc-800">
+                        <option value="Easy">
                           Easy
                         </option>
-                        <option value="Medium" className="text-zinc-800">
+                        <option value="Medium">
                           Medium
                         </option>
-                        <option value="Hard" className="text-zinc-800">
+                        <option value="Hard">
                           Hard
                         </option>
                       </select>
@@ -381,14 +381,14 @@ export default function AddRecipeForm({ recipeCreator }) {
                   </TextField>
 
                   {/* Image Upload Block Interface */}
-                  <div className="flex flex-col gap-1.5 col-span-1 md:col-span-2 bg-[#1c1c1f] border border-zinc-800 rounded-xl p-4">
-                    <span className="text-xs font-semibold text-zinc-300">
+                  <div className="flex flex-col gap-1.5 col-span-1 md:col-span-2 bg-input border border-input-line rounded-xl p-4">
+                    <span className="text-xs font-semibold text-default-600">
                       Recipe Image Display Cover
                     </span>
                     <div className="flex items-center gap-4 mt-1">
-                      <label className="flex flex-col items-center justify-center w-14 h-14 bg-[#222226] hover:bg-zinc-800 border border-dashed border-zinc-700 rounded-xl cursor-pointer transition shrink-0 group">
+                      <label className="flex flex-col items-center justify-center w-14 h-14 bg-surface-secondary hover:bg-surface-hover border border-dashed border-border rounded-xl cursor-pointer transition shrink-0 group">
                         <FiUploadCloud
-                          className="text-zinc-400 group-hover:text-amber-500 transition"
+                          className="text-default-500 group-hover:text-brand transition"
                           size={18}
                         />
                         <input
@@ -399,12 +399,12 @@ export default function AddRecipeForm({ recipeCreator }) {
                         />
                       </label>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-xs text-zinc-200 font-medium truncate">
+                        <span className="text-xs text-foreground font-medium truncate">
                           {imageFile
                             ? imageFile.name
                             : "Select cover image file..."}
                         </span>
-                        <span className="text-[10px] text-zinc-500">
+                        <span className="text-[10px] text-default-500">
                           Asset will auto-upload straight to ImgBB ecosystem
                         </span>
                       </div>
@@ -412,7 +412,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                         <img
                           src={logoPreview}
                           alt="Preview Cache"
-                          className="w-12 h-12 object-cover rounded-lg border border-zinc-700 ml-auto"
+                          className="w-12 h-12 object-cover rounded-lg border border-border ml-auto"
                         />
                       )}
                     </div>
@@ -420,7 +420,7 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Ingredients Multi-line Entry */}
                   <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Ingredients
                     </Label>
                     <textarea
@@ -434,9 +434,9 @@ export default function AddRecipeForm({ recipeCreator }) {
                       }
                       rows={4}
                       required
-                      className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl p-3 text-sm text-white placeholder-zinc-600 outline-none transition resize-none"
+                      className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl p-3 text-sm text-foreground placeholder:text-default-400 outline-none transition resize-none"
                     />
-                    <Description className="text-[11px] text-zinc-500">
+                    <Description className="text-[11px] text-default-500">
                       Separating values cleanly line-by-line transforms them
                       into an iterable array schema.
                     </Description>
@@ -445,7 +445,7 @@ export default function AddRecipeForm({ recipeCreator }) {
 
                   {/* Instructions text area */}
                   <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                    <Label className="text-xs font-semibold text-zinc-300">
+                    <Label className="text-xs font-semibold text-default-600">
                       Instructions
                     </Label>
                     <textarea
@@ -459,7 +459,7 @@ export default function AddRecipeForm({ recipeCreator }) {
                       }
                       rows={5}
                       required
-                      className="w-full bg-[#1c1c1f] border border-zinc-800 focus-within:border-amber-500/50 rounded-xl p-3 text-sm text-white placeholder-zinc-600 outline-none transition resize-none"
+                      className="w-full bg-input border border-input-line focus-within:border-ring rounded-xl p-3 text-sm text-foreground placeholder:text-default-400 outline-none transition resize-none"
                     />
                     <Description className="hidden" />
                     <FieldError className="hidden" />
@@ -467,11 +467,11 @@ export default function AddRecipeForm({ recipeCreator }) {
                 </Fieldset.Group>
 
                 {/* Actions Submission Area */}
-                <Fieldset.Actions className="flex justify-end pt-4 border-t border-zinc-800 w-full">
+                <Fieldset.Actions className="flex justify-end pt-4 border-t border-border w-full">
                   <Button
                     type="submit"
                     isDisabled={isSubmitting}
-                    className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm transition shadow-lg shadow-amber-500/10 flex items-center gap-2"
+                    className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold h-11 px-6 rounded-xl text-sm transition shadow-lg shadow-accent/10 flex items-center gap-2"
                   >
                     {!isSubmitting && <FiCheck size={16} />}
                     Save Recipe Document

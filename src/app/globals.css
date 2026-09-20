@@ -1,21 +1,189 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
-:root {
-  --background: #ffffff;
-  --foreground: #111111;
+/* ============================================================================
+   Recipe-Hub colour system
+   ----------------------------------------------------------------------------
+   HeroUI v3 already ships a complete, well-balanced token set (background,
+   surface, muted, border, separator, field, danger/warning/success, and the
+   calculated hover/soft variants). This file does three things on top of it:
+
+     1. Sets the brand accent, because HeroUI's stock --accent is blue and the
+        brand is the orange used by the logo, hero and CTAs.
+     2. Adds the few tokens HeroUI has no opinion on (info, the text ramp).
+     3. Re-exposes the token names this codebase already writes -
+        content1 / divider / default-* - so the ~440 existing usages resolve.
+
+   Everything below is declared inside @layer base, the same layer HeroUI uses.
+   The previous version of this file set --background and --foreground from
+   OUTSIDE any layer: unlayered declarations beat layered ones regardless of
+   order, so it silently overrode HeroUI's own base colours on every page.
+   That is what made light mode pure #fff (identical to --surface, so cards had
+   nothing to separate them from the page) and dark mode navy while every card
+   stayed neutral grey. Keep new colours in this layer.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* --- Brand ------------------------------------------------------------
+       --brand is the vivid orange for decoration (gradients, icons, the logo).
+       --accent is what HeroUI paints solid buttons, links and focus rings
+       with, so it is a deeper orange that clears 4.5:1 against white text.
+       Keeping them separate means the brand stays vivid without dragging
+       button labels below AA. */
+    --brand: oklch(70.5% 0.174 48);
+    --brand-strong: oklch(63.7% 0.208 27.5);
+
+    --accent: oklch(56% 0.17 42);
+    --accent-foreground: var(--snow);
+
+    /* --- Status -----------------------------------------------------------
+       success / warning / danger come from HeroUI. Only info is missing.
+
+       The *-text variants exist because a colour vivid enough to fill a chip
+       is not readable as text on a light surface: measured against --surface,
+       stock --warning is 2.04:1 and --success 2.19:1, both far below the 4.5:1
+       AA floor. The fills keep the vivid tokens; only the text/icon utilities
+       are re-pointed (see the @layer utilities block at the end of this file). */
+    --info: oklch(55% 0.16 253.8);
+    --info-foreground: var(--snow);
+
+    --success-text: oklch(52% 0.13 150.8);
+    --warning-text: oklch(52% 0.12 72.3);
+    --danger-text: oklch(52% 0.21 25.7);
+
+    /* --- Form fields ------------------------------------------------------
+       HeroUI sets --field-background to white and --surface to white, so a
+       plain <input> on a card was white-on-white: measured 1.00 contrast with
+       a 1.34:1 hairline border. WCAG 1.4.11 wants 3:1 for the boundary of a
+       control, so fields get their own recessed fill and a border that earns
+       its keep. HeroUI's own Input component papers over this with
+       --field-shadow; the raw inputs in the recipe forms have no such help. */
+    --input-surface: oklch(98.6% 0 0);
+    --input-line: oklch(66% 0.005 286);
+
+    /* --- Text ramp --------------------------------------------------------
+       Four deliberate steps instead of the ad-hoc greys the components used.
+       --text-muted is darker than HeroUI's stock --muted so that the most
+       common secondary-text class clears AA on --background. */
+    --text-muted: oklch(50% 0.014 285.94);
+    --text-secondary: color-mix(in oklab, var(--foreground) 76%, var(--background));
+    --text-strong: var(--foreground);
+
+    /* Links pick up the accent rather than plain foreground. */
+    --link: var(--accent);
+  }
+
+  .dark,
+  [data-theme="dark"] {
+    /* Lifted so the orange still reads on a near-black ground. Paired with a
+       dark foreground, because white on bright orange is the worse contrast. */
+    --brand: oklch(76% 0.157 52);
+    --brand-strong: oklch(68% 0.185 30);
+
+    --accent: oklch(72% 0.162 50);
+    --accent-foreground: var(--eclipse);
+
+    --info: oklch(70% 0.142 253.8);
+    --info-foreground: var(--eclipse);
+
+    /* On a near-black ground the vivid tokens already clear AA (warning 9.99:1,
+       success 8.08:1), so these track them. Only danger needed lifting. */
+    --success-text: var(--success);
+    --warning-text: var(--warning);
+    --danger-text: oklch(70% 0.17 25);
+
+    /* Recessed below the card (21%) rather than level with it, so a field
+       reads as a well in both themes instead of only in one. */
+    --input-surface: oklch(15.5% 0.005 286);
+    --input-line: oklch(52% 0.008 286);
+
+    --text-muted: oklch(72% 0.015 286);
+    --text-secondary: color-mix(in oklab, var(--foreground) 82%, var(--background));
+    --text-strong: var(--foreground);
+
+    --link: var(--accent);
+  }
 }
 
-.dark {
-  --background: #1a1a2e;
-  --foreground: #ffffff;
-}
+/* ----------------------------------------------------------------------------
+   Tailwind colour utilities.
 
+   `inline` matters here: it substitutes the var() straight into the utility
+   (`.bg-card { background-color: var(--surface) }`) instead of adding an
+   indirection variable resolved once on :root. Only the inline form keeps
+   following the .dark override, since .dark lands on <html> - the same element
+   :root matches.
+   -------------------------------------------------------------------------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  /* --- Semantic names (prefer these in new code) ------------------------- */
+  --color-card: var(--surface);
+  --color-card-foreground: var(--surface-foreground);
+
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+
+  --color-muted-foreground: var(--text-muted);
+
+  --color-input: var(--input-surface);
+  --color-input-line: var(--input-line);
+  --color-ring: var(--focus);
+
+  --color-error: var(--danger);
+  --color-error-foreground: var(--danger-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+
+  /* --- Legacy HeroUI v2 names -------------------------------------------
+     These emitted no CSS at all under v3: cards rendered with no background,
+     secondary text inherited its colour and `border-divider` fell back to
+     currentColor. Aliasing them here revives every existing usage without
+     touching the components, and keeps one place to retire them from later.
+
+     bg-*   fills, in increasing weight
+     text-* the ramp, 400 lightest -> 800 strongest
+     ---------------------------------------------------------------------- */
+  --color-content1: var(--surface);
+  --color-content2: var(--surface-secondary);
+  --color-content3: var(--surface-tertiary);
+
+  --color-divider: var(--separator);
+
+  --color-default-50: var(--background-secondary);
+  --color-default-100: var(--default);
+  --color-default-200: var(--background-tertiary);
+  --color-default-300: var(--border-secondary);
+
+  --color-default-400: var(--text-muted);
+  --color-default-500: var(--text-muted);
+  --color-default-600: var(--text-secondary);
+  --color-default-700: var(--text-strong);
+  --color-default-800: var(--text-strong);
+  --color-default-900: var(--text-strong);
+
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+}
+
+/* Status colours as TEXT.
+
+   Tailwind derives `text-warning` and `bg-warning` from one token, but a chip
+   fill and a text label have opposite contrast needs. These three rules let the
+   fills stay vivid while the text/icon utilities use the readable variants.
+   Declared after the framework import so they win inside the utilities layer. */
+@layer utilities {
+  .text-success {
+    color: var(--success-text);
+  }
+  .text-warning {
+    color: var(--warning-text);
+  }
+  .text-danger {
+    color: var(--danger-text);
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -25,12 +193,6 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
 
 h1,
 h2,
@@ -44,7 +206,10 @@ h6 {
 body {
   background: var(--background);
   color: var(--foreground);
-  transition: all 0.3s ease;
-  /* font-family: Arial, Helvetica, sans-serif; */
   font-family: var(--font-inter);
+  /* Only the themed properties transition. `transition: all` also animated
+     layout and transform properties on every element that inherited it. */
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }

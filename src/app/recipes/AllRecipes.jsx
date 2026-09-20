@@ -116,10 +116,10 @@ export default function AllRecipesPage({ allRecipes = [] }) {
                   <div className="absolute top-3 right-3">
                     <Chip
                       size="sm"
-                      className="bg-[#d2f34c] text-black font-bold text-xs shadow-sm border border-black/5"
+                      className="bg-warning text-warning-foreground font-bold text-xs shadow-sm border border-black/5"
                     >
                       <span className="inline-flex items-center gap-1">
-                        <FiStar className="fill-current text-black" size={12} />
+                        <FiStar className="fill-current" size={12} />
                         {dynamicRating}
                       </span>
                     </Chip>
@@ -162,7 +162,7 @@ export default function AllRecipesPage({ allRecipes = [] }) {
                 {/* Footer Action segment */}
                 <Card.Footer className="p-4 pt-2">
                   <Button
-                    className="w-full bg-black text-white dark:bg-white dark:text-black font-bold text-sm h-11 shadow-sm hover:opacity-90 transition-opacity"
+                    className="w-full bg-foreground text-background font-bold text-sm h-11 shadow-sm hover:opacity-90 transition-opacity"
                     radius="xl"
                     onPress={() =>
                       (window.location.href = `/recipes/${recipe._id}`)

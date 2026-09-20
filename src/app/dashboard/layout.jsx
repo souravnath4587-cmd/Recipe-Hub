@@ -14,7 +14,7 @@ const DashBoardLayoutPage = ({ children }) => {
     <>
       <Navbar />
       {/* Column on mobile (nav bar sits above the content), row from md up. */}
-      <div className="min-h-screen bg-black text-white flex flex-col md:flex-row">
+      <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row">
         {/* Sidebar */}
         <DashboardSideBar user={user} />
 

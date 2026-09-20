@@ -9,10 +9,10 @@ export default function NotFound() {
   return (
     <section className="min-h-screen flex items-center justify-center px-6 overflow-hidden relative">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-linear-to-br from-orange-50 via-white to-red-50 dark:from-zinc-950 dark:via-black dark:to-zinc-900" />
+      <div className="absolute inset-0 bg-linear-to-br from-brand/10 via-background to-brand-strong/10" />
 
-      <div className="absolute top-20 left-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-20 w-72 h-72 bg-red-300/20 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-20 w-72 h-72 bg-brand/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-20 w-72 h-72 bg-brand-strong/20 rounded-full blur-3xl" />
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -31,7 +31,7 @@ export default function NotFound() {
           }}
           className="mx-auto mb-8"
         >
-          <div className="w-24 h-24 mx-auto rounded-full bg-linear-to-r from-orange-500 to-red-500 flex items-center justify-center shadow-xl">
+          <div className="w-24 h-24 mx-auto rounded-full bg-linear-to-r from-brand to-brand-strong flex items-center justify-center shadow-xl">
             <FaUtensils className="text-white text-4xl" />
           </div>
         </motion.div>
@@ -40,7 +40,7 @@ export default function NotFound() {
         <motion.h1
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="text-7xl md:text-9xl font-black bg-linear-to-r from-orange-500 via-red-500 to-yellow-500 bg-clip-text text-transparent"
+          className="text-7xl md:text-9xl font-black bg-linear-to-r from-brand via-brand-strong to-warning bg-clip-text text-transparent"
         >
           404
         </motion.h1>
@@ -60,14 +60,14 @@ export default function NotFound() {
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            className="font-semibold bg-blue-500 text-white px-4 py-2 rounded-xl"
+            className="font-semibold bg-info text-info-foreground px-4 py-2 rounded-xl"
           >
             Back to Home
           </Link>
 
           <Link
             href="/recipes"
-            className="bg-orange-500 text-white px-4 py-2 rounded-xl"
+            className="bg-accent text-accent-foreground px-4 py-2 rounded-xl"
           >
             Browse Recipes
           </Link>

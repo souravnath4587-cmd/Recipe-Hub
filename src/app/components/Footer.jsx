@@ -17,7 +17,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-default-200 bg-white dark:bg-zinc-950">
+    <footer className="border-t border-divider bg-card">
       <div className="max-w-7xl mx-auto px-6 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Logo & Description */}
@@ -26,11 +26,11 @@ export default function Footer() {
               whileHover={{ scale: 1.05 }}
               className="flex items-center gap-3"
             >
-              <div className="w-11 h-11 rounded-full bg-linear-to-r from-orange-500 to-red-500 flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full bg-linear-to-r from-brand to-brand-strong flex items-center justify-center">
                 <FaUtensils className="text-white text-lg" />
               </div>
 
-              <h2 className="text-2xl font-bold bg-linear-to-r from-orange-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-brand via-brand-strong to-warning bg-clip-text text-transparent">
                 Recipe-Hub
               </h2>
             </motion.div>
@@ -47,7 +47,7 @@ export default function Footer() {
 
             <ul className="space-y-3">
               <li>
-                <Link href="/" className="hover:text-orange-500 transition">
+                <Link href="/" className="hover:text-brand transition">
                   Home
                 </Link>
               </li>
@@ -55,7 +55,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/recipes"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-brand transition"
                 >
                   Browse Recipes
                 </Link>
@@ -64,7 +64,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/dashboard/user/overView"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-brand transition"
                 >
                   Dashboard
                 </Link>
@@ -73,7 +73,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/signIn"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-brand transition"
                 >
                   Login
                 </Link>
@@ -82,7 +82,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/signUp"
-                  className="hover:text-orange-500 transition"
+                  className="hover:text-brand transition"
                 >
                   Register
                 </Link>
@@ -97,28 +97,28 @@ export default function Footer() {
             <div className="flex gap-4">
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-orange-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-orange-500 hover:text-white transition"
+                className="w-10 h-10 rounded-full bg-default flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition"
               >
                 <FaFacebookF />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-orange-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-orange-500 hover:text-white transition"
+                className="w-10 h-10 rounded-full bg-default flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition"
               >
                 <FaInstagram />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-orange-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-orange-500 hover:text-white transition"
+                className="w-10 h-10 rounded-full bg-default flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition"
               >
                 <FaLinkedinIn />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-orange-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-orange-500 hover:text-white transition"
+                className="w-10 h-10 rounded-full bg-default flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition"
               >
                 <FaGithub />
               </a>
@@ -131,17 +131,17 @@ export default function Footer() {
 
             <div className="space-y-4 text-default-500">
               <div className="flex items-center gap-3">
-                <FaEnvelope className="text-orange-500" />
+                <FaEnvelope className="text-brand" />
                 <span>support@recipehub.com</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <FaPhoneAlt className="text-orange-500" />
+                <FaPhoneAlt className="text-brand" />
                 <span>+880 1234-567890</span>
               </div>
 
               <div className="flex items-start gap-3">
-                <FaMapMarkerAlt className="text-orange-500 mt-1" />
+                <FaMapMarkerAlt className="text-brand mt-1" />
                 <span>Dhaka, Bangladesh</span>
               </div>
             </div>

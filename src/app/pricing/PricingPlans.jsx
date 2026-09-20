@@ -22,7 +22,7 @@ export default function PricingPlansPage() {
     {
       name: "Free Plan",
       id: "user_free",
-      icon: <GiNoodles size={32} className="text-amber-500" />,
+      icon: <GiNoodles size={32} className="text-warning" />,
       price: "Free",
       description:
         "Perfect for home cooks getting started sharing their daily culinary workflows.",
@@ -40,7 +40,7 @@ export default function PricingPlansPage() {
     {
       name: "Pro Plan",
       id: "user_pro",
-      icon: <GiChefToque size={32} className="text-orange-500" />,
+      icon: <GiChefToque size={32} className="text-brand" />,
       price: "$9.99",
       period: "/mo",
       description:
@@ -60,7 +60,7 @@ export default function PricingPlansPage() {
     {
       name: "Premium Plan",
       id: "user_premium",
-      icon: <GiCakeSlice size={32} className="text-red-500" />,
+      icon: <GiCakeSlice size={32} className="text-brand-strong" />,
       price: "$24.99",
       period: "/mo",
       description:
@@ -93,7 +93,7 @@ export default function PricingPlansPage() {
         </Chip>
         <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-tight">
           Choose the Perfect Plan for Your{" "}
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-500 via-orange-500 to-red-600">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-warning via-brand to-brand-strong">
             Culinary Journey
           </span>
         </h1>
@@ -108,13 +108,13 @@ export default function PricingPlansPage() {
           <div className="bg-default-100 p-1 rounded-2xl border border-divider flex gap-1">
             <button
               onClick={() => setBillingPeriod("monthly")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-xl transition-all ${billingPeriod === "monthly" ? "bg-white text-black shadow-sm dark:bg-zinc-800 dark:text-white" : "text-default-400 hover:text-foreground"}`}
+              className={`px-4 py-1.5 text-xs font-bold rounded-xl transition-all ${billingPeriod === "monthly" ? "bg-card text-foreground shadow-sm" : "text-default-400 hover:text-foreground"}`}
             >
               Monthly Billing
             </button>
             <button
               onClick={() => setBillingPeriod("yearly")}
-              className={`px-4 py-1.5 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${billingPeriod === "yearly" ? "bg-linear-to-r from-orange-500 to-red-500 text-white shadow-sm" : "text-default-400 hover:text-foreground"}`}
+              className={`px-4 py-1.5 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${billingPeriod === "yearly" ? "bg-linear-to-r from-brand to-brand-strong text-white shadow-sm" : "text-default-400 hover:text-foreground"}`}
             >
               Annual Save 20%
             </button>
@@ -137,7 +137,7 @@ export default function PricingPlansPage() {
             <Card
               className={`w-full bg-content1 rounded-3xl overflow-hidden shadow-md flex flex-col justify-between p-6 relative border transition-colors ${
                 plan.popular
-                  ? "border-orange-500 ring-2 ring-orange-500/20 shadow-orange-500/10"
+                  ? "border-brand ring-2 ring-brand/20 shadow-brand/10"
                   : "border-divider/70"
               }`}
             >
@@ -145,7 +145,7 @@ export default function PricingPlansPage() {
                 <div className="absolute top-4 right-4 z-20">
                   <Chip
                     size="sm"
-                    className="bg-linear-to-r from-orange-500 to-red-600 text-white font-black tracking-wider uppercase text-[10px]"
+                    className="bg-linear-to-r from-brand to-brand-strong text-white font-black tracking-wider uppercase text-[10px]"
                   >
                     <FiZap className="fill-current inline mr-1" />
                     Most Popular
@@ -191,7 +191,7 @@ export default function PricingPlansPage() {
                       className="flex items-start gap-2.5 text-xs text-default-600 font-medium"
                     >
                       <div
-                        className={`p-0.5 rounded-full mt-0.5 ${plan.popular ? "bg-orange-500/10 text-orange-500" : "bg-default-100 text-default-500"}`}
+                        className={`p-0.5 rounded-full mt-0.5 ${plan.popular ? "bg-brand/10 text-brand" : "bg-default-100 text-default-500"}`}
                       >
                         <FiCheck size={12} className="stroke-3" />
                       </div>
@@ -231,7 +231,7 @@ export default function PricingPlansPage() {
                           role="link"
                           className={`font-black w-full p-2 rounded-xl text-sm tracking-tight transition-transform active:scale-95 ${
                             plan.popular
-                              ? "text-black bg-linear-to-r from-amber-400 to-orange-500 shadow-md"
+                              ? "text-white bg-linear-to-r from-brand to-brand-strong shadow-md"
                               : "bg-default-200 text-default-700"
                           }`}
                         >
@@ -264,15 +264,15 @@ export default function PricingPlansPage() {
               Free Storage Tier
             </div>
             <div className="text-lg text-foreground flex justify-center items-center gap-1">
-              <FiUser size={14} className="text-amber-500" /> 3 Recipes Max
+              <FiUser size={14} className="text-warning" /> 3 Recipes Max
             </div>
           </div>
           <div className="space-y-1 py-2">
-            <div className="text-orange-500 font-black uppercase tracking-wider text-[10px]">
+            <div className="text-brand font-black uppercase tracking-wider text-[10px]">
               Pro Growth Limit
             </div>
             <div className="text-lg text-foreground flex justify-center items-center gap-1">
-              <FiTrendingUp size={14} className="text-orange-500" /> 10 Recipes
+              <FiTrendingUp size={14} className="text-brand" /> 10 Recipes
               Max
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function PricingPlansPage() {
               Premium Architecture
             </div>
             <div className="text-lg text-foreground flex justify-center items-center gap-1">
-              <FiDatabase size={14} className="text-red-500" /> Unlimited Slots
+              <FiDatabase size={14} className="text-brand-strong" /> Unlimited Slots
             </div>
           </div>
         </div>
@@ -295,7 +295,7 @@ export default function PricingPlansPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="bg-default-50 border border-divider/40 p-5 rounded-2xl space-y-2">
-            <FiAward className="text-orange-500" size={24} />
+            <FiAward className="text-brand" size={24} />
             <h3 className="font-bold text-sm">Verified Creator Credibility</h3>
             <p className="text-xs text-default-400 leading-relaxed font-medium">
               Gain access to elite search positioning algorithms to ensure your
@@ -303,7 +303,7 @@ export default function PricingPlansPage() {
             </p>
           </div>
           <div className="bg-default-50 border border-divider/40 p-5 rounded-2xl space-y-2">
-            <FiBookOpen className="text-amber-500" size={24} />
+            <FiBookOpen className="text-warning" size={24} />
             <h3 className="font-bold text-sm">Granular Engagement Matrix</h3>
             <p className="text-xs text-default-400 leading-relaxed font-medium">
               Track exactly who bookmarks, duplicates, logs prints, or likes
@@ -311,7 +311,7 @@ export default function PricingPlansPage() {
             </p>
           </div>
           <div className="bg-default-50 border border-divider/40 p-5 rounded-2xl space-y-2">
-            <FiZap className="text-red-500" size={24} />
+            <FiZap className="text-brand-strong" size={24} />
             <h3 className="font-bold text-sm">Direct Monetization Channels</h3>
             <p className="text-xs text-default-400 leading-relaxed font-medium">
               Premium nodes open access pipelines to paywall custom cooking
@@ -325,7 +325,7 @@ export default function PricingPlansPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="text-center space-y-1">
           <h2 className="text-2xl font-black tracking-tight flex items-center justify-center gap-2">
-            <FiHelpCircle className="text-orange-500" /> Frequently Asked
+            <FiHelpCircle className="text-brand" /> Frequently Asked
             Questions
           </h2>
           <p className="text-xs text-default-400 font-medium">

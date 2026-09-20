@@ -27,14 +27,14 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* --- LEFT SIDE: HEADER CONTENT COLUMN --- */}
         <div className="lg:col-span-4 space-y-4 pr-0 lg:pr-4">
-          <div className="inline-flex items-center gap-2 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-warning-soft text-warning px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase shadow-sm">
             <FiStar className="fill-current animate-pulse" size={12} />
             Admin Spotlight
           </div>
 
           <h2 className="text-4xl font-black tracking-tight text-foreground leading-tight">
             Elite Culinary <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-warning-500 to-amber-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-strong">
               Masterpieces
             </span>
           </h2>
@@ -96,7 +96,7 @@ export default function FeaturedRecipesSection({ recipes = [] }) {
                     <Chip
                       size="sm"
                       variant="solid"
-                      className="bg-black/60 text-white dark:bg-white/70 dark:text-black backdrop-blur-md font-bold"
+                      className="bg-black/60 text-white backdrop-blur-md font-bold"
                     >
                       <span className="inline-flex items-center gap-1">
                         <FiGlobe />

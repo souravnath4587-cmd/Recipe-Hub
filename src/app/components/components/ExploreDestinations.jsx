@@ -91,7 +91,7 @@ export default function ExploreDestinations() {
         transition={{ duration: 0.6 }}
         className="text-center space-y-3 max-w-2xl mx-auto"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-500 dark:text-orange-400 font-bold text-xs uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 text-brand font-bold text-xs uppercase tracking-wider">
           <FiCompass className="animate-spin-slow" /> Global Gastronomy
         </div>
         <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground flex items-center justify-center gap-2.5">
@@ -118,7 +118,7 @@ export default function ExploreDestinations() {
             whileHover={{ y: -8 }}
             className="h-full group"
           >
-            <Card className="relative h-[380px] w-full overflow-hidden border border-divider/60 group-hover:border-orange-500/50 bg-content1 shadow-sm transition-all duration-300 p-0 rounded-2xl">
+            <Card className="relative h-[380px] w-full overflow-hidden border border-divider/60 group-hover:border-brand/50 bg-content1 shadow-sm transition-all duration-300 p-0 rounded-2xl">
               {/* Card Image Cover Layer */}
               <div className="absolute inset-0 z-0 h-full w-full overflow-hidden">
                 <img
@@ -147,7 +147,7 @@ export default function ExploreDestinations() {
                 <Chip
                   size="sm"
                   variant="flat"
-                  className="bg-orange-500 text-white font-black text-[11px] shadow-sm tracking-tight"
+                  className="bg-accent text-accent-foreground font-black text-[11px] shadow-sm tracking-tight"
                 >
                   {dest.count} Recipes
                 </Chip>
@@ -156,7 +156,7 @@ export default function ExploreDestinations() {
               {/* Main Content Info Block (Bottom Anchored) */}
               <div className="absolute bottom-0 inset-x-0 p-5 z-10 flex flex-col justify-end space-y-4">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-1 text-amber-400 font-bold text-xs tracking-wide uppercase">
+                  <div className="flex items-center gap-1 text-brand font-bold text-xs tracking-wide uppercase">
                     <FiMapPin className="shrink-0" />
                     <span>Signature Dishes</span>
                   </div>
@@ -166,7 +166,7 @@ export default function ExploreDestinations() {
                     {dest.foods.map((food, idx) => (
                       <span
                         key={idx}
-                        className="text-xs bg-white/10 dark:bg-zinc-900/60 backdrop-blur-sm text-zinc-100 font-semibold px-2.5 py-1 rounded-lg border border-white/5"
+                        className="text-xs bg-white/10 backdrop-blur-sm text-white font-semibold px-2.5 py-1 rounded-lg border border-white/5"
                       >
                         {food}
                       </span>
@@ -177,7 +177,7 @@ export default function ExploreDestinations() {
                 {/* Call To Action Button Interaction element */}
                 <Button
                   fullWidth
-                  className="bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 text-white font-black text-xs tracking-tight shadow-lg opacity-95 group-hover:opacity-100 h-11 transition-all"
+                  className="bg-gradient-to-r from-brand-strong via-brand to-warning text-white font-black text-xs tracking-tight shadow-lg opacity-95 group-hover:opacity-100 h-11 transition-all"
                 >
                   <span className="inline-flex items-center gap-1.5">
                     Explore Recipes
@@ -204,7 +204,7 @@ export default function ExploreDestinations() {
         <Button
           variant="bordered"
           color="warning"
-          className="border-2 font-black text-xs tracking-tight px-8 h-12 rounded-xl text-orange-600 dark:text-amber-400 border-orange-500/30 hover:border-orange-500"
+          className="border-2 font-black text-xs tracking-tight px-8 h-12 rounded-xl text-brand border-brand/30 hover:border-brand"
         >
           View All Global Destinations
         </Button>

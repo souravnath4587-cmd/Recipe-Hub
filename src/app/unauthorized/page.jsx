@@ -17,24 +17,24 @@ export default function UnauthorizedPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-[#09090b] text-foreground p-6">
-      <div className="w-full max-w-md mx-auto text-center border border-divider bg-surface dark:bg-[#121214] rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
+    <div className="w-full min-h-screen flex items-center justify-center bg-background text-foreground p-6">
+      <div className="w-full max-w-md mx-auto text-center border border-divider bg-card rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
         {/* Decorative Top Accent Glow line */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-danger-500 via-amber-500 to-danger-500" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-danger via-brand to-danger" />
 
         {/* Warning Shield Alert Identity Graphic Header Block */}
         <div className="flex justify-center">
-          <div className="p-4 bg-danger-500/10 text-danger rounded-2xl border border-danger-500/20 animate-pulse">
+          <div className="p-4 bg-danger/10 text-danger rounded-2xl border border-danger/20 animate-pulse">
             <FiShield size={48} />
           </div>
         </div>
 
         {/* Informative Error Message Text Blocks */}
         <div className="space-y-2">
-          <h1 className="text-2xl font-black tracking-tight uppercase text-white">
+          <h1 className="text-2xl font-black tracking-tight uppercase text-foreground">
             Access Denied
           </h1>
-          <p className="text-xs text-danger-500 font-bold tracking-widest uppercase">
+          <p className="text-xs text-danger font-bold tracking-widest uppercase">
             Error Code: 403 Forbidden
           </p>
           <p className="text-sm text-default-400 leading-relaxed pt-2">
@@ -45,7 +45,7 @@ export default function UnauthorizedPage() {
         </div>
 
         {/* Secondary Informational Disclaimer Segment Panel */}
-        <div className="p-3 bg-default-50 dark:bg-[#1c1c1f] rounded-xl border border-divider text-left text-xs text-default-500">
+        <div className="p-3 bg-input rounded-xl border border-input-line text-left text-xs text-default-500">
           💡 <strong className="text-default-700">Need access?</strong> If you
           believe this is an error, try signing out and logging back in with
           your designated administrative profile account credentials.
@@ -63,7 +63,7 @@ export default function UnauthorizedPage() {
 
           <Button
             onPress={handleLogout}
-            className="flex-1 bg-danger text-white font-bold h-11 rounded-xl text-sm transition-transform shadow-lg shadow-danger-500/10 flex items-center justify-center gap-2"
+            className="flex-1 bg-danger text-danger-foreground font-bold h-11 rounded-xl text-sm transition-transform shadow-lg shadow-danger/10 flex items-center justify-center gap-2"
           >
             <FiLogOut size={16} />
             Switch Account

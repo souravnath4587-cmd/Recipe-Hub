@@ -54,7 +54,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
         </p>
       </div>
       {recipeCreator.status === "block" && (
-        <p className="text-red-600 my-2 font-semibold">
+        <p className="text-danger my-2 font-semibold">
           All your actions are currently disabled. Please contact the
           administrator.{" "}
         </p>
@@ -68,31 +68,31 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
         <Table.ScrollContainer>
           <Table.Content aria-label="User registered recipes control log panel">
             <Table.Header>
-              <Table.Column isRowHeader className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column isRowHeader className="bg-default-100 text-default-600 font-semibold text-xs py-4">
                 Recipe
               </Table.Column>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column className="bg-default-100 text-default-600 font-semibold text-xs py-4">
                 Category
               </Table.Column>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column className="bg-default-100 text-default-600 font-semibold text-xs py-4">
                 Cuisine
               </Table.Column>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column className="bg-default-100 text-default-600 font-semibold text-xs py-4">
                 Difficulty
               </Table.Column>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4">
+              <Table.Column className="bg-default-100 text-default-600 font-semibold text-xs py-4">
                 Prep Time
               </Table.Column>
-              <Table.Column className="bg-default-100 dark:bg-zinc-800/60 text-default-600 dark:text-zinc-400 font-semibold text-xs py-4 text-center">
+              <Table.Column className="bg-default-100 text-default-600 font-semibold text-xs py-4 text-center">
                 Actions
               </Table.Column>
             </Table.Header>
 
-            <Table.Body className="bg-surface dark:bg-zinc-900/40">
+            <Table.Body className="bg-surface">
               {recipes.map((recipe, index) => (
                 <Table.Row
                   key={index}
-                  className="border-b border-divider hover:bg-default-50 dark:hover:bg-zinc-800/30 transition-colors"
+                  className="border-b border-divider hover:bg-default-50 transition-colors"
                 >
                   <Table.Cell className="py-4">
                     <div className="flex items-center gap-3">
@@ -115,10 +115,10 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                     </div>
                   </Table.Cell>
 
-                  <Table.Cell className="text-default-700 dark:text-zinc-300 text-sm">
+                  <Table.Cell className="text-default-700 text-sm">
                     {recipe.category}
                   </Table.Cell>
-                  <Table.Cell className="text-default-700 dark:text-zinc-300 text-sm">
+                  <Table.Cell className="text-default-700 text-sm">
                     {recipe.cuisineType}
                   </Table.Cell>
 
@@ -135,9 +135,9 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                     </Chip>
                   </Table.Cell>
 
-                  <Table.Cell className="text-default-700 dark:text-zinc-300 text-sm">
+                  <Table.Cell className="text-default-700 text-sm">
                     <div className="flex items-center gap-1.5 text-default-500">
-                      <FiClock size={13} className="text-amber-500" />
+                      <FiClock size={13} className="text-brand" />
                       <span>{recipe.preparationTime}</span>
                     </div>
                   </Table.Cell>
@@ -148,7 +148,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                         <Link
                           href={`/recipes/${recipe._id}`}
                           aria-disabled={recipeCreator?.status === "block"}
-                          className={`inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-amber-500 transition-colors ${
+                          className={`inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-brand transition-colors ${
                             recipeCreator?.status === "block"
                               ? "pointer-events-none opacity-50"
                               : ""
@@ -160,7 +160,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
                       <Tooltip content="Edit Details" closeDelay={0}>
                         <Link
                           href={`/dashboard/user/myRecipes/${recipe._id}`}
-                          className="inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-amber-500 transition-colors"
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-md text-default-400 hover:text-brand transition-colors"
                         >
                           <FiEdit2 size={16} />
                         </Link>
@@ -197,7 +197,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
         onClose={() => setIsModalOpen(false)}
         backdrop="blur"
         classNames={{
-          base: "bg-surface dark:bg-zinc-950 border border-divider text-foreground max-w-md rounded-2xl mx-4 p-5",
+          base: "bg-card border border-divider text-foreground max-w-md rounded-2xl mx-4 p-5",
         }}
       >
         {modalType === "edit" ? (
@@ -222,7 +222,7 @@ export default function MyRecipesTable({ allRecipes, recipeCreator }) {
               </Button>
               <Button
                 color="warning"
-                className="font-bold text-black dark:text-white"
+                className="font-bold text-foreground"
                 onPress={() => setIsModalOpen(false)}
               >
                 Save Changes

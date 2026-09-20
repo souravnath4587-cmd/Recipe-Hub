@@ -26,7 +26,7 @@ export default function RecipeLimitMeter({
       }`}
     >
       {/* Decorative Accent Background Glow */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-warning-500/5 to-transparent rounded-bl-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-warning/5 to-transparent rounded-bl-full pointer-events-none" />
 
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
         {/* Left Side: Progress Metrics Panel */}
@@ -74,7 +74,7 @@ export default function RecipeLimitMeter({
 
           {/* Custom Pure-Tailwind Progress Bar (Error Free) */}
           <div className="space-y-1.5 pt-2 max-w-xl">
-            <div className="w-full bg-default-100 dark:bg-default-200 h-2.5 rounded-full overflow-hidden">
+            <div className="w-full bg-default-100 h-2.5 rounded-full overflow-hidden">
               <div
                 className={`h-full ${progressBgColor} transition-all duration-500 ease-out`}
                 style={{ width: `${usagePercentage}%` }}
@@ -98,7 +98,7 @@ export default function RecipeLimitMeter({
               <Button
                 color="warning"
                 variant="solid"
-                className="font-black text-black text-xs w-full md:w-auto px-6 shadow-lg bg-linear-to-r from-amber-400 to-orange-500"
+                className="font-black text-white text-xs w-full md:w-auto px-6 shadow-lg bg-linear-to-r from-brand to-brand-strong"
               >
                 <span className="inline-flex items-center gap-1.5">
                   <FiTrendingUp className="stroke-3" size={14} />

@@ -112,13 +112,13 @@ export default function ProfilePage() {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 min-h-screen text-foreground bg-background">
-      <div className="bg-surface dark:bg-[#121214] border border-divider rounded-2xl p-8 shadow-xl">
+      <div className="bg-surface border border-divider rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit}>
           <Fieldset className="space-y-8">
             {/* Header Legend Layout Block */}
             <Fieldset.Legend className="flex flex-col gap-1 pb-4 border-b border-divider w-full">
               <span className="text-2xl font-bold tracking-tight uppercase flex items-center gap-2">
-                <FiUser className="text-amber-500" /> My Profile Setup
+                <FiUser className="text-brand" /> My Profile Setup
               </span>
               <p className="text-xs text-default-400">
                 Manage your public profile identity records. Email addresses are
@@ -127,12 +127,12 @@ export default function ProfilePage() {
             </Fieldset.Legend>
 
             {/* Interactive Profile Avatar Grid Section */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl">
+            <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-input border border-input-line rounded-xl">
               <div className="relative group shrink-0">
                 <Avatar
                   src={imagePreview || undefined}
                   name={formData.name || "User"}
-                  className="w-24 h-24 text-large rounded-2xl border-2 border-divider object-cover"
+                  className="w-24 h-24 text-lg rounded-2xl border-2 border-divider object-cover"
                 />
                 <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center rounded-2xl cursor-pointer text-white text-[10px] font-semibold gap-1">
                   <FiUploadCloud size={16} />
@@ -164,7 +164,7 @@ export default function ProfilePage() {
             <Fieldset.Group className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full pt-2">
               {/* Profile Name Field */}
               <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Full Name / Display Name
                 </Label>
                 <div className="relative flex items-center">
@@ -177,14 +177,14 @@ export default function ProfilePage() {
                     }
                     required
                     placeholder="Enter your public identifier identity description"
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none transition-colors"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none transition-colors"
                   />
                 </div>
               </TextField>
 
               {/* Immutable Email Field (Display Only) */}
               <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2 opacity-60">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Registered Email Address (Locked)
                 </Label>
                 <div className="relative flex items-center cursor-not-allowed">
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                     value={user?.email || ""}
                     disabled
                     readOnly
-                    className="w-full bg-default-100 dark:bg-zinc-800/40 border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-default-500 outline-none select-none"
+                    className="w-full bg-default-100 border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-default-500 outline-none select-none"
                   />
                 </div>
               </TextField>
@@ -205,7 +205,7 @@ export default function ProfilePage() {
               <Button
                 type="submit"
                 isDisabled={isSubmitting}
-                className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm transition-transform shadow-lg shadow-amber-500/10 flex items-center gap-2"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold h-11 px-6 rounded-xl text-sm transition-transform shadow-lg shadow-accent/10 flex items-center gap-2"
               >
                 {isSubmitting ? (
                   <FiRefreshCw className="animate-spin" size={16} />

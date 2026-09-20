@@ -78,7 +78,7 @@ function AssistantPanel({ userId }) {
         radius="full"
         aria-label="Open cooking assistant"
         onPress={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 bg-linear-to-r from-orange-500 to-red-500 text-white shadow-xl"
+        className="fixed bottom-6 right-6 z-50 h-14 w-14 bg-linear-to-r from-brand to-brand-strong text-accent-foreground shadow-xl"
       >
         <FiMessageCircle size={22} />
       </Button>
@@ -88,10 +88,10 @@ function AssistantPanel({ userId }) {
   return (
     // max-h keeps the panel inside short viewports (landscape phones, small
     // laptops) where a fixed 32rem would run off the top of the screen.
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-128 max-h-[calc(100dvh-2rem)] w-88 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
-      <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-128 max-h-[calc(100dvh-2rem)] w-88 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-border bg-overlay text-overlay-foreground shadow-2xl">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">
-          <FiMessageCircle className="text-orange-500" />
+          <FiMessageCircle className="text-brand" />
           <span className="text-sm font-semibold">Cooking Assistant</span>
         </div>
         <Button
@@ -107,7 +107,7 @@ function AssistantPanel({ userId }) {
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
         {messages.length === 0 && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="text-xs text-default-500">
             Ask about substitutions, scaling a recipe, technique or storage. I only
             help with cooking.
           </p>
@@ -123,8 +123,8 @@ function AssistantPanel({ userId }) {
             <div
               className={
                 message.role === "user"
-                  ? "max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-sm bg-orange-500 px-3 py-2 text-sm text-white"
-                  : "max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-sm bg-zinc-100 px-3 py-2 text-sm text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+                  ? "max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-sm bg-accent px-3 py-2 text-sm text-accent-foreground"
+                  : "max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-sm bg-default px-3 py-2 text-sm text-default-foreground"
               }
             >
               <MessageText message={message} />
@@ -133,7 +133,7 @@ function AssistantPanel({ userId }) {
         ))}
 
         {status === "submitted" && (
-          <p className="text-xs text-zinc-400">Thinking...</p>
+          <p className="text-xs text-default-500">Thinking...</p>
         )}
 
         {error && (
@@ -151,7 +151,7 @@ function AssistantPanel({ userId }) {
 
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 border-t border-zinc-200 px-3 py-3 dark:border-zinc-800"
+        className="flex items-center gap-2 border-t border-border px-3 py-3"
       >
         <input
           type="text"
@@ -159,7 +159,7 @@ function AssistantPanel({ userId }) {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask a cooking question..."
           maxLength={500}
-          className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-zinc-400 dark:border-zinc-700"
+          className="flex-1 rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none placeholder:text-default-400"
         />
         <Button
           type="submit"
@@ -167,7 +167,7 @@ function AssistantPanel({ userId }) {
           radius="lg"
           aria-label="Send message"
           isDisabled={isBusy || !input.trim()}
-          className="bg-orange-500 text-white disabled:opacity-50"
+          className="bg-accent text-accent-foreground disabled:opacity-50"
         >
           <FiSend className={isBusy ? "animate-pulse" : undefined} />
         </Button>

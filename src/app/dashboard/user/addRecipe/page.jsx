@@ -33,15 +33,15 @@ const RecipePage = async () => {
       </div>
       {hasReachedLimit ? (
         /* Lockout State View */
-        <div className="bg-zinc-900/50 border border-dashed border-zinc-800 rounded-2xl p-8 text-center flex flex-col items-center justify-center">
-          <div className="w-10 h-10 bg-zinc-800 text-zinc-400 rounded-full flex items-center justify-center mb-3">
+        <div className="bg-input border border-dashed border-input-line rounded-2xl p-8 text-center flex flex-col items-center justify-center">
+          <div className="w-10 h-10 bg-default text-default-500 rounded-full flex items-center justify-center mb-3">
             <FaCircleInfo className="w-5 h-5" />
           </div>
-          <h4 className="text-base font-semibold text-zinc-200">
+          <h4 className="text-base font-semibold text-foreground">
             Recipe Publishing Limit Reached
           </h4>
 
-          <p className="text-sm text-zinc-500 max-w-sm mt-1">
+          <p className="text-sm text-default-500 max-w-sm mt-1">
             You have reached the maximum number of recipes allowed under your
             current plan. Upgrade your membership to continue publishing more
             recipes.

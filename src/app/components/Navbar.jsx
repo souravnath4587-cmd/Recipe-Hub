@@ -55,7 +55,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 dark:bg-black/40 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-5">
         <div className="h-20 flex items-center justify-between">
           {/* Logo */}
@@ -63,11 +63,11 @@ export default function Navbar() {
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-3"
           >
-            <div className="w-11 h-11 rounded-full bg-linear-to-r from-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+            <div className="w-11 h-11 rounded-full bg-linear-to-r from-brand to-brand-strong flex items-center justify-center shadow-lg">
               <FaUtensils className="text-white text-lg" />
             </div>
 
-            <h1 className="text-2xl font-extrabold bg-linear-to-r from-orange-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-extrabold bg-linear-to-r from-brand via-brand-strong to-warning bg-clip-text text-transparent">
               Recipe-Hub
             </h1>
           </motion.div>
@@ -82,7 +82,7 @@ export default function Navbar() {
               >
                 {item.name}
 
-                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-orange-500 transition-all duration-300 group-hover:w-full" />
+                <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-brand transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
             {user ? (
@@ -111,7 +111,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={() => setDark(!dark)}
-              className="w-10 h-10 rounded-full dark:bg-zinc-800 flex items-center justify-center border-2"
+              className="w-10 h-10 rounded-full bg-default flex items-center justify-center border-2 border-border"
             >
               {dark ? <FaSun /> : <FaMoon />}
             </button>
@@ -119,7 +119,7 @@ export default function Navbar() {
               <div className="flex flex-row gap-4 items-center min-w-0">
                 <p className="hidden xl:block truncate">
                   Welcome{" "}
-                  <span className="uppercase text-orange-500 font-semibold">
+                  <span className="uppercase text-brand font-semibold">
                     {user?.name}
                   </span>
                 </p>
@@ -131,17 +131,17 @@ export default function Navbar() {
                     alt="User Image."
                     width={40}
                     height={40}
-                    className="rounded-full border-2 border-green-500 shrink-0"
+                    className="rounded-full border-2 border-brand shrink-0"
                   />
                 ) : (
-                  <div className="w-10 h-10 shrink-0 rounded-full border-2 border-green-500 flex items-center justify-center font-bold uppercase text-orange-500">
+                  <div className="w-10 h-10 shrink-0 rounded-full border-2 border-brand flex items-center justify-center font-bold uppercase text-brand">
                     {user?.name?.[0] || "?"}
                   </div>
                 )}
               </div>
             ) : (
-              <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-500">
-                <FaUserCircle className="w-full h-full text-orange-500" />
+              <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-brand">
+                <FaUserCircle className="w-full h-full text-brand" />
               </button>
             )}
           </div>
@@ -152,7 +152,7 @@ export default function Navbar() {
             <button
               onClick={() => setDark(!dark)}
               aria-label="Toggle theme"
-              className="w-9 h-9 rounded-full dark:bg-zinc-800 flex items-center justify-center border-2"
+              className="w-9 h-9 rounded-full bg-default flex items-center justify-center border-2 border-border"
             >
               {dark ? <FaSun /> : <FaMoon />}
             </button>
@@ -182,7 +182,7 @@ export default function Navbar() {
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            className="fixed top-0 right-0 z-50 h-screen w-72 max-w-[85vw] overflow-y-auto bg-orange-500 dark:bg-zinc-900 shadow-2xl lg:hidden"
+            className="fixed top-0 right-0 z-50 h-screen w-72 max-w-[85vw] overflow-y-auto bg-card text-foreground border-l border-border shadow-2xl lg:hidden"
           >
             <div className="p-6">
               <div className="flex justify-between items-center mb-8">
@@ -198,17 +198,17 @@ export default function Navbar() {
               </div>
 
               {user && (
-                <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/20">
+                <div className="flex items-center gap-3 mb-6 pb-6 border-b border-border">
                   {isValidImageSrc(user?.image) ? (
                     <Image
                       src={user.image}
                       alt="User Image."
                       width={40}
                       height={40}
-                      className="rounded-full border-2 border-green-500 shrink-0"
+                      className="rounded-full border-2 border-brand shrink-0"
                     />
                   ) : (
-                    <div className="w-10 h-10 shrink-0 rounded-full border-2 border-green-500 flex items-center justify-center font-bold uppercase">
+                    <div className="w-10 h-10 shrink-0 rounded-full border-2 border-brand flex items-center justify-center font-bold uppercase">
                       {user?.name?.[0] || "?"}
                     </div>
                   )}

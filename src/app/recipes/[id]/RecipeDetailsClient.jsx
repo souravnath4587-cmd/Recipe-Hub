@@ -239,7 +239,7 @@ export default function RecipeDetailsClient({
             </div>
 
             <Card.Content className="p-4 flex flex-col md:flex-row items-center justify-between gap-4 bg-default-50/50 border-t border-divider/60">
-              <div className="flex items-center justify-center bg-gray-700 p-2 rounded-xl gap-2 border w-full">
+              <div className="flex items-center justify-center bg-input p-2 rounded-xl gap-2 border border-input-line w-full">
                 <Button
                   isIconOnly
                   radius="full"
@@ -255,7 +255,7 @@ export default function RecipeDetailsClient({
                 </Button>
 
                 {/* Securely displays the reactive state value from our API callback */}
-                <span className="text-xs font-extrabold text-center uppercase text-white px-1">
+                <span className="text-xs font-extrabold text-center uppercase text-foreground px-1">
                   {recipe.likesCount ?? 0} Likes
                 </span>
                 <Button
@@ -273,7 +273,7 @@ export default function RecipeDetailsClient({
                 </Button>
               </div>
 
-              <div className="flex items-center justify-center bg-gray-700 p-2 rounded-xl gap-2 border w-full text-white">
+              <div className="flex items-center justify-center bg-input p-2 rounded-xl gap-2 border border-input-line w-full text-foreground">
                 <Button
                   isIconOnly
                   radius="full"
@@ -294,7 +294,7 @@ export default function RecipeDetailsClient({
                 </span>
               </div>
 
-              <div className="flex items-center justify-center bg-gray-700 p-2 rounded-xl gap-2 border w-full text-white">
+              <div className="flex items-center justify-center bg-input p-2 rounded-xl gap-2 border border-input-line w-full text-foreground">
                 <Button
                   isIconOnly
                   radius="full"
@@ -324,7 +324,7 @@ export default function RecipeDetailsClient({
               </p>
             </div>
             <Button
-              className="w-full bg-black text-white dark:bg-white dark:text-black font-black tracking-tight text-md h-12 shadow-md disabled:opacity-50"
+              className="w-full bg-foreground text-background font-black tracking-tight text-base h-12 shadow-md disabled:opacity-50"
               radius="xl"
               isDisabled={shouldDisableButton}
               onPress={() => handlePurchasePayment(recipe._id)}

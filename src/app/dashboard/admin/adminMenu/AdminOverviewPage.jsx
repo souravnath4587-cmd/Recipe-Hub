@@ -47,7 +47,7 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         {/* Swapped custom background strings for bg-content1 (HeroUI's default semantic card background) */}
         <Card className="bg-content1 border border-divider rounded-2xl p-4 shadow-sm">
           <Card.Header className="flex flex-row items-center gap-4 p-2">
-            <div className="p-3 bg-blue-500/10 text-blue-500 rounded-xl border border-blue-500/10">
+            <div className="p-3 bg-info/10 text-info rounded-xl border border-info/10">
               <FiUsers size={24} />
             </div>
             <div>
@@ -64,7 +64,7 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         {/* Total Recipes */}
         <Card className="bg-content1 border border-divider rounded-2xl p-4 shadow-sm">
           <Card.Header className="flex flex-row items-center gap-4 p-2">
-            <div className="p-3 bg-amber-500/10 text-amber-500 rounded-xl border border-amber-500/10">
+            <div className="p-3 bg-brand/10 text-brand rounded-xl border border-brand/10">
               <FiBookOpen size={24} />
             </div>
             <div>
@@ -81,7 +81,7 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         {/* Total Premium Members */}
         <Card className="bg-content1 border border-divider rounded-2xl p-4 shadow-sm">
           <Card.Header className="flex flex-row items-center gap-4 p-2">
-            <div className="p-3 bg-purple-500/10 text-purple-500 rounded-xl border border-purple-500/10">
+            <div className="p-3 bg-success/10 text-success rounded-xl border border-success/10">
               <FiBriefcase size={24} />
             </div>
             <div>
@@ -98,7 +98,7 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         {/* Total Reports */}
         <Card className="bg-content1 border border-divider rounded-2xl p-4 shadow-sm">
           <Card.Header className="flex flex-row items-center gap-4 p-2">
-            <div className="p-3 bg-danger-500/10 text-danger rounded-xl border border-danger-500/10">
+            <div className="p-3 bg-danger/10 text-danger rounded-xl border border-danger/10">
               <FiShield size={24} />
             </div>
             <div>
@@ -119,7 +119,7 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         <Card className="bg-content1 border border-divider rounded-2xl p-5 shadow-sm">
           <div className="flex items-center gap-2 pb-4 mb-2 border-b border-divider">
             <FiAlertTriangle className="text-danger" size={18} />
-            <h2 className="text-md font-bold text-foreground uppercase tracking-wide">
+            <h2 className="text-base font-bold text-foreground uppercase tracking-wide">
               Pending Moderation Logs
             </h2>
           </div>
@@ -182,8 +182,8 @@ export default function AdminOverviewPage({ users, recipes, reports }) {
         {/* Premium Conversions Stream */}
         <Card className="bg-content1 border border-divider rounded-2xl p-5 shadow-sm">
           <div className="flex items-center gap-2 pb-4 mb-2 border-b border-divider">
-            <FiTrendingUp className="text-purple-500" size={18} />
-            <h2 className="text-md font-bold text-foreground uppercase tracking-wide">
+            <FiTrendingUp className="text-success" size={18} />
+            <h2 className="text-base font-bold text-foreground uppercase tracking-wide">
               Recent Premium Signups
             </h2>
           </div>

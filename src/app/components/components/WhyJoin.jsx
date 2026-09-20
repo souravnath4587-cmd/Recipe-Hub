@@ -19,9 +19,9 @@ const features = [
     description:
       "Publish your favorite recipes and inspire food enthusiasts around the world.",
     icon: FiBookOpen,
-    gradient: "from-orange-500/20 to-red-500/5",
-    iconColor: "text-orange-500",
-    borderColor: "hover:border-orange-500/40",
+    gradient: "from-brand/20 to-brand-strong/5",
+    iconColor: "text-brand",
+    borderColor: "hover:border-brand/40",
   },
   {
     id: 2,
@@ -29,9 +29,9 @@ const features = [
     description:
       "Grow your profile, gain followers, and showcase your culinary expertise.",
     icon: FiUsers,
-    gradient: "from-red-500/20 to-amber-500/5",
-    iconColor: "text-red-500",
-    borderColor: "hover:border-red-500/40",
+    gradient: "from-brand-strong/20 to-brand/5",
+    iconColor: "text-brand-strong",
+    borderColor: "hover:border-brand-strong/40",
   },
   {
     id: 3,
@@ -39,9 +39,9 @@ const features = [
     description:
       "Create your personal collection by saving recipes you love for easy access anytime.",
     icon: FiHeart,
-    gradient: "from-amber-500/20 to-orange-500/5",
-    iconColor: "text-amber-500",
-    borderColor: "hover:border-amber-500/40",
+    gradient: "from-warning/20 to-brand/5",
+    iconColor: "text-warning",
+    borderColor: "hover:border-warning/40",
   },
   {
     id: 4,
@@ -49,9 +49,9 @@ const features = [
     description:
       "Upgrade to Pro or Premium plans to publish more recipes and access exclusive creator benefits.",
     icon: FiZap,
-    gradient: "from-orange-600/20 to-red-600/5",
-    iconColor: "text-orange-600",
-    borderColor: "hover:border-orange-600/40",
+    gradient: "from-brand/20 to-brand-strong/5",
+    iconColor: "text-brand",
+    borderColor: "hover:border-brand/40",
   },
 ];
 
@@ -84,7 +84,7 @@ export default function WhyJoin() {
         transition={{ duration: 0.5 }}
         className="text-center space-y-3 max-w-2xl mx-auto"
       >
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-red-500 dark:text-red-400 font-bold text-xs uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-strong/10 text-brand-strong font-bold text-xs uppercase tracking-wider">
           <FiUserPlus /> Hub Community
         </div>
         <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground flex items-center justify-center gap-2.5">
@@ -123,7 +123,7 @@ export default function WhyJoin() {
                 />
 
                 {/* Card Icon Header */}
-                <div className="p-3.5 bg-default-50 dark:bg-zinc-900/60 rounded-xl border border-divider group-hover:scale-110 transition-transform duration-300 relative z-10">
+                <div className="p-3.5 bg-input rounded-xl border border-divider group-hover:scale-110 transition-transform duration-300 relative z-10">
                   <IconComponent
                     className={`${feat.iconColor} stroke-[2.5]`}
                     size={24}
@@ -132,7 +132,7 @@ export default function WhyJoin() {
 
                 {/* Card Text Content */}
                 <div className="space-y-2 grow relative z-10">
-                  <h3 className="text-base font-extrabold tracking-tight text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-orange-500 group-hover:to-red-500 transition-all duration-300">
+                  <h3 className="text-base font-extrabold tracking-tight text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-brand group-hover:to-brand-strong transition-all duration-300">
                     {feat.title}
                   </h3>
                   <p className="text-xs text-default-400 font-medium leading-relaxed">
@@ -153,9 +153,9 @@ export default function WhyJoin() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="max-w-4xl mx-auto pt-4"
       >
-        <div className="w-full bg-linear-to-br from-default-50 to-default-100/50 dark:from-zinc-900/40 dark:to-zinc-900/10 border border-divider rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/5 rounded-bl-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-500/5 rounded-tr-full blur-3xl pointer-events-none" />
+        <div className="w-full bg-linear-to-br from-default-50 to-default-100/50 border border-divider rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-brand/5 rounded-bl-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-brand-strong/5 rounded-tr-full blur-3xl pointer-events-none" />
 
           <div className="space-y-1.5 relative z-10">
             <h3 className="text-xl md:text-2xl font-black tracking-tight text-foreground">
@@ -169,7 +169,7 @@ export default function WhyJoin() {
 
           <Button
             size="lg"
-            className="bg-linear-to-r from-red-500 via-orange-500 to-amber-500 text-white font-black text-xs tracking-tight shadow-xl shadow-orange-500/10 px-8 h-12 rounded-xl shrink-0 group relative z-10"
+            className="bg-linear-to-r from-brand-strong via-brand to-warning text-white font-black text-xs tracking-tight shadow-xl shadow-brand/10 px-8 h-12 rounded-xl shrink-0 group relative z-10"
           >
             <span className="inline-flex items-center gap-1.5">
               Join Recipe-Hub Today

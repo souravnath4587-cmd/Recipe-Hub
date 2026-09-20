@@ -124,7 +124,7 @@ const RecipeDetailPage = async ({ params }) => {
 
               {/* Ingredients Arrays Processing Block Section */}
               <div className="space-y-2">
-                <h3 className="text-md font-bold tracking-tight text-foreground flex items-center gap-2">
+                <h3 className="text-base font-bold tracking-tight text-foreground flex items-center gap-2">
                   <span className="w-1.5 h-4 bg-primary rounded-full"></span>{" "}
                   Ingredients List
                 </h3>
@@ -144,7 +144,7 @@ const RecipeDetailPage = async ({ params }) => {
 
               {/* Instructions Paragraph String block parsing context */}
               <div className="space-y-2">
-                <h3 className="text-md font-bold tracking-tight text-foreground flex items-center gap-2">
+                <h3 className="text-base font-bold tracking-tight text-foreground flex items-center gap-2">
                   <span className="w-1.5 h-4 bg-primary rounded-full"></span>{" "}
                   Preparation Instructions
                 </h3>
@@ -175,7 +175,7 @@ const RecipeDetailPage = async ({ params }) => {
               />
               {/* <Avatar
                 isBordered
-                className="w-24 h-24 text-large"
+                className="w-24 h-24 text-lg"
                 radius="full"
                 color={selectedUser?.role === "admin" ? "danger" : "primary"}
                 src={

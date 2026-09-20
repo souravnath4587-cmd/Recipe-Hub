@@ -132,12 +132,12 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
         </span>
       </Button>
 
-      <div className="bg-surface dark:bg-[#121214] border border-divider rounded-2xl p-8 shadow-xl">
+      <div className="bg-surface border border-divider rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit}>
           <Fieldset className="space-y-6">
             <Fieldset.Legend className="flex flex-col gap-1 pb-2 border-b border-divider w-full">
               <span className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                <FiEdit3 className="text-amber-500" /> UPDATE RECIPE
+                <FiEdit3 className="text-brand" /> UPDATE RECIPE
               </span>
               <p className="text-xs text-default-400">
                 Modify parameters below to update this entry inside your
@@ -148,7 +148,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
             <Fieldset.Group className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 w-full">
               {/* Recipe Name */}
               <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Recipe Name
                 </Label>
                 <div className="relative flex items-center">
@@ -160,14 +160,14 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                       setFormData({ ...formData, recipeName: e.target.value })
                     }
                     required
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
                   />
                 </div>
               </TextField>
 
               {/* Category */}
               <TextField className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Category
                 </Label>
                 <div className="relative flex items-center">
@@ -179,14 +179,14 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                       setFormData({ ...formData, category: e.target.value })
                     }
                     required
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
                   />
                 </div>
               </TextField>
 
               {/* Cuisine Type */}
               <TextField className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Cuisine Type
                 </Label>
                 <div className="relative flex items-center">
@@ -198,14 +198,14 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                       setFormData({ ...formData, cuisineType: e.target.value })
                     }
                     required
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
                   />
                 </div>
               </TextField>
 
               {/* Preparation Time */}
               <TextField className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Preparation Time
                 </Label>
                 <div className="relative flex items-center">
@@ -217,14 +217,14 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                       setFormData({ ...formData, prepTime: e.target.value })
                     }
                     required
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2 text-sm text-foreground outline-none"
                   />
                 </div>
               </TextField>
 
               {/* Difficulty Level */}
               <TextField className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Difficulty Level
                 </Label>
                 <div className="relative flex items-center">
@@ -237,7 +237,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                         difficultyLevel: e.target.value,
                       })
                     }
-                    className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground outline-none cursor-pointer appearance-none"
+                    className="w-full bg-input border border-input-line rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground outline-none cursor-pointer appearance-none"
                   >
                     <option value="Easy">Easy</option>
                     <option value="Medium">Medium</option>
@@ -247,14 +247,14 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
               </TextField>
 
               {/* Cover Asset Block */}
-              <div className="flex flex-col gap-1.5 col-span-1 md:col-span-2 bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl p-4">
-                <span className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+              <div className="flex flex-col gap-1.5 col-span-1 md:col-span-2 bg-input border border-input-line rounded-xl p-4">
+                <span className="text-xs font-semibold text-default-700">
                   Recipe Image Display Cover
                 </span>
                 <div className="flex items-center gap-4 mt-1">
-                  <label className="flex flex-col items-center justify-center w-14 h-14 bg-default-100 dark:bg-[#222226] border border-dashed border-divider rounded-xl cursor-pointer transition shrink-0 group">
+                  <label className="flex flex-col items-center justify-center w-14 h-14 bg-default-100 border border-dashed border-divider rounded-xl cursor-pointer transition shrink-0 group">
                     <FiUploadCloud
-                      className="text-default-400 group-hover:text-amber-500 transition"
+                      className="text-default-400 group-hover:text-brand transition"
                       size={18}
                     />
                     <input
@@ -283,7 +283,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
 
               {/* Ingredients */}
               <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Ingredients
                 </Label>
                 <textarea
@@ -293,13 +293,13 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                   }
                   rows={4}
                   required
-                  className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl p-3 text-sm text-foreground outline-none resize-none"
+                  className="w-full bg-input border border-input-line rounded-xl p-3 text-sm text-foreground outline-none resize-none"
                 />
               </TextField>
 
               {/* Instructions */}
               <TextField className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
-                <Label className="text-xs font-semibold text-default-700 dark:text-zinc-300">
+                <Label className="text-xs font-semibold text-default-700">
                   Instructions
                 </Label>
                 <textarea
@@ -309,7 +309,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
                   }
                   rows={5}
                   required
-                  className="w-full bg-default-50 dark:bg-[#1c1c1f] border border-divider rounded-xl p-3 text-sm text-foreground outline-none resize-none"
+                  className="w-full bg-input border border-input-line rounded-xl p-3 text-sm text-foreground outline-none resize-none"
                 />
               </TextField>
             </Fieldset.Group>
@@ -318,7 +318,7 @@ export default function UpdateRecipeForm({ initialRecipeData }) {
               <Button
                 type="submit"
                 isDisabled={isSubmitting}
-                className="bg-amber-500 hover:bg-amber-600 text-black font-bold h-11 px-6 rounded-xl text-sm"
+                className="bg-accent hover:bg-accent-hover text-accent-foreground font-bold h-11 px-6 rounded-xl text-sm"
               >
                 {!isSubmitting && <FiCheck size={16} />} Save Changes
               </Button>
